@@ -33,7 +33,7 @@
     </q-page-container>
   </q-layout>
 
-  <PasswordModal @passed="pass = true" />
+  <PasswordModal @passed="pass = true" v-if="!pass" />
 </template>
 
 <script setup>

@@ -106,6 +106,7 @@ const checkPassword = () => {
   if (password.value === '') return
   const bytes = decryptString(pwd.value)
   if (bytes === password.value) {
+    console.log('passed')
     emit('passed')
   }
 }

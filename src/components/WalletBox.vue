@@ -38,9 +38,11 @@
             searchText === ''
           "
           :num="index + 1"
-          :classify="classify"
-          :currentNum="walletNum"
-          v-bind="wallet"
+          :classify="props.classify"
+          :currentNum="props.walletNum"
+          :address="wallet.address"
+          :qty="wallet.qty"
+          :usd="wallet.usd"
         />
       </template>
       <q-separator></q-separator>
@@ -62,10 +64,9 @@ import { ref } from 'vue'
 import { wallets } from './models'
 
 const searchText = ref('')
-
 // eslint-disable-next-line vue/valid-define-props
-withDefaults(defineProps(), {
-  walletNum: '1',
-  classify: 'assets'
+const props = defineProps({
+  walletNum: String,
+  classify: String
 })
 </script>

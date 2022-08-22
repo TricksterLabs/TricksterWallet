@@ -32,6 +32,8 @@
       <router-view />
     </q-page-container>
   </q-layout>
+
+  <PasswordModal @passed="pass = true" />
 </template>
 
 <script setup>
@@ -42,6 +44,7 @@ import TransactionBox from 'src/components/TransactionBox.vue'
 import WalletBox from 'src/components/WalletBox.vue'
 import FooterBar from 'src/components/FooterBar.vue'
 import { useTransactionStore } from 'src/stores/transactions'
+import PasswordModal from 'src/components/PasswordModal.vue'
 
 // import { date } from 'quasar';
 
@@ -50,6 +53,7 @@ const store = useTransactionStore()
 
 const walletNum = ref('1')
 const classify = ref('assets')
+const pass = ref(false)
 
 const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)

@@ -5,7 +5,7 @@
         <template v-for="nav in navs" :key="nav">
           <q-item
             tag="a"
-            :href="`/#/${walletNum}/${nav.toLowerCase()}`"
+            :href="`/#/${props.walletNum}/${nav.toLowerCase()}`"
             class="flex justify-center items-center full-width"
             style="height: 64px"
             >{{ nav }}
@@ -25,9 +25,8 @@
 
 <script setup>
 const navs = ['ASSETS', 'MARKET', 'TRANSACTION', 'STAKING', 'VOTING']
-
 // eslint-disable-next-line vue/valid-define-props
-withDefaults(defineProps(), {
-  walletNum: '1'
+const props = defineProps({
+  walletNum: String
 })
 </script>

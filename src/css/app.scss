@@ -1,0 +1,92 @@
+// app global css in SCSS form
+body {
+  overflow-y: hidden;
+}
+.fit-main {
+  height: calc(100vh - 173px);
+  overflow-y: auto;
+}
+.bg-transparent {
+  background: transparent;
+}
+
+.bg-green-02 {
+  background: rgba(80, 0, 255, 0.2);
+}
+.wallet-num {
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-left: none;
+  border-radius: 0 15px 15px 0;
+  & > div {
+    padding-right: 7px;
+  }
+  &:not(.wallet-all) {
+    color: white;
+    box-shadow: 1px 1px 3px black;
+    border: none;
+  }
+
+  &.wallet-all {
+    border-radius: 0 50% 50% 0;
+  }
+}
+
+.wallet-hover {
+  background: rgba(0, 0, 0, 0.2);
+  .wallet-num {
+    border-color: black;
+  }
+}
+.wallet-text {
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  width: 150px;
+  text-overflow: ellipsis;
+}
+.number-input {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+.q-separator {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  @media (max-width: 1185px) {
+    font-size: 10px;
+    line-height: 10px;
+    .q-item {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+  }
+  @media (max-width: 767px) {
+    font-size: 8px;
+  }
+}
+.body--dark {
+  .wallet-num {
+    border-color: rgba(255, 255, 255, 0.4);
+    &:not(.wallet-all) {
+      color: black;
+      // box-shadow: 1px 1px 3px white;
+    }
+  }
+  .wallet-hover {
+    background: rgba(255, 255, 255, 0.1);
+    .wallet-num {
+      border-color: white;
+    }
+  }
+  .q-separator {
+    background: rgba(255, 255, 255, 0.4);
+  }
+  .number-input {
+    color: white;
+  }
+}

@@ -56,7 +56,7 @@
   </q-item>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import WalletItem from 'components/WalletItem.vue'
 import { ref } from 'vue'
 import { wallets } from './models'

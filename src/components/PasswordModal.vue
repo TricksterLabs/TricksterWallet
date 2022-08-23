@@ -42,9 +42,20 @@
           <q-input
             dense
             type="password"
+            label="New Password"
             v-model="newPwd"
             autofocus
             @keyup.enter="setPassword"
+          />
+        </q-card-section>
+        <q-card-section>
+          <q-input
+            dense
+            type="password"
+            v-model="confirmPassword"
+            label="Confirm Password"
+            autofocus
+            @keyup.enter="checkPassword"
           />
         </q-card-section>
 
@@ -61,6 +72,8 @@
 import { ref } from 'vue'
 import { datab, getFromDb } from 'src/dexie/db'
 import CryptoJS from 'crypto-js'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 
 const emit = defineEmits(['passed'])
 
@@ -68,6 +81,7 @@ const inception = ref(true)
 const secondDialog = ref(false)
 const pwd = ref(null)
 const password = ref('')
+const confirmPassword = ref('')
 const newPwd = ref('')
 
 const db = datab
@@ -108,6 +122,15 @@ const checkPassword = () => {
   if (bytes === password.value) {
     console.log('passed')
     emit('passed')
+    $q.notify({
+      type: 'positive',
+      message: 'Success'
+    })
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Failure'
+    })
   }
 }
 

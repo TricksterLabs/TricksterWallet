@@ -45,7 +45,11 @@ import WalletBox from 'src/components/WalletBox.vue'
 import FooterBar from 'src/components/FooterBar.vue'
 import { useTransactionStore } from 'src/stores/transactions'
 import PasswordModal from 'src/components/PasswordModal.vue'
+import { useQuasar } from 'quasar'
 
+const $q = useQuasar()
+
+$q.dark.set(true)
 // import { date } from 'quasar';
 
 const route = useRoute()

@@ -42,7 +42,6 @@ onMounted(() => {
   timer = setInterval(() => {
     currentTime.value = new Date(Date.now()).toLocaleString()
   }, 1000)
-  $q.dark.toggle()
 })
 
 onUnmounted(() => {

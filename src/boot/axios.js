@@ -8,7 +8,7 @@ import axios from 'axios'
 // "export default () => {}" function below (which runs individually
 // for each client)
 // const api = axios.create({ baseURL: 'https://api.example.com' })
-const api = axios.create({ baseURL: 'https://api.koios.rest/api/v0' })
+const api = axios.create({ baseURL: 'https://eu-fr.trickster.fi/api/v0' })
 
 // export default boot(({ app }) => {
 //   // for use inside Vue files (Options API) through this.$axios and this.$api

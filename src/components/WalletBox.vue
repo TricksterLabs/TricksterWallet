@@ -1,24 +1,36 @@
 <template>
   <q-list separator>
-    <q-item class="q-pa-none bg-green-02" tag="a" :href="`/#/all/${classify}`">
-      <q-avatar font-size="16px" class="q-mr-sm q-my-sm wallet-num wallet-all"
-        >ALL</q-avatar
+    <q-item
+      class="q-pa-none bg-green-02"
+      tag="a"
+      :href="`/#/all/${classify}`"
+    >
+      <q-avatar
+        font-size="16px"
+        class="q-mr-sm q-my-sm wallet-num wallet-all"
       >
-      <q-separator vertical></q-separator>
+        ALL
+      </q-avatar>
+      <q-separator vertical />
       <q-item-section class="q-pa-sm">
         <q-item-label class="justify-between flex q-px-md">
           <span>15</span>
           <span>$20</span>
         </q-item-label>
-        <q-item-label class="text-center"
-          >Assets: {{ wallets.length }}</q-item-label
-        >
+        <q-item-label class="text-center">
+          <!-- Assets: {{ store.wallets }} -->
+        </q-item-label>
       </q-item-section>
     </q-item>
 
     <q-item>
-      <q-input v-model="searchText" borderless label="Search.." dense>
-        <template v-slot:append>
+      <q-input
+        v-model="searchText"
+        borderless
+        label="Search.."
+        dense
+      >
+        <template #append>
           <q-icon
             name="close"
             @click="searchText = ''"
@@ -28,24 +40,25 @@
       </q-input>
     </q-item>
   </q-list>
-  <q-separator></q-separator>
+  <q-separator />
   <q-scroll-area class="fit">
     <q-list separator>
-      <template v-for="(wallet, index) in wallets" :key="wallet.address">
+      <template
+        v-for="(wallet) in store.wallets"
+        :key="wallet.baseAddressExternal[0]"
+      >
         <WalletItem
           v-if="
             wallet.name.toLowerCase().includes(searchText.toLowerCase()) ||
-            searchText === ''
+              searchText === ''
           "
-          :num="index + 1"
+          :num="wallet.id"
           :classify="props.classify"
-          :currentNum="props.walletNum"
-          :address="wallet.address"
-          :qty="wallet.qty"
-          :usd="wallet.usd"
+          :current-num="props.walletNum"
+          :address="wallet.baseAddressExternal[0]"
         />
       </template>
-      <q-separator></q-separator>
+      <q-separator />
     </q-list>
   </q-scroll-area>
   <q-separator />
@@ -54,19 +67,25 @@
     class="flex bg-negative text-white"
     style="min-height: 50px"
   >
-    <q-item-section class="text-center">WALLET MANAGEMENT</q-item-section>
+    <q-item-section class="text-center">
+      WALLET MANAGEMENT
+      <!-- {{ store.wallets }} -->
+    </q-item-section>
   </q-item>
 </template>
 
 <script setup>
 import WalletItem from 'components/WalletItem.vue'
 import { ref } from 'vue'
-import { wallets } from './models'
+import { useWalletsStore } from 'stores/wallets'
+
+const store = await useWalletsStore()
 
 const searchText = ref('')
-// eslint-disable-next-line vue/valid-define-props
+
 const props = defineProps({
   walletNum: String,
   classify: String
 })
+
 </script>

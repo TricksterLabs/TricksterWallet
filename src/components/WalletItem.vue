@@ -14,17 +14,28 @@
       font-size="16px"
       class="q-mr-sm q-my-sm wallet-num"
       :style="{ background: color }"
-      >{{ props.num }}</q-avatar
     >
+      {{ props.num }}
+    </q-avatar>
     <!-- <q-separator vertical></q-separator> -->
     <q-item-section class="q-pa-sm">
-      <q-item-label class="text-center">{{ props.name }}</q-item-label>
-      <q-item-label caption class="text-center">{{
-        shortenAddress(props.address)
-      }}</q-item-label>
-      <q-item-label caption class="flex justify-between q-px-md">
-        <span>{{ props.qty }}</span>
-        <span>${{ props.usd }}</span>
+      <q-item-label class="text-center">
+        {{ props.name }}
+      </q-item-label>
+      <q-item-label
+        caption
+        class="text-center"
+      >
+        {{
+          shortenAddress(props.address)
+        }}
+      </q-item-label>
+      <q-item-label
+        caption
+        class="flex justify-between q-px-md"
+      >
+        <!-- <span>{{ props.qty }}</span> -->
+        <!-- <span>${{ props.usd }}</span> -->
       </q-item-label>
     </q-item-section>
   </q-item>
@@ -39,8 +50,8 @@ import { useQuasar } from 'quasar'
 // eslint-disable-next-line vue/valid-define-props
 const props = defineProps({
   address: String,
-  qty: Number,
-  usd: Number,
+  // qty: Number,
+  // usd: Number,
   num: Number,
   classify: String,
   currentNum: String

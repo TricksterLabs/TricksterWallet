@@ -1,10 +1,16 @@
 <template>
   <q-layout view="lHr Lpr lFr">
-    <q-header bordered class="bg-transparent text-black">
+    <q-header
+      bordered
+      class="bg-transparent text-black"
+    >
       <TopBar :wallet-num="walletNum" />
     </q-header>
 
-    <q-footer bordered class="bg-transparent text-black">
+    <q-footer
+      bordered
+      class="bg-transparent text-black"
+    >
       <FooterBar />
     </q-footer>
 
@@ -15,7 +21,17 @@
       :width="200"
       class="flex no-wrap column"
     >
-      <WalletBox :classify="classify" :wallet-num="walletNum" />
+      <Suspense>
+        <template #default>
+          <WalletBox
+            :classify="classify"
+            :wallet-num="walletNum"
+          />
+        </template>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </q-drawer>
 
     <q-drawer
@@ -29,11 +45,21 @@
     </q-drawer>
 
     <q-page-container>
-      <router-view />
+      <Suspense>
+        <template #default>
+          <router-view />
+        </template>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </q-page-container>
   </q-layout>
 
-  <PasswordModal @passed="pass = true" v-if="!pass" />
+  <PasswordModal
+    @passed="pass = true"
+    v-if="!pass"
+  />
 </template>
 
 <script setup>

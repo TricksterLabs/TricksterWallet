@@ -1,9 +1,14 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
-    <q-dialog v-model="inception" persistent>
+    <q-dialog
+      v-model="inception"
+      persistent
+    >
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Your password</div>
+          <div class="text-h6">
+            Your password
+          </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -16,14 +21,21 @@
           />
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
+        <q-card-actions
+          align="right"
+          class="text-primary"
+        >
           <q-btn
             flat
             label="Set Password"
             v-if="!pwd"
             @click="secondDialog = true"
           />
-          <q-btn flat label="Sign In" @click="checkPassword" />
+          <q-btn
+            flat
+            label="Sign In"
+            @click="checkPassword"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -35,7 +47,9 @@
     >
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">New password</div>
+          <div class="text-h6">
+            New password
+          </div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -59,9 +73,20 @@
           />
         </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Set Password" @click="setPassword" />
+        <q-card-actions
+          align="right"
+          class="text-primary"
+        >
+          <q-btn
+            flat
+            label="Cancel"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            label="Set Password"
+            @click="setPassword"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -70,7 +95,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { datab, getFromDb } from 'src/dexie/db'
+import { dbSettings, getFromDb } from 'src/dexie/db'
 import CryptoJS from 'crypto-js'
 import { useQuasar } from 'quasar'
 const $q = useQuasar()
@@ -84,7 +109,7 @@ const password = ref('')
 const confirmPassword = ref('')
 const newPwd = ref('')
 
-const db = datab
+const db = dbSettings
 
 const salt = 'my-secret-key@123'
 

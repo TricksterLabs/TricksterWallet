@@ -9,7 +9,7 @@
           label="Search.."
           dense
         >
-          <template v-slot:append>
+          <template #append>
             <q-icon
               name="close"
               @click="searchText = ''"
@@ -25,7 +25,7 @@
         <q-btn>FILTER</q-btn>
       </q-item>
     </q-list>
-    <q-separator></q-separator>
+    <q-separator />
     <div class="fit-main">
       <q-scroll-area class="fit">
         <q-list bordered>
@@ -36,30 +36,41 @@
             :label="nft.asset_list[0].policy_id"
             default-opened
           >
-            <q-separator></q-separator>
+            <q-separator />
             <q-expansion-item
               v-for="asset in nft.asset_list"
               :key="`asset-${asset.asset_name}`"
               expand-separator
             >
-              <template v-slot:header>
-                <q-checkbox v-model="store.selections" :val="asset" />
+              <template #header>
+                <q-checkbox
+                  v-model="store.selections"
+                  :val="asset"
+                />
                 <q-item-section avatar>
                   <q-avatar>1</q-avatar>
                 </q-item-section>
 
                 <q-item-section>
                   <q-item-label>{{ asset.realName }}</q-item-label>
-                  <q-item-label caption>{{ asset.asset_name }}</q-item-label>
-                  <q-item-label caption>{{ asset.walletName }}</q-item-label>
+                  <q-item-label caption>
+                    {{ asset.asset_name }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    {{ asset.walletName }}
+                  </q-item-label>
                 </q-item-section>
 
-                <q-item-section side> {{ asset.quantity }}x </q-item-section>
+                <q-item-section side>
+                  {{ asset.quantity }}x
+                </q-item-section>
               </template>
               <q-card>
                 <q-card-section class="row">
                   <div class="col-8">
-                    <h6 class="q-mt-none q-mb-md">Properties:</h6>
+                    <h6 class="q-mt-none q-mb-md">
+                      Properties:
+                    </h6>
                     <p>
                       Asset Name: <span>{{ asset.asset_name }}</span>
                     </p>
@@ -71,19 +82,21 @@
                     <p>
                       Sources Type:
                       <span>{{
-                        asset.data.last_metadata.mediaType ?? 'image/jpeg'
+                        asset.data.mediaType ?? 'image/jpeg'
                       }}</span>
                     </p>
                     <p>
                       Source Link:
-                      <span>{{ asset.data.last_metadata.image }}</span>
+                      <span>{{ asset.data.image }}</span>
                     </p>
                     <p>
                       Quantity: <span>{{ asset.quantity }}</span>
                     </p>
                   </div>
                   <div class="col-4">
-                    <h6 class="q-mt-none q-mb-md">Metadata:</h6>
+                    <h6 class="q-mt-none q-mb-md">
+                      Metadata:
+                    </h6>
                     <p>Legs: <span>Yes</span></p>
                     <p>Head: <span>Yes</span></p>
                     <p>Hands: <span>Yes</span></p>
@@ -101,49 +114,59 @@
   </q-page>
 </template>
 
-<script setup lang="ts">
-import { mockupData, wallets } from 'components/models'
+<script setup async>
+import { wallets } from 'components/models'
+// import { storeToRefs } from 'pinia'
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTransactionStore } from 'stores/transactions'
+import { useWalletsStore } from 'stores/wallets'
 
 const route = useRoute()
 // const data = mockupData[0];
 const searchText = ref('')
 const store = useTransactionStore()
+const walletsStore = useWalletsStore()
+// const { wallets } = useWalletsStore()
+// let walletList = []
 const walletList = computed(() => {
   const data = []
-  for (let i = 0; i < mockupData.length; i++) {
-    if (
-      route.params.walletnum === 'all' ||
-      (route.params.walletnum &&
-        mockupData[i].name === wallets[Number(route.params.walletnum) - 1].name)
-    ) {
-      mockupData[i].utxo_set
-        .filter(
-          (x) =>
-            searchText.value === '' ||
-            x.asset_list[0].asset_name
-              .toLowerCase()
-              .includes(searchText.value.toLowerCase()) ||
-            x.asset_list[0].policy_id
-              .toLowerCase()
-              .includes(searchText.value.toLowerCase())
-        )
+  // const { wallets } = storeToRefs(store)
+  if (wallets.length !== 0) {
+    for (let i = 0; i < wallets.length; i++) {
+      if (
+        route.params.walletnum === 'all' ||
+        (route.params.walletnum &&
+          wallets[i].id === wallets[Number(route.params.walletnum) - 1].id)
+      ) {
+        wallets[i].utxo_set
+          .filter(
+            (x) =>
+              searchText.value === '' ||
+              x.asset_list[0].asset_name
+                .toLowerCase()
+                .includes(searchText.value.toLowerCase()) ||
+              x.asset_list[0].policy_id
+                .toLowerCase()
+                .includes(searchText.value.toLowerCase())
+          )
         // eslint-disable-next-line array-callback-return
-        .map((x) => {
-          data.push({
-            ...x,
-            asset_list: x.asset_list.map((y) => ({
-              ...y,
-              realName: y.data.last_metadata.name,
-              walletName: mockupData[i].name
-            }))
+          .map((x) => {
+            data.push({
+              ...x,
+              asset_list: x.asset_list.map((y) => ({
+                ...y,
+                realName: y.data.name,
+                walletName: wallets[i].name
+              }))
+            })
           })
-        })
+      }
     }
   }
-  // console.log(data);
+  console.log('wallets', walletsStore.wallets)
   return data
 })
+
+// onBeforeMount(walletList = walletListFunction())
 </script>

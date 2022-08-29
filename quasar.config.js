@@ -11,6 +11,9 @@
 const { configure } = require('quasar/wrappers')
 const path = require('path')
 
+const { NodeGlobalsPolyfillPlugin } = require('@esbuild-plugins/node-globals-polyfill')
+const { NodeModulesPolyfillPlugin } = require('@esbuild-plugins/node-modules-polyfill')
+
 module.exports = configure(function (/* ctx */) {
   return {
     eslint: {
@@ -75,7 +78,20 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      // extendViteConf (viteConf) {},
+      extendViteConf (viteConf) {
+        viteConf.optimizeDeps.esbuildOptions = {
+          define: {
+            global: 'globalThis'
+          },
+          plugins: [
+            NodeGlobalsPolyfillPlugin({
+              // process: true,
+              buffer: true
+            }),
+            NodeModulesPolyfillPlugin()
+          ]
+        }
+      },
       // viteVuePluginOptions: {},
 
       vitePlugins: [

@@ -114,84 +114,51 @@
   </q-page>
 </template>
 
-<script setup async>
-import { wallets } from 'components/models'
-// import { storeToRefs } from 'pinia'
-import { computed, onBeforeUpdate, onUpdated, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
+<script setup>
+import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
 
 const route = useRoute()
-// const data = mockupData[0];
 const searchText = ref('')
 const store = useTransactionStore()
-const walletsStore = await useWalletsStore()
-// const { wallets } = useWalletsStore()
+const walletStore = useWalletsStore()
 const walletList = computed(() => {
-  const data = []
-  // const { wallets } = storeToRefs(store)
-  if (wallets.length !== 0) {
+  let data = []
+  const wallets = walletStore.wallets
+  if (wallets && wallets.length !== 0) {
     for (let i = 0; i < wallets.length; i++) {
       if (
         route.params.walletnum === 'all' ||
         (route.params.walletnum &&
           wallets[i].id === wallets[Number(route.params.walletnum) - 1].id)
       ) {
-        wallets[i].utxo_set
-          .filter(
-            (x) =>
-              searchText.value === '' ||
+        const filteredWallets = wallets[i].utxo_set?.filter(
+          (x) =>
+            searchText.value === '' ||
               x.asset_list[0].asset_name
                 .toLowerCase()
                 .includes(searchText.value.toLowerCase()) ||
               x.asset_list[0].policy_id
                 .toLowerCase()
                 .includes(searchText.value.toLowerCase())
-          )
-        // eslint-disable-next-line array-callback-return
-          .map((x) => {
-            data.push({
-              ...x,
-              asset_list: x.asset_list.map((y) => ({
-                ...y,
-                realName: y.data.name,
-                walletName: wallets[i].name
-              }))
-            })
-          })
+        ) || []
+        data = filteredWallets.map((x) => ({
+          ...x,
+          asset_list: x.asset_list.map((y) => ({
+            ...y,
+            realName: y.data.name,
+            walletName: wallets[i].name
+          }))
+        }))
       }
     }
   }
-  console.log('computed', walletsStore.wallets)
   return data
 })
 
-// const walletList = reactive(walletListFunction())
-
-// onBeforeMount(walletList = walletListFunction())
-onMounted(async () => {
-  console.log('onMounted', walletsStore.wallets)
-})
-onUpdated(async () => {
-  console.log('onUpdated', walletsStore.wallets)
-})
-onUnmounted(async () => {
-  console.log('onUnmounted', walletsStore.wallets)
-})
-onBeforeMount(async () => {
-  console.log('onBeforeMount', walletsStore.wallets)
-})
-onBeforeUpdate(async () => {
-  console.log('onBeforeUpdate', walletsStore.wallets)
-})
-onBeforeUnmount(async () => {
-  console.log('onBeforeUnmount', walletsStore.wallets)
-})
-onActivated(async () => {
-  console.log('onActivated', walletsStore.wallets)
-})
-onDeactivated(async () => {
-  console.log('onDeactivated', walletsStore.wallets)
+watch(walletList, (val) => {
+  console.log('walletList', JSON.parse(JSON.stringify(val)))
 })
 </script>

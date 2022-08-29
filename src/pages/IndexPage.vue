@@ -135,18 +135,18 @@ const walletList = computed(() => {
           wallets[i].id === wallets[Number(route.params.walletnum) - 1].id)
       ) {
         const filteredUTXOSet = wallets[i].utxo_set?.filter(
-          (utxoItem) =>
+          (item) =>
             searchText.value === '' ||
-            utxoItem.asset_list[0].asset_name
+            item.asset_list[0].asset_name
               .toLowerCase()
               .includes(searchText.value.toLowerCase()) ||
-                utxoItem.asset_list[0].policy_id
-                  .toLowerCase()
-                  .includes(searchText.value.toLowerCase())
+              item.asset_list[0].policy_id
+                .toLowerCase()
+                .includes(searchText.value.toLowerCase())
         ) || []
-        data = filteredUTXOSet.map((walletItem) => ({
-          ...walletItem,
-          asset_list: walletItem.asset_list.map((assetListItem) => ({
+        data = filteredUTXOSet.map((item) => ({
+          ...item,
+          asset_list: item.asset_list.map((assetListItem) => ({
             ...assetListItem,
             realName: assetListItem.data.name,
             walletName: wallets[i].name

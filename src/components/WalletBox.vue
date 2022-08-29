@@ -77,6 +77,8 @@
 <script setup>
 import WalletItem from 'components/WalletItem.vue'
 import { ref } from 'vue'
+// import { onBeforeUpdate, onUpdated, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
+
 import { useWalletsStore } from 'stores/wallets'
 
 const store = await useWalletsStore()
@@ -87,5 +89,30 @@ const props = defineProps({
   walletNum: String,
   classify: String
 })
+
+// onMounted(() => {
+//   console.log('onMounted2', store.wallets)
+// })
+// onUpdated(() => {
+//   console.log('onUpdated2', store.wallets)
+// })
+// onUnmounted(() => {
+//   console.log('onUnmounted2', store.wallets)
+// })
+// onBeforeMount(() => {
+//   console.log('onBeforeMount2', store.wallets)
+// })
+// onBeforeUpdate(() => {
+//   console.log('onBeforeUpdate2', store.wallets)
+// })
+// onBeforeUnmount(() => {
+//   console.log('onBeforeUnmount2', store.wallets)
+// })
+// onActivated(() => {
+//   console.log('onActivated2', store.wallets)
+// })
+// onDeactivated(() => {
+//   console.log('onDeactivated2', store.wallets)
+// })
 
 </script>

@@ -117,7 +117,7 @@
 <script setup async>
 import { wallets } from 'components/models'
 // import { storeToRefs } from 'pinia'
-import { computed, ref } from 'vue'
+import { computed, onBeforeUpdate, onUpdated, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
@@ -126,9 +126,8 @@ const route = useRoute()
 // const data = mockupData[0];
 const searchText = ref('')
 const store = useTransactionStore()
-const walletsStore = useWalletsStore()
+const walletsStore = await useWalletsStore()
 // const { wallets } = useWalletsStore()
-// let walletList = []
 const walletList = computed(() => {
   const data = []
   // const { wallets } = storeToRefs(store)
@@ -164,9 +163,35 @@ const walletList = computed(() => {
       }
     }
   }
-  console.log('wallets', walletsStore.wallets)
+  console.log('computed', walletsStore.wallets)
   return data
 })
 
+// const walletList = reactive(walletListFunction())
+
 // onBeforeMount(walletList = walletListFunction())
+onMounted(async () => {
+  console.log('onMounted', walletsStore.wallets)
+})
+onUpdated(async () => {
+  console.log('onUpdated', walletsStore.wallets)
+})
+onUnmounted(async () => {
+  console.log('onUnmounted', walletsStore.wallets)
+})
+onBeforeMount(async () => {
+  console.log('onBeforeMount', walletsStore.wallets)
+})
+onBeforeUpdate(async () => {
+  console.log('onBeforeUpdate', walletsStore.wallets)
+})
+onBeforeUnmount(async () => {
+  console.log('onBeforeUnmount', walletsStore.wallets)
+})
+onActivated(async () => {
+  console.log('onActivated', walletsStore.wallets)
+})
+onDeactivated(async () => {
+  console.log('onDeactivated', walletsStore.wallets)
+})
 </script>

@@ -125,7 +125,7 @@ const searchText = ref('')
 const store = useTransactionStore()
 const walletStore = useWalletsStore()
 const walletList = computed(() => {
-  let data = []
+  const data = []
   const wallets = walletStore.wallets
   if (wallets && wallets.length !== 0) {
     for (let i = 0; i < wallets.length; i++) {
@@ -144,14 +144,16 @@ const walletList = computed(() => {
                 .toLowerCase()
                 .includes(searchText.value.toLowerCase())
         ) || []
-        data = filteredUTXOSet.map((item) => ({
-          ...item,
-          asset_list: item.asset_list.map((assetListItem) => ({
-            ...assetListItem,
-            realName: assetListItem.data.name,
-            walletName: wallets[i].name
-          }))
-        }))
+        filteredUTXOSet.forEach((item) => {
+          data.push({
+            ...item,
+            asset_list: item.asset_list.map((assetListItem) => ({
+              ...assetListItem,
+              realName: assetListItem.data?.name || '',
+              walletName: wallets[i].name
+            }))
+          })
+        })
       }
     }
   }

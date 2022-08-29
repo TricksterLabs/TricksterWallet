@@ -71,7 +71,7 @@ import { dbData } from '../dexie/db'
 import { generateWallet } from '../wallet/generateWallet'
 // import { useObservable } from '@vueuse/rxjs'
 
-const currentPrimaryKey = 1
+const currentPrimaryKey = 2
 // const currentPrimaryKey = 'addr1qyaqu8lagr3q3asgc9kcq78trmhqzafwcmx3t5kcagygsgxqnt036jfahpntmhxg8k9zh82zemxlra5hzc76wgdcsxysg2h7y2'
 
 // const newData = useObservable(

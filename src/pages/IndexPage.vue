@@ -134,7 +134,7 @@ const walletList = computed(() => {
         (route.params.walletnum &&
           wallets[i].id === wallets[Number(route.params.walletnum) - 1].id)
       ) {
-        const filteredWallets = wallets[i].utxo_set?.filter(
+        const filteredUTXOSet = wallets[i].utxo_set?.filter(
           (utxoItem) =>
             searchText.value === '' ||
             utxoItem.asset_list[0].asset_name
@@ -144,7 +144,7 @@ const walletList = computed(() => {
                   .toLowerCase()
                   .includes(searchText.value.toLowerCase())
         ) || []
-        data = filteredWallets.map((walletItem) => ({
+        data = filteredUTXOSet.map((walletItem) => ({
           ...walletItem,
           asset_list: walletItem.asset_list.map((assetListItem) => ({
             ...assetListItem,

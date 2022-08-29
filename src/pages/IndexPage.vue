@@ -127,13 +127,10 @@ const walletStore = useWalletsStore()
 const walletList = computed(() => {
   const data = []
   const wallets = walletStore.wallets
+  const walletnum = route.params.walletnum
   if (wallets && wallets.length !== 0) {
     for (let i = 0; i < wallets.length; i++) {
-      if (
-        route.params.walletnum === 'all' ||
-        (route.params.walletnum &&
-          wallets[i].id === wallets[Number(route.params.walletnum) - 1].id)
-      ) {
+      if (walletnum === 'all' || (walletnum && wallets[i].id === wallets[Number(walletnum) - 1].id)) {
         const filteredUTXOSet = wallets[i].utxo_set?.filter(
           (item) =>
             searchText.value === '' ||
@@ -149,6 +146,7 @@ const walletList = computed(() => {
             ...item,
             asset_list: item.asset_list.map((assetListItem) => ({
               ...assetListItem,
+              data: assetListItem.data || {},
               realName: assetListItem.data?.name || '',
               walletName: wallets[i].name
             }))

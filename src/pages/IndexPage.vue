@@ -155,7 +155,8 @@ const walletList = computed(() => {
                   ...assetListItem,
                   data: assetListItem.data || {},
                   realName: assetListItem.data?.name || '',
-                  walletName: wallets[i].name
+                  walletName: wallets[i].name,
+                  walletId: wallets[i].id
                 }))
               })
             } else {
@@ -165,7 +166,8 @@ const walletList = computed(() => {
                   ...assetListItem,
                   data: assetListItem.data || {},
                   realName: assetListItem.data?.name || '',
-                  walletName: wallets[i].name
+                  walletName: wallets[i].name,
+                  walletId: wallets[i].id
                 }))
               }]
             }

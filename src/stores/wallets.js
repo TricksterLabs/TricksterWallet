@@ -1,33 +1,32 @@
 import { defineStore } from 'pinia'
 import { dbData } from '../dexie/db'
 import { liveQuery } from 'dexie'
-import { useObservable } from '@vueuse/rxjs'
-// import { ref } from 'vue'
 
-// export interface TypeSelection {
-//   asset_name: string;
-//   policy_id: string;
-//   walletName: string;
-// }
+import { ref, getCurrentScope, onScopeDispose } from 'vue'
 
-// interface StateInterface {
-//   selections: TypeSelection[];
-// }
+function tryOnScopeDispose (fn) {
+  if (getCurrentScope()) {
+    onScopeDispose(fn)
+    return true
+  }
+  return false
+}
+
+function useObservable (observable, options) {
+  // const value = ref(options == null ? void 0 : options.initialValue)
+  const value = ref(options)
+  const subscription = observable.subscribe({
+    // eslint-disable-next-line no-return-assign
+    next: (val) => value.value = val,
+    error: options == null ? void 0 : options.onError
+  })
+  tryOnScopeDispose(() => {
+    subscription.unsubscribe()
+  })
+  return value
+}
 
 export const useWalletsStore = defineStore('wallets', () => {
-  const wallets = useObservable(liveQuery(async () => await dbData.wallet.toArray()))
+  const wallets = useObservable(liveQuery(async () => { return await dbData.wallet.toArray() }), dbData.wallet.toArray())
   return { wallets }
 })
-
-// export const useWalletsStore = defineStore('wallets', {
-//   state: () => ({
-//     wallets: []
-//   }),
-
-//   getters: {
-//     wallets: (state) => {
-//       state.wallets = useObservable(liveQuery(() => dbData.wallet.toArray()))
-//     }
-
-//   }
-// })

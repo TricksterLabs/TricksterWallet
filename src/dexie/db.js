@@ -19,8 +19,7 @@ export const clearTable = async () => {
 const dbData = new Dexie('trickster-data')
 
 dbData.version(1).stores({
-  wallet: '++id', // Primary key and indexed props
-  history: 'id'
+  wallet: '++id' // Primary key and indexed props
 })
 
 dbData.open().catch(function (e) {

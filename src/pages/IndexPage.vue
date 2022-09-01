@@ -134,6 +134,7 @@ const walletList = computed(() => {
   const wallets = walletStore.wallets
   const walletnum = route.params.walletnum
   if (wallets && wallets.length !== 0) {
+    // console.log(walletStore)
     for (let i = 0; i < wallets.length; i++) {
       if (walletnum === 'all' || (walletnum && wallets[i].id === wallets[Number(walletnum) - 1].id)) {
         const filteredUTXOSet = wallets[i].utxo_set?.filter(

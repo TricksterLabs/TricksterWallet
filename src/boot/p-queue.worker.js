@@ -67,7 +67,7 @@ const getTransactions = async (id, address, lastHeight) => {
         if (resultWalletUtxo[0].utxo_set[0].asset_list[0]) {
           await dbData.wallet.update(id, {
             balance: parseInt(resultWalletUtxo[0].balance),
-            last_height: resultGetTip[0].block_no - 1,
+            last_height: resultGetTip[0].block_no,
             utxo_set: resultWalletUtxo[0].utxo_set
           })
           for (let i = 0; i < resultWalletUtxo[0].utxo_set.length; i++) {
@@ -94,7 +94,7 @@ const getTransactions = async (id, address, lastHeight) => {
         } else if (resultWalletUtxo.length > 0) {
           await dbData.wallet.update(id, {
             balance: parseInt(resultWalletUtxo[0].balance),
-            last_height: resultGetTip[0].block_no - 1,
+            last_height: resultGetTip[0].block_no,
             utxo_set: resultWalletUtxo[0].utxo_set
           })
           return
@@ -102,7 +102,7 @@ const getTransactions = async (id, address, lastHeight) => {
       }
     } else {
       await dbData.wallet.update(id, {
-        last_height: resultGetTip[0].block_no - 1
+        last_height: resultGetTip[0].block_no
       })
       return
     }
@@ -112,70 +112,6 @@ const getTransactions = async (id, address, lastHeight) => {
   }
 }
 
-// let count = 0
-// const getPolicyData = async () => {
-//   try {
-//     const res = await fetch('https://api.opencnft.io/1/policy/c204b7595ab87f70a4a4d3a6c40833e8942b990bacf492090fe8b4d3', {
-//       method: 'GET',
-//       headers: {
-//         accept: 'application/json'
-//       }
-//     })
-//     count = count + 1
-//     console.log(count, await res.json())
-//     return res
-//   } catch (e) {
-//     count = count + 1
-//     console.error(count, e)
-//   }
-// }
-
-// const tasksWallet = async () => {
-//   const task = getTip
-//   for (let i = 0; i < 1000; i++) {
-//     // console.log('Adding to queue ' + i)
-//     await queueWallet.add(task)
-//     console.log('Wallet ' + i)
-//   }
-//   // console.log('Anonymous', task)
-// }
-
-// const taskArray = []
-// const tasksPolicyData = async () => {
-//   const task = getPolicyData
-//   for (let i = 0; i < 1000; i++) {
-//     taskArray.push(task)
-//   }
-//   await queueAnalytics.addAll(taskArray)
-// }
-
-// await tasksPolicyData()
-// await tasksWallet()
-
-// export { tasks }
-
-// (async () => {
-//   const task = await getTip(2)
-//   await queue.add(task)
-//   // console.log('Anonymous', task)
-// })()
-
-// export { getTip }
-
-// self.port.start()
-
-// self.onconnect = function (e) {
-//   const port = e.ports[0] // get the port
-
-//   port.onmessage = function (e) {
-//     // console.log('Worker revceived arguments:', e.data)
-//     port.postMessage('Hello from the worker!')
-//   }
-// }
-
-// import pinia from 'pinia'
-
-// const transactionArray = []
 self.onconnect = (e) => {
   const port = e.ports[0]
   port.onmessage = async (e) => {

@@ -1,9 +1,9 @@
 import Dexie from 'dexie'
-import { clearAllTables } from 'dexie-encrypted'
+// import { clearAllTables } from 'dexie-encrypted'
 
 const dbSettings = new Dexie('trickster-settings')
 
-dbSettings.version(6).stores({
+dbSettings.version(7).stores({
   password: '++id, pwd'
 })
 
@@ -12,14 +12,15 @@ export const getFromDb = async () => {
   return data
 }
 
-export const clearTable = async () => {
-  await clearAllTables(dbSettings)
-}
+// export const clearTable = async () => {
+//   await clearAllTables(dbSettings)
+// }
 
 const dbData = new Dexie('trickster-data')
 
-dbData.version(1).stores({
-  wallet: '++id' // Primary key and indexed props
+dbData.version(2).stores({
+  wallet: '++id', // Primary key and indexed props
+  history: 'id'
 })
 
 dbData.open().catch(function (e) {

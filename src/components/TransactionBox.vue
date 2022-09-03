@@ -153,6 +153,7 @@
       size="40px"
       color="primary"
       :disable="receivingAddress === ''"
+      @click="onSubmit"
     >
       SUBMIT
     </q-btn>
@@ -162,6 +163,7 @@
 <script setup>
 import { useTransactionStore } from 'src/stores/transactions'
 import { computed, ref } from 'vue'
+import { singleSend } from '../wallet/singleSend'
 
 const store = useTransactionStore()
 const tab = ref('standard')
@@ -171,10 +173,21 @@ const selectedNum = computed(() => {
   return selectedWallet.value.indexOf(true)
 })
 const adaAmounts = ref(Array(store.transactions.length).fill(0))
-const feeAmount = computed(() => 1.45)
+const feeAmount = computed(() => 0)
 const totalAmounts = computed(() => {
   return adaAmounts.value.map(
-    (x, i) => (Number(adaAmounts.value[i]) || 0) + Number(feeAmount.value)
+    (x, i) => (Number(adaAmounts.value[i]) || 0)
   )
 })
+const onSubmit = async () => {
+  // console.log('receiveingAddress', receivingAddress.value)
+  // console.log('selectedWallet', selectedWallet.value)
+  // console.log('totalAmounts', totalAmounts.value[0])
+  // console.log('store.Transaction', JSON.parse(JSON.stringify(await store.transactions2)))
+  await singleSend(
+    totalAmounts.value[0],
+    await store.transactions2,
+    receivingAddress.value
+  )
+}
 </script>

@@ -81,9 +81,9 @@ $q.dark.set(true)
 const route = useRoute()
 const store = useTransactionStore()
 
-const walletNum = ref('1')
+const walletNum = ref('all')
 const classify = ref('assets')
-const pass = ref(false)
+const pass = ref(true)
 
 const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)

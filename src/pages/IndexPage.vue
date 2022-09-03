@@ -120,7 +120,8 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRoute } from 'vue-router'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
@@ -128,16 +129,19 @@ import { useWalletsStore } from 'stores/wallets'
 const route = useRoute()
 const searchText = ref('')
 const store = useTransactionStore()
-const walletStore = useWalletsStore()
+// const walletStore = useWalletsStore()
+const { wallets } = storeToRefs(useWalletsStore())
+
 const walletList = computed(() => {
   const data = {}
-  const wallets = walletStore.wallets
+  const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
+  // console.log('walletRefs', walletsRefs)
   const walletnum = route.params.walletnum
-  if (wallets && wallets.length !== 0) {
-    // console.log(walletStore)
-    for (let i = 0; i < wallets.length; i++) {
-      if (walletnum === 'all' || (walletnum && wallets[i].id === wallets[Number(walletnum) - 1].id)) {
-        const filteredUTXOSet = wallets[i].utxo_set?.filter(
+  if (walletsRefs && walletsRefs.length !== 0) {
+    // console.log(walletsRefstore)
+    for (let i = 0; i < walletsRefs.length; i++) {
+      if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
+        const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
           (item) =>
             searchText.value === '' ||
             item.asset_list[0].asset_name
@@ -151,24 +155,24 @@ const walletList = computed(() => {
           item.asset_list.forEach((assetListItem) => {
             if (data[assetListItem.policy_id]) {
               data[assetListItem.policy_id].push({
-                ...item,
+                // ...item,
                 asset_list: item.asset_list.map((assetListItem) => ({
                   ...assetListItem,
                   data: assetListItem.data || {},
                   realName: assetListItem.data?.name || '',
-                  walletName: wallets[i].name,
-                  walletId: wallets[i].id
+                  walletName: walletsRefs[i].name,
+                  walletId: walletsRefs[i].id
                 }))
               })
             } else {
               data[assetListItem.policy_id] = [{
-                ...item,
+                // ...item,
                 asset_list: item.asset_list.map((assetListItem) => ({
                   ...assetListItem,
                   data: assetListItem.data || {},
                   realName: assetListItem.data?.name || '',
-                  walletName: wallets[i].name,
-                  walletId: wallets[i].id
+                  walletName: walletsRefs[i].name,
+                  walletId: walletsRefs[i].id
                 }))
               }]
             }
@@ -180,7 +184,7 @@ const walletList = computed(() => {
   return data
 })
 
-watch(walletList, (val) => {
-  console.log('walletList', JSON.parse(JSON.stringify(val)))
-})
+// watch(walletList, (val) => {
+//   console.log('walletList', JSON.parse(JSON.stringify(val)))
+// })
 </script>

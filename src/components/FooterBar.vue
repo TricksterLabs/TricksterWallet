@@ -82,8 +82,11 @@ const genWallet = async () => {
       await dbData.wallet.update(addNewWallet, {
         name: 'Wallet ' + addNewWallet,
         balance: 0,
+        utxo_set: []
+      })
+      await dbData.history.put({
+        id: addNewWallet,
         last_height: 0,
-        utxo_set: [],
         transactions: []
       })
       // ])

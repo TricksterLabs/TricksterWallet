@@ -11,8 +11,10 @@
 const { configure } = require('quasar/wrappers')
 const path = require('path')
 
-const { NodeGlobalsPolyfillPlugin } = require('@esbuild-plugins/node-globals-polyfill')
-const { NodeModulesPolyfillPlugin } = require('@esbuild-plugins/node-modules-polyfill')
+// const { NodeGlobalsPolyfillPlugin } = require('@esbuild-plugins/node-globals-polyfill')
+// const { NodeModulesPolyfillPlugin } = require('@esbuild-plugins/node-modules-polyfill')
+// const inject = require('@rollup/plugin-inject')
+// const { crossOriginIsolation } = require('vite-plugin-cross-origin-isolation')
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -59,10 +61,19 @@ module.exports = configure(function (/* ctx */) {
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#build
     build: {
       target: {
-        browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+        // browser: ['es2019', 'edge88', 'firefox78', 'chrome87', 'safari13.1'],
+        browser: 'esnext',
         node: 'node16'
       },
-
+      alias: {
+        // process: 'process/browser',
+        stream: 'stream-browserify'
+        // zlib: 'browserify-zlib'
+        // util: 'util'
+      },
+      // rollupOptions: {
+      //   plugins: [inject({ Buffer: ['buffer', 'Buffer'] })]
+      // },
       vueRouterMode: 'hash', // available values: 'hash', 'history'
       // vueRouterBase,
       // vueDevtools,
@@ -79,20 +90,20 @@ module.exports = configure(function (/* ctx */) {
       // polyfillModulePreload: true,
       // distDir
 
-      extendViteConf (viteConf) {
-        viteConf.optimizeDeps.esbuildOptions = {
-          define: {
-            global: 'globalThis'
-          },
-          plugins: [
-            NodeGlobalsPolyfillPlugin({
-              // process: true,
-              buffer: true
-            }),
-            NodeModulesPolyfillPlugin()
-          ]
-        }
-      },
+      // extendViteConf (viteConf) {
+      //   viteConf.optimizeDeps.esbuildOptions = {
+      //     define: {
+      //       global: 'globalThis'
+      //     }
+      //     // plugins: [
+      //     //   NodeGlobalsPolyfillPlugin({
+      //     //     process: true,
+      //     //     buffer: true
+      //     //   })
+      //     // NodeModulesPolyfillPlugin()
+      //     // ]
+      //   }
+      // },
       // viteVuePluginOptions: {},
 
       vitePlugins: [
@@ -102,13 +113,26 @@ module.exports = configure(function (/* ctx */) {
 
           // you need to set i18n resource including paths !
           include: path.resolve(__dirname, './src/i18n/**')
+          // include: path.resolve(__dirname, './node_modules/readable-stream')
         }]
       ]
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
     devServer: {
-      // https: true
+      // port: 9000,
+      // server: {
+      //   port: 9001,
+      proxy: {
+        '/api': {
+          target: 'https://eu-fr.trickster.fi/api/v0/submittx',
+          changeOrigin: true,
+          secure: false,
+          rewrite: path => path.replace(/^\/api/, '')
+        }
+      },
+      // },
+      // https: true,
       open: true // opens browser window automatically
     },
 
@@ -146,12 +170,12 @@ module.exports = configure(function (/* ctx */) {
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#property-sourcefiles
     // sourceFiles: {
     //   rootComponent: 'src/App.vue',
-    //   router: 'src/router/index',
-    //   store: 'src/store/index',
+    // router: 'src/router/index',
+    // store: 'src/store/index'
     //   registerServiceWorker: 'src-pwa/register-service-worker',
     //   serviceWorker: 'src-pwa/custom-service-worker',
     //   pwaManifestFile: 'src-pwa/manifest.json',
-    //   electronMain: 'src-electron/electron-main',
+    // electronMain: 'src-electron/electron-main',
     //   electronPreload: 'src-electron/electron-preload'
     // },
 
@@ -209,6 +233,7 @@ module.exports = configure(function (/* ctx */) {
       bundler: 'packager', // 'packager' or 'builder'
 
       packager: {
+        // includeSubNodeModules: true
         // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
 
         // OS X / Mac App Store
@@ -222,6 +247,32 @@ module.exports = configure(function (/* ctx */) {
       },
 
       builder: {
+        // files: [
+        //   // 'dist/**/*',
+        //   'node_modules/**/**/*'
+        // ],
+
+        //  "files": [
+        //     "!**/**.map",
+        //     "!**/**.ts",
+        //     "!node_modules",
+        //     "package.json",
+        //     "node_modules/semver/**",
+        //     "node_modules/fs-extra/**",
+        //     "node_modules/graceful-fs/**",
+        //     "node_modules/jsonfile/**",
+        //     "node_modules/universalify/**"
+        // ],
+        // extraResources: [
+        //   {
+        //     from: './node_modules/bip39/src/wordslist',
+        //     to: './node_modules/bip39/src/wordslist',
+        //     filter: [
+        //       '**/*'
+        //     ]
+        //   }
+        // ],
+        // includeSubNodeModules: true,
         // https://www.electron.build/configuration/configuration
 
         appId: 'trickster-wallet-js'

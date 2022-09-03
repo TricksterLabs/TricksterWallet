@@ -44,7 +44,7 @@
   <q-scroll-area class="fit">
     <q-list separator>
       <template
-        v-for="(wallet) in store.wallets"
+        v-for="(wallet) in wallets"
         :key="wallet.baseAddressExternal[0]"
       >
         <WalletItem
@@ -77,11 +77,16 @@
 <script setup>
 import WalletItem from 'components/WalletItem.vue'
 import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
 // import { onBeforeUpdate, onUpdated, onActivated, onBeforeMount, onBeforeUnmount, onDeactivated, onMounted, onUnmounted, ref } from 'vue'
 
 import { useWalletsStore } from 'stores/wallets'
 
-const store = await useWalletsStore()
+const { wallets } = storeToRefs(await useWalletsStore())
+
+// console.log(JSON.parse(JSON.stringify(wallets.value)))
+
+// const wallets = JSON.parse(JSON.stringify(await store.wallets))
 
 const searchText = ref('')
 

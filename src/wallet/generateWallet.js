@@ -1,7 +1,8 @@
 import * as typhonjs from '@stricahq/typhonjs'
 import { Bip32PrivateKey } from '@stricahq/bip32ed25519'
-import { generateMnemonic, mnemonicToEntropy } from 'bip39'
-import { Buffer } from 'buffer/index'
+import { generateMnemonic, mnemonicToEntropy } from '@scure/bip39'
+import { wordlist } from '@scure/bip39/wordlists/english'
+import { Buffer } from 'buffer/'
 
 export async function generateWallet (words) {
   let strength
@@ -12,8 +13,12 @@ export async function generateWallet (words) {
   } else {
     strength = 256
   }
-  const genWords = await generateMnemonic(strength)
-  const entropy = await mnemonicToEntropy(genWords)
+  const genWords = await generateMnemonic(wordlist, strength)
+  console.log(genWords)
+  const entropy = Buffer.from((await mnemonicToEntropy(genWords, wordlist)).buffer).toString('hex')
+  console.log(entropy)
+
+  // Buffer.from(entropy.buffer).toString('hex')
 
   const rootKey = await Bip32PrivateKey.fromEntropy(Buffer.from(entropy, 'hex'))
   console.log(rootKey)

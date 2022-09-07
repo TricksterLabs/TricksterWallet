@@ -1,8 +1,11 @@
 <template>
-  <q-toolbar class="q-pa-none">
-    <q-separator />
+  <q-toolbar class="q-pa-none q-pb-sm">
     <q-btn
+      outline
+      style="border-top: gray solid 0px !important;"
       color="secondary"
+      stack
+      class="q-ml-xs q-mt-xs"
       @click="genWallet"
     >
       GEN WALLET
@@ -17,31 +20,44 @@
     <q-list class="footer-bar">
       <q-item>
         <q-item-section dense>
-          Last Refresh: {{ lastTime }}
+          <q-input
+            dense
+            :model-value="lastTime"
+            input-class=""
+            label="Last Refresh"
+            borderless
+            readonly
+          />
         </q-item-section>
       </q-item>
       <q-item>
         <q-item-section dense>
-          Now: {{ currentTime }}
-        </q-item-section>
-      </q-item>
-      <q-item>
-        <q-toggle
-          dense
-          v-model="isLight"
-          size="md"
-          checked-icon="light_mode"
-          color="grey"
-          unchecked-icon="dark_mode"
-          @click="$q.dark.toggle()"
-        />
-      </q-item>
-      <q-item>
-        <q-item-section dense>
-          Version: 2.0.0 BETA
+          <q-input
+            dense
+            :model-value="currentTime"
+            input-class=""
+            label="Now"
+            borderless
+            readonly
+          />
         </q-item-section>
       </q-item>
     </q-list>
+    <q-space />
+    <span
+      :style="$q.dark.isActive?{color:'white'}:{color: '#71a4e0'}"
+      class="col-2">
+
+      <q-btn
+        flat
+        round
+        @click="$q.dark.toggle()"
+        color="grey"
+        class="q-mr-sm"
+        :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+      />
+      Version: 2.0.0 BETA
+    </span>
   </q-toolbar>
 </template>
 
@@ -175,7 +191,6 @@ const $q = useQuasar()
 
 const lastTime = ref(new Date(Date.now()).toLocaleString())
 const currentTime = ref(new Date(Date.now()).toLocaleString())
-const isLight = ref(!$q.dark.isActive)
 
 let timer
 

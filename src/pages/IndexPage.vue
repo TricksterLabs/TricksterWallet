@@ -1,42 +1,39 @@
 <template>
   <q-page>
-    <q-list class="flex no-wrap">
-      <q-item class="full-width">
+    <div class="row items-center">
+      <div class="col-10 q-pl-sm">
         <q-input
           v-model="searchText"
-          class="full-width"
-          borderless
+          class="full-width q-ma-sm "
+          outlined dense
           label="Search.."
-          dense
         >
           <template #append>
-            <q-icon
+            <q-icon v-if="searchText"
               name="close"
               @click="searchText = ''"
               class="cursor-pointer"
             />
           </template>
         </q-input>
-      </q-item>
-      <q-item>
-        <q-btn>SORT</q-btn>
-      </q-item>
-      <q-item>
-        <q-btn>FILTER</q-btn>
-      </q-item>
-    </q-list>
-    <q-separator />
+      </div>
+      <div class="col-2 q-pl-sm">
+        <q-btn color="primary" dense icon="sort" outline class="q-ml-sm text-capitalize" label="Sort"></q-btn>
+        <q-btn class="q-ml-md text-capitalize" dense icon="filter_alt" outline color="primary" label="Filter"></q-btn>
+      </div>
+    </div>
     <div class="fit-main">
       <q-scroll-area class="fit">
-        <q-list bordered>
+        <q-list>
           <q-expansion-item
             v-for="(nft, policyId) in walletList"
             :key="policyId"
-            expand-separator
+            :expand-separator="false"
             :label="policyId"
             default-opened
+            class="expansion-border q-ma-sm"
+            header-class="expansion-border-header text-center"
           >
-            <q-separator />
             <template
               v-for="item in nft"
               :key="item.id"
@@ -44,7 +41,8 @@
               <q-expansion-item
                 v-for="asset in item.asset_list"
                 :key="`asset-${asset.asset_name}`"
-                expand-separator
+                class="expansion-border q-ma-sm"
+                :expand-separator="false"
               >
                 <template #header>
                   <q-checkbox
@@ -52,61 +50,150 @@
                     :val="asset"
                   />
                   <q-item-section avatar>
-                    <q-avatar>1</q-avatar>
+                    <q-avatar>
+                      <img :src="'https://nftstorage.link/ipfs/'+asset.data.image.split('//')[1]">
+                    </q-avatar>
                   </q-item-section>
 
                   <q-item-section>
-                    <q-item-label>{{ asset.realName }}</q-item-label>
-                    <q-item-label caption>
-                      {{ asset.asset_name }}
+                    <q-item-label class="text-weight-bold">{{ asset.realName }}</q-item-label>
+                    <q-item-label caption class="text-weight-bold">
+                      {{ asset.walletName }} / {{ asset.asset_name }}
                     </q-item-label>
-                    <q-item-label caption>
-                      {{ asset.walletName }}
+                    <q-item-label caption class="text-weight-bold">
+
                     </q-item-label>
                   </q-item-section>
-
                   <q-item-section side>
-                    {{ asset.quantity }}x
+                    <q-chip outline square dense color="red" text-color="white">
+                      {{ asset.quantity }}x
+                    </q-chip>
                   </q-item-section>
                 </template>
-                <q-card>
-                  <q-card-section class="row">
+                <q-card
+                  style="border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;"
+                  class="no-border no-shadow"
+                  :class="$q.dark.isActive?'bg-dark':'bg-grey-2'">
+                  <q-card-section
+                    class="row q-p-xs">
                     <div class="col-8">
-                      <h6 class="q-mt-none q-mb-md">
-                        Properties:
-                      </h6>
-                      <p>
-                        Asset Name: <span>{{ asset.asset_name }}</span>
-                      </p>
-                      <p>
-                        Policy Id: <span>{{ asset.policy_id }}</span>
-                      </p>
-                      <p>Fingerprint: <span>fg43f43</span></p>
-                      <p>Metadata Type: <span>721</span></p>
-                      <p>
-                        Sources Type:
-                        <span>{{
-                          asset.data.mediaType ?? 'image/jpeg'
-                        }}</span>
-                      </p>
-                      <p>
-                        Source Link:
-                        <span>{{ asset.data.image }}</span>
-                      </p>
-                      <p>
-                        Quantity: <span>{{ asset.quantity }}</span>
-                      </p>
+                      <div class="text-h6 text-weight-bold">
+                        Properties
+                      </div>
+                      <q-input
+                        dense
+                        v-model="asset.asset_name"
+                        input-class=""
+                        label="Asset Name"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        v-model="asset.policy_id"
+                        input-class=""
+                        label="Policy Id"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="fg43f43"
+                        input-class=""
+                        label="Fingerprint"
+                        borderless
+                        readonly
+                      />
+
+                      <q-input
+                        dense
+                        model-value="721"
+                        input-class=""
+                        label="Metadata Type"
+                        borderless
+                        readonly
+                      />
+
+                      <q-input
+                        dense
+                        :model-value="asset.data.mediaType ?? 'image/jpeg'"
+                        input-class=""
+                        label="Sources Type"
+                        borderless
+                        readonly
+                      />
+
+                      <q-input
+                        dense
+                        v-model="asset.data.image"
+                        input-class=""
+                        label="Source Link"
+                        borderless
+                        readonly
+                      >
+                      </q-input>
+
+                      <q-input
+                        dense
+                        v-model="asset.quantity"
+                        input-class=""
+                        label="Quantity"
+                        borderless
+                        readonly
+                      />
                     </div>
                     <div class="col-4">
-                      <h6 class="q-mt-none q-mb-md">
-                        Metadata:
-                      </h6>
-                      <p>Legs: <span>Yes</span></p>
-                      <p>Head: <span>Yes</span></p>
-                      <p>Hands: <span>Yes</span></p>
-                      <p>Body: <span>Yes</span></p>
-                      <p>Eyes: <span>Yes</span></p>
-                      <p>Mouth: <span>Yes</span></p>
+                      <div class="text-h6 text-weight-bold">
+                        Metadata
+                      </div>
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Legs"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Head"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Hands"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Body"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Eyes"
+                        borderless
+                        readonly
+                      />
+                      <q-input
+                        dense
+                        model-value="Yes"
+                        input-class=""
+                        label="Mouth"
+                        borderless
+                        readonly
+                      />
                     </div>
                   </q-card-section>
                 </q-card>

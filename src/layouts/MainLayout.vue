@@ -9,6 +9,7 @@
 
     <q-footer
       bordered
+      style="height: 60px"
       class="bg-transparent text-black"
     >
       <FooterBar />
@@ -18,7 +19,7 @@
       v-model="leftDrawerOpen"
       :breakpoint="0"
       bordered
-      :width="200"
+      :width="220"
       class="flex no-wrap column"
     >
       <Suspense>
@@ -39,7 +40,7 @@
       v-model="rightDrawerOpen"
       :breakpoint="0"
       bordered
-      :width="292"
+      :width="300"
     >
       <TransactionBox />
     </q-drawer>

@@ -9,23 +9,27 @@
           v-for="nav in navs"
           :key="nav"
         >
-          <q-item
-            tag="a"
+          <q-btn
+            square
+            type="a"
             :href="`/#/${props.walletNum}/${nav.toLowerCase()}`"
-            class="flex justify-center items-center full-width"
+            class="flex text-capitalize text-weight-bold justify-center items-center full-width"
             style="height: 64px"
           >
-            {{ nav }}
-          </q-item>
+            {{ nav.toLowerCase() }}
+          </q-btn>
           <q-separator vertical />
         </template>
-        <q-item
-          tag="a"
-          class="flex justify-center items-center full-width bg-negative text-white"
+        <q-btn
+          color="negative"
+          square
+          outline
+          type="a"
+          class="flex justify-center text-weight-bold text-capitalize items-center full-width"
           style="height: 64px"
         >
-          SETTINGS
-        </q-item>
+          Settings
+        </q-btn>
       </q-list>
     </q-scroll-area>
   </q-toolbar>

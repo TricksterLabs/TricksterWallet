@@ -1,44 +1,45 @@
 <template>
   <q-list separator>
     <q-item
-      class="q-pa-none bg-green-02"
+      style="border: 1px #03a9f4 solid;border-radius:5px"
+      class="q-mt-sm q-mx-xs"
       tag="a"
       :href="`/#/all/${classify}`"
     >
-      <q-avatar
-        font-size="16px"
-        class="q-mr-sm q-my-sm wallet-num wallet-all"
+      <q-badge
+        class="absolute-top-left q-mt-xs q-ml-xs"
+        square
+        color="blue"
       >
-        ALL
-      </q-avatar>
-      <q-separator vertical />
-      <q-item-section class="q-pa-sm">
-        <q-item-label class="justify-between flex q-px-md">
+        All
+      </q-badge>
+      <q-item-section class="q-pt-ms">
+        <q-item-label class="justify-between text-weight-bolder flex q-px-md">
           <span>15</span>
           <span>$20</span>
         </q-item-label>
-        <q-item-label class="text-center">
-          <!-- Assets: {{ store.wallets }} -->
-        </q-item-label>
+<!--        <q-item-label class="text-center">-->
+<!--          &lt;!&ndash; Assets: {{ store.wallets }} &ndash;&gt;-->
+<!--        </q-item-label>-->
       </q-item-section>
     </q-item>
 
-    <q-item>
-      <q-input
-        v-model="searchText"
-        borderless
-        label="Search.."
-        dense
-      >
-        <template #append>
-          <q-icon
-            name="close"
-            @click="searchText = ''"
-            class="cursor-pointer"
-          />
-        </template>
-      </q-input>
-    </q-item>
+    <q-input
+      v-model="searchText"
+      class="full-width q-pa-xs"
+      outlined
+      dense
+      label="Search.."
+    >
+      <template #append>
+        <q-icon
+          v-if="searchText"
+          name="close"
+          @click="searchText = ''"
+          class="cursor-pointer"
+        />
+      </template>
+    </q-input>
   </q-list>
   <q-separator />
   <q-scroll-area class="fit">
@@ -61,17 +62,14 @@
       <q-separator />
     </q-list>
   </q-scroll-area>
-  <q-separator />
-  <q-item
-    clickable
-    class="flex bg-negative text-white"
-    style="min-height: 50px"
+  <q-btn
+    outline
+    style="border-top: gray solid 0px !important;"
+    color="negative"
+    class="q-ma-xs q-pb-sm"
   >
-    <q-item-section class="text-center">
-      WALLET MANAGEMENT
-      <!-- {{ store.wallets }} -->
-    </q-item-section>
-  </q-item>
+    WALLET <br/> MANAGEMENT
+  </q-btn>
 </template>
 
 <script setup>

@@ -57,6 +57,9 @@
           :classify="props.classify"
           :current-num="props.walletNum"
           :address="wallet.baseAddressExternal[0]"
+          :name="wallet.name"
+          :stack-address="wallet.stakeAddress"
+          :balance="wallet.balance"
         />
       </template>
       <q-separator />

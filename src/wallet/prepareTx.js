@@ -49,12 +49,27 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
   console.log('outputs', outputs)
   // const finalTTL = await getTTL(TTL)
 
-  const tx = new typhonjs.Transaction({ protocolParams }).paymentTransaction({
-    inputs: inputsData,
-    outputs,
-    changeAddress: typhonjs.utils.getAddressFromBech32(sendAddress),
-    ttl: TTL
+  const tx = new typhonjs.Transaction({ protocolParams })
+
+  // tx.paymentTransaction({
+  //   inputs: inputsData,
+  //   outputs,
+  //   changeAddress: typhonjs.utils.getAddressFromBech32(sendAddress),
+  //   ttl: TTL
+  // })
+
+  outputs.forEach((output) => {
+    tx.addOutput(output)
   })
+
+  tx.setTTL(TTL)
+
+  // if (auxiliaryData) {
+  //   transaction.setAuxiliaryData(auxiliaryData)
+  // }
+
+  const sendAddressMod = typhonjs.utils.getAddressFromBech32(sendAddress)
+  tx.prepareTransaction({ inputs: inputsData, sendAddressMod })
 
   console.log(tx)
 

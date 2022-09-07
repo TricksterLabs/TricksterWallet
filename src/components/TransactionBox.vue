@@ -75,7 +75,7 @@
             >
               <q-item-section avatar>
                 <q-avatar>
-                  <img :src="'https://nftstorage.link/ipfs/'+nft.data.image.split('//')[1]">
+                  <img :src="nft.data.image?'https://nftstorage.link/ipfs/'+nft.data.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
                 </q-avatar>
               </q-item-section>
               <q-item-section>

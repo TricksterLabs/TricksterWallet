@@ -110,20 +110,46 @@
       persistent
     >
       <q-card style="min-width: 800px">
-        <q-card-section class="col-12">
-          <span class="text-weight-bold">Address</span>
-          <q-space />{{address}}
+        <q-card-section class="col-12 text-center">
+          <span class="text-weight-bold text-h6">Address</span>
         </q-card-section>
-        <q-card-section>
-          <qrcode-stream
-            :camera="camera"
-            class="boom-border"
-            style="width: 100%; margin: auto"
+        <q-card-section class="text-center q-pa-none">
+          <figure>
+            <qrcode
+              class="qr"
+              :value="address"
+              :options="{
+                scale: 8,
+                color: {
+                  dark: '#1d1d1d',
+                  light: '#f5f5f5',
+                },
+              }"
+            ></qrcode>
+          </figure>
+          {{ address }}
+          <q-btn
+            size="sm"
+            flat
+            round
+            color="primary"
+            icon="content_copy"
+            @click="copyAddressContent()"
           >
-          </qrcode-stream>
+            <q-tooltip>
+              Copy Address
+            </q-tooltip>
+          </q-btn>
         </q-card-section>
-        <q-card-actions align="right">
-          <q-btn label="Close" color="negative" outline @click="modelQr=false"></q-btn>
+        <q-card-actions
+          align="right"
+          class="q-pa-md">
+          <q-btn
+            label="Close"
+            color="negative"
+            outline
+            @click="modelQr=false">
+          </q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -135,7 +161,7 @@ import { shortenAddress } from 'src/utils'
 import randomColor from 'randomcolor/randomColor'
 import { computed, ref } from 'vue'
 import { useQuasar, copyToClipboard } from 'quasar'
-import { QrcodeStream } from 'vue3-qrcode-reader'
+import qrcode from '@chenfengyuan/vue-qrcode'
 
 // eslint-disable-next-line vue/valid-define-props
 const props = defineProps({
@@ -160,7 +186,6 @@ const color = computed(() => {
 })
 
 const modelQr = ref(false)
-const camera = ref('auto')
 
 const copyAddressContent = () => {
   copyToClipboard(props.address)

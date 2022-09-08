@@ -113,123 +113,66 @@
                   <q-card-section
                     class="row q-p-xs"
                   >
-                    <div class="col-8">
-                      <div class="text-h6 text-weight-bold">
+                    <div class="col-12 row">
+                      <div class="text-h6 col-12 text-weight-bold">
                         Properties
                       </div>
                       <q-input
                         dense
+                        v-if="asset.asset_name"
                         v-model="asset.asset_name"
                         input-class=""
                         label="Asset Name"
                         borderless
+                        class="col-6"
                         readonly
                       />
+
                       <q-input
                         dense
+                        v-if="asset.policy_id"
                         v-model="asset.policy_id"
                         input-class=""
                         label="Policy Id"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="fg43f43"
-                        input-class=""
-                        label="Fingerprint"
+                        class="col-6"
                         borderless
                         readonly
                       />
 
                       <q-input
-                        dense
-                        model-value="721"
-                        input-class=""
-                        label="Metadata Type"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
-                        dense
-                        :model-value="asset.data.mediaType ?? 'image/jpeg'"
-                        input-class=""
-                        label="Sources Type"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
-                        dense
-                        v-model="asset.data.image"
-                        input-class=""
-                        label="Source Link"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
+                        v-if="asset.quantity"
                         dense
                         v-model="asset.quantity"
                         input-class=""
                         label="Quantity"
+                        class="col-6"
                         borderless
                         readonly
                       />
-                    </div>
-                    <div class="col-4">
-                      <div class="text-h6 text-weight-bold">
-                        Metadata
-                      </div>
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Legs"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Head"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Hands"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Body"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Eyes"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Mouth"
-                        borderless
-                        readonly
-                      />
+
+                      <template v-if="asset.hasOwnProperty('data')">
+                        <template
+                          :key="data"
+                          v-for="data in Object.keys(asset.data)">
+                          <q-input
+                            v-if="data!='files'"
+                            dense
+                            :model-value="asset.data[data]"
+                            input-class=""
+                            class="col-6"
+                            borderless
+                            readonly
+                            :label-slot="true"
+                          >
+                            <template v-slot:label>
+                              <span class="text-capitalize">
+                                {{ data.split('_').join(' ') }}
+                              </span>
+                            </template>
+                          </q-input>
+                        </template>
+                      </template>
+
                     </div>
                   </q-card-section>
                 </q-card>

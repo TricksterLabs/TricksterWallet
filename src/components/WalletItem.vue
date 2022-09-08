@@ -17,29 +17,36 @@
     </q-badge>
     <!-- <q-separator vertical></q-separator> -->
     <q-item-section class="q-pa-sm">
-      <q-item-label class="text-center text-weight-bold">
+      <div>
         <a
-          :href="`/#/${props.num}/${props.classify}`"
+          :href="`/#/assets`"
           style="text-decoration: none"
+          @click="store.WalletNumData(props.num, props.classify)"
           :class="$q.dark.isActive?'text-white':'text-grey-8'">
-          {{ props.name }}
+          <q-item-label class="text-center text-h6 text-weight-bold">
+            {{ props.name }}
+          </q-item-label>
+          <q-item-label
+            class="col-12 text-body2 text-center"
+          >
+            {{
+              shortenAddress(props.address)
+            }}
+          </q-item-label>
+          <q-item-label
+            class="col-12text-body2 text-center"
+          >
+            {{
+              shortenAddress(props.stackAddress)
+            }}
+          </q-item-label>
+          <q-item-label class="text-body2 text-center">
+            {{ (balance / 1000000).toFixed(2) }}
+            {{ balance / 200 }}$
+          </q-item-label>
         </a>
-      </q-item-label>
-      <q-item-label
-        caption
-        class="col-12 text-center"
-      >
-        {{
-          shortenAddress(props.address)
-        }}
-      </q-item-label>
-      <q-item-label caption>
-        {{balance/1000000}}
-
-        <span class="float-right">
-          {{balance/200}}$
-        </span>
-      </q-item-label>
+      </div>
+      <q-separator class="q-my-xs"></q-separator>
 
       <q-item-label class="text-center">
         <q-btn
@@ -47,6 +54,7 @@
           flat
           round
           icon="delete"
+          class="q-mt-xs q-ml-xs"
         >
           <q-tooltip>
             Delete Wallet
@@ -57,6 +65,7 @@
           flat
           round
           icon="edit"
+          class="q-mt-xs q-ml-xs"
         >
           <q-tooltip>
             Rename Wallet
@@ -67,6 +76,7 @@
           flat
           round
           icon="content_copy"
+          class="q-mt-xs q-ml-xs"
           @click="copyAddressContent()"
         >
           <q-tooltip>
@@ -78,6 +88,7 @@
           flat
           round
           icon="file_copy"
+          class="q-mt-xs q-ml-xs"
           @click="copyStackAddressContent()"
         >
           <q-tooltip>
@@ -89,6 +100,7 @@
           flat
           round
           icon="qr_code_2"
+          class="q-mt-xs q-ml-xs"
           @click="modelQr=true"
         >
           <q-tooltip>
@@ -96,13 +108,13 @@
           </q-tooltip>
         </q-btn>
       </q-item-label>
-<!--      <q-item-label-->
-<!--        caption-->
-<!--        class="flex justify-between q-px-md"-->
-<!--      >-->
-<!--        &lt;!&ndash; <span>{{ props.qty }}</span> &ndash;&gt;-->
-<!--        &lt;!&ndash; <span>${{ props.usd }}</span> &ndash;&gt;-->
-<!--      </q-item-label>-->
+      <!--      <q-item-label-->
+      <!--        caption-->
+      <!--        class="flex justify-between q-px-md"-->
+      <!--      >-->
+      <!--        &lt;!&ndash; <span>{{ props.qty }}</span> &ndash;&gt;-->
+      <!--        &lt;!&ndash; <span>${{ props.usd }}</span> &ndash;&gt;-->
+      <!--      </q-item-label>-->
     </q-item-section>
 
     <q-dialog
@@ -162,6 +174,7 @@ import randomColor from 'randomcolor/randomColor'
 import { computed, ref } from 'vue'
 import { useQuasar, copyToClipboard } from 'quasar'
 import qrcode from '@chenfengyuan/vue-qrcode'
+import { useTransactionStore } from 'src/stores/transactions'
 
 // eslint-disable-next-line vue/valid-define-props
 const props = defineProps({
@@ -176,6 +189,8 @@ const props = defineProps({
   balance: Number
 })
 const $q = useQuasar()
+
+const store = useTransactionStore()
 
 const color = computed(() => {
   return randomColor({

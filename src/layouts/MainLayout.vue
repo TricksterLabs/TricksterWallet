@@ -65,7 +65,6 @@
 
 <script setup>
 import { onMounted, onUpdated, ref } from 'vue'
-import { useRoute } from 'vue-router'
 import TopBar from '../components/TopBar.vue'
 import TransactionBox from 'src/components/TransactionBox.vue'
 import WalletBox from 'src/components/WalletBox.vue'
@@ -79,7 +78,6 @@ const $q = useQuasar()
 $q.dark.set(true)
 // import { date } from 'quasar';
 
-const route = useRoute()
 const store = useTransactionStore()
 
 const walletNum = ref('all')
@@ -90,11 +88,6 @@ const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)
 
 const getParams = () => {
-  const params = route.params
-  if (params.walletnum && params.classify) {
-    classify.value = params.classify.toString()
-    walletNum.value = params.walletnum.toString()
-  }
   store.clearSelection()
 }
 

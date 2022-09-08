@@ -3,8 +3,8 @@
     <q-item
       style="border: 1px #03a9f4 solid;border-radius:5px"
       class="q-mt-sm q-mx-xs"
-      tag="a"
-      :href="`/#/all/${classify}`"
+      clickable
+      @click="store.WalletNumData('all', 'assets')"
     >
       <q-badge
         class="absolute-top-left q-mt-xs q-ml-xs"
@@ -54,8 +54,8 @@
               searchText === ''
           "
           :num="wallet.id"
-          :classify="props.classify"
-          :current-num="props.walletNum"
+          :classify="store.classify"
+          :current-num="store.walletNum"
           :address="wallet.baseAddressExternal[0]"
           :name="wallet.name"
           :stack-address="wallet.stakeAddress"
@@ -65,14 +65,6 @@
       <q-separator />
     </q-list>
   </q-scroll-area>
-  <q-btn
-    outline
-    style="border-top: gray solid 0px !important;"
-    color="negative"
-    class="q-ma-xs q-pb-sm"
-  >
-    WALLET <br/> MANAGEMENT
-  </q-btn>
 </template>
 
 <script setup>
@@ -83,6 +75,9 @@ import { storeToRefs } from 'pinia'
 
 import { useWalletsStore } from 'stores/wallets'
 
+import { useTransactionStore } from 'stores/transactions'
+const store = useTransactionStore()
+
 const { wallets } = storeToRefs(await useWalletsStore())
 
 // console.log(JSON.parse(JSON.stringify(wallets.value)))
@@ -90,11 +85,6 @@ const { wallets } = storeToRefs(await useWalletsStore())
 // const wallets = JSON.parse(JSON.stringify(await store.wallets))
 
 const searchText = ref('')
-
-const props = defineProps({
-  walletNum: String,
-  classify: String
-})
 
 // onMounted(() => {
 //   console.log('onMounted2', store.wallets)

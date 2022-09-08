@@ -61,6 +61,14 @@
                       {{ asset.walletName }} / {{ asset.asset_name }}
                     </q-item-label>
                     <q-item-label caption class="text-weight-bold">
+                      <q-chip outline square dense color="cyan-7" text-color="white" v-if="asset.data.statistical_rank">
+                      Statistical Rank - {{ asset.data.statistical_rank }}
+                      </q-chip>
+                      <q-chip outline square dense color="light-blue-8" text-color="white" v-if="asset.data.rarity_rank">
+                      Rarity Rank - {{ asset.data.rarity_rank }}
+                      </q-chip>
+                    </q-item-label>
+                    <q-item-label caption class="text-weight-bold">
 
                     </q-item-label>
                   </q-item-section>
@@ -209,11 +217,9 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRoute } from 'vue-router'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
 
-const route = useRoute()
 const searchText = ref('')
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()
@@ -223,7 +229,7 @@ const walletList = computed(() => {
   const data = {}
   const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
   // console.log('walletRefs', walletsRefs)
-  const walletnum = route.params.walletnum
+  const walletnum = store.walletNum
   if (walletsRefs && walletsRefs.length !== 0) {
     // console.log(walletsRefstore)
     for (let i = 0; i < walletsRefs.length; i++) {

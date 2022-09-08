@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import BigNumber from 'bignumber.js'
+import { ref } from 'vue'
 
 // console.log(BigNumber)
 
@@ -15,7 +16,9 @@ import BigNumber from 'bignumber.js'
 
 export const useTransactionStore = defineStore('transactions', {
   state: () => ({
-    selections: []
+    selections: [],
+    walletNum: ref('all'),
+    classify: ref('assets')
   }),
   getters: {
     transactions: (state) => {
@@ -46,6 +49,9 @@ export const useTransactionStore = defineStore('transactions', {
         }
       }
       return transactions
+    },
+    walletNumGet: (state) => {
+      return state.walletNum
     }
   },
   actions: {
@@ -58,6 +64,10 @@ export const useTransactionStore = defineStore('transactions', {
     },
     clearSelection () {
       this.selections = []
+    },
+    WalletNumData (number, classify) {
+      this.walletNum = number.toString()
+      this.classify = classify.toString()
     }
   }
 })

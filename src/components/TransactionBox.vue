@@ -1,6 +1,5 @@
 <template>
   <q-list
-    bordered
     separator
     class="full-height flex column no-wrap"
   >
@@ -42,9 +41,9 @@
         />
       </q-tabs>
     </q-item>
-
-    <q-item class="full-height q-pa-none">
-      <q-scroll-area class="fit">
+    <q-item class="q-mb-md q-pa-none"
+            :style="$route.path=='/assets'?{'height': 'calc(100vh - 249px)'}:{'height': 'calc(100vh - 200px)'}">
+    <q-scroll-area class="fit">
         <q-list class="q-ma-sm">
           <q-expansion-item
             v-for="(nfts, i) in store.transactions"
@@ -89,11 +88,11 @@
               <q-item-section>
                 <q-item-label class="ellipsis">
                   {{
-                    nft.asset_name
+                    shortenAddress(nft.asset_name)
                   }}
                 </q-item-label>
                 <q-item-label
-                  class="wallet-text"
+                  class="wallet-text ellipsis"
                   caption
                 >
                   {{
@@ -181,6 +180,7 @@
 </template>
 
 <script setup>
+import { shortenAddress } from 'src/utils'
 import { useTransactionStore } from 'src/stores/transactions'
 import { computed, ref } from 'vue'
 import { singleSend } from '../wallet/singleSend'

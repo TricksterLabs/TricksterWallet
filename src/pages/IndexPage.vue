@@ -27,10 +27,10 @@
             v-for="(nft, policyId) in walletList"
             :key="policyId"
             :expand-separator="false"
-            :label="policyId"
+            :label="$q.screen.gt.md?policyId:shortenPolicy(policyId)"
             default-opened
             class="expansion-border q-ma-sm"
-            header-class="expansion-border-header text-center"
+            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
           >
             <template
               v-for="item in nft"
@@ -61,7 +61,7 @@
                       caption
                       class="text-weight-bold"
                     >
-                      {{ asset.walletName }} / {{ asset.asset_name }}
+                      {{ asset.walletName }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
                     </q-item-label>
                     <q-item-label
                       caption
@@ -87,13 +87,23 @@
                       >
                         Rarity Rank - {{ asset.data.rarity_rank }}
                       </q-chip>
+                      <q-chip
+                        v-if="!$q.screen.gt.md"
+                        outline
+                        square
+                        dense
+                        color="red"
+                        text-color="white"
+                      >
+                        {{ asset.quantity }}x
+                      </q-chip>
                     </q-item-label>
                     <q-item-label
                       caption
                       class="text-weight-bold"
                     />
                   </q-item-section>
-                  <q-item-section side>
+                  <q-item-section side v-if="$q.screen.gt.md">
                     <q-chip
                       outline
                       square
@@ -124,7 +134,7 @@
                         input-class=""
                         label="Asset Name"
                         borderless
-                        class="col-6"
+                        :class="$q.screen.gt.md?'col-6':'col-12'"
                         readonly
                       />
 
@@ -134,7 +144,7 @@
                         v-model="asset.policy_id"
                         input-class=""
                         label="Policy Id"
-                        class="col-6"
+                        :class="$q.screen.gt.md?'col-6':'col-12'"
                         borderless
                         readonly
                       />
@@ -145,7 +155,7 @@
                         v-model="asset.quantity"
                         input-class=""
                         label="Quantity"
-                        class="col-6"
+                        :class="$q.screen.gt.md?'col-6':'col-12'"
                         borderless
                         readonly
                       />
@@ -159,7 +169,7 @@
                             dense
                             :model-value="asset.data[data]"
                             input-class=""
-                            class="col-6"
+                            :class="$q.screen.gt.md?'col-6':'col-12'"
                             borderless
                             readonly
                             :label-slot="true"
@@ -190,6 +200,7 @@ import { computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
+import { shortenPolicy } from 'src/utils'
 
 const searchText = ref('')
 const store = useTransactionStore()

@@ -1,6 +1,7 @@
 <template>
   <q-toolbar class="q-pa-none q-pb-sm">
     <q-btn
+      v-if="$q.screen.gt.md"
       outline
       style="border-top: gray solid 0px !important;"
       color="secondary"
@@ -30,7 +31,7 @@
           />
         </q-item-section>
       </q-item>
-      <q-item>
+      <q-item v-if="$q.screen.gt.md">
         <q-item-section dense>
           <q-input
             dense
@@ -46,7 +47,7 @@
     <q-space />
     <span
       :style="$q.dark.isActive?{color:'white'}:{color: '#71a4e0'}"
-      class="col-2"
+      :class="$q.screen.gt.md?'col-2':'col-5 q-mt-sm'"
     >
 
       <q-btn

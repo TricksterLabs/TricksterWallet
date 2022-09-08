@@ -2,8 +2,8 @@
   <q-item
     class="q-pa-none flex items-center q-pr-none"
     :class="
-      currentNum === props.num || props.currentNum === 'all'
-        ? 'wallet-hover'
+      currentNum.toString() === props.num.toString() || props.currentNum.toString() === 'all'
+        ? ($q.dark.isActive?'bg-dark-card':'bg-lite-card')
         : ''
     "
   >
@@ -232,3 +232,12 @@ const copyStackAddressContent = () => {
     })
 }
 </script>
+
+<style>
+.bg-dark-card{
+  background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+}
+.bg-lite-card{
+background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
+}
+</style>

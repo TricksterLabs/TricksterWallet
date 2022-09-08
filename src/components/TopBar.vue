@@ -11,33 +11,46 @@
         >
           <q-btn
             square
+            :outline="route.path=='/'+nav.route?true:false"
             type="a"
-            :href="`/#/${props.walletNum}/${nav.toLowerCase()}`"
+            :href="`/#/${nav.route}`"
             class="flex text-capitalize text-weight-bold justify-center items-center full-width"
             style="height: 64px"
           >
-            {{ nav.toLowerCase() }}
+            {{ nav.label.toLowerCase() }}
           </q-btn>
           <q-separator vertical />
         </template>
-        <q-btn
-          color="negative"
-          square
-          outline
-          type="a"
-          class="flex justify-center text-weight-bold text-capitalize items-center full-width"
-          style="height: 64px"
-        >
-          Settings
-        </q-btn>
       </q-list>
     </q-scroll-area>
   </q-toolbar>
 </template>
 
 <script setup>
-const navs = ['ASSETS', 'MARKET', 'TRANSACTION', 'STAKING', 'VOTING']
-const props = defineProps({
-  walletNum: String
-})
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const navs = [
+  {
+    label: 'ASSETS',
+    route: 'assets'
+  }, {
+    label: 'MARKET',
+    route: 'market'
+  }, {
+    label: 'TRANSACTION',
+    route: 'transaction'
+  }, {
+    label: 'STAKING',
+    route: 'stacking'
+  },
+  {
+    label: 'VOTING',
+    route: 'voting'
+  },
+  {
+    label: 'Wallet Management',
+    route: 'wallet_management'
+  }]
 </script>

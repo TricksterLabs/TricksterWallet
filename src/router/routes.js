@@ -2,12 +2,19 @@
 const routes = [
   {
     path: '/',
-    redirect: '/all/assets'
+    redirect: '/assets'
   },
   {
-    path: '/:walletnum/:classify',
+    path: '/assets',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }]
+    children: [
+      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: '/stacking', component: () => import('pages/StackingPage.vue') },
+      { path: '/transaction', component: () => import('pages/TransactionPage.vue') },
+      { path: '/market', component: () => import('pages/MarketPage.vue') },
+      { path: '/voting', component: () => import('pages/VotingPage.vue') },
+      { path: '/wallet_management', component: () => import('pages/WalletManagementPage.vue') }
+    ]
   },
 
   // Always leave this as last one,

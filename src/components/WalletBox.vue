@@ -1,30 +1,30 @@
 <template>
   <q-list separator>
-<!--    <q-item-->
-<!--      style="border: 1px #03a9f4 solid;border-radius:5px"-->
-<!--      class="q-mt-sm q-mx-xs"-->
-<!--      clickable-->
-<!--      @click="store.WalletNumData('all', 'assets')"-->
-<!--    >-->
-<!--      <q-badge-->
-<!--        class="absolute-top-left q-mt-xs q-ml-xs"-->
-<!--        square-->
-<!--        color="blue"-->
-<!--      >-->
-<!--        All-->
-<!--      </q-badge>-->
-<!--      <q-item-section class="q-pt-ms">-->
-<!--        <q-item-label class="justify-between text-weight-bolder flex q-px-md">-->
-<!--          <span>15</span>-->
-<!--          <span>$20</span>-->
-<!--        </q-item-label>-->
-<!--&lt;!&ndash;        <q-item-label class="text-center">&ndash;&gt;-->
-<!--&lt;!&ndash;          &lt;!&ndash; Assets: {{ store.wallets }} &ndash;&gt;&ndash;&gt;-->
-<!--&lt;!&ndash;        </q-item-label>&ndash;&gt;-->
-<!--      </q-item-section>-->
-<!--    </q-item>-->
+    <!--    <q-item-->
+    <!--      style="border: 1px #03a9f4 solid;border-radius:5px"-->
+    <!--      class="q-mt-sm q-mx-xs"-->
+    <!--      clickable-->
+    <!--      @click="store.WalletNumData('all', 'assets')"-->
+    <!--    >-->
+    <!--      <q-badge-->
+    <!--        class="absolute-top-left q-mt-xs q-ml-xs"-->
+    <!--        square-->
+    <!--        color="blue"-->
+    <!--      >-->
+    <!--        All-->
+    <!--      </q-badge>-->
+    <!--      <q-item-section class="q-pt-ms">-->
+    <!--        <q-item-label class="justify-between text-weight-bolder flex q-px-md">-->
+    <!--          <span>15</span>-->
+    <!--          <span>$20</span>-->
+    <!--        </q-item-label>-->
+    <!--&lt;!&ndash;        <q-item-label class="text-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;          &lt;!&ndash; Assets: {{ store.wallets }} &ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;        </q-item-label>&ndash;&gt;-->
+    <!--      </q-item-section>-->
+    <!--    </q-item>-->
 
-     <q-item
+    <q-item
       class="q-pa-none bg-cyan-5 text-white"
       tag="a"
       clickable
@@ -32,7 +32,8 @@
     >
       <q-avatar
         font-size="16px"
-        class="q-mr-sm q-my-sm wallet-num wallet-all">
+        class="q-mr-sm q-my-sm wallet-num wallet-all"
+      >
         ALL
       </q-avatar>
       <q-separator vertical />
@@ -44,9 +45,9 @@
         <q-item-label class="text-center">
           <!-- Assets: {{ store.wallets }} -->
         </q-item-label>
-<!--        <q-item-label class="text-center">-->
-<!--          &lt;!&ndash; Assets: {{ store.wallets }} &ndash;&gt;-->
-<!--        </q-item-label>-->
+        <!--        <q-item-label class="text-center">-->
+        <!--          &lt;!&ndash; Assets: {{ store.wallets }} &ndash;&gt;-->
+        <!--        </q-item-label>-->
       </q-item-section>
     </q-item>
 

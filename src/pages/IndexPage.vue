@@ -8,8 +8,7 @@
           borderless
           label="Search.."
           dense
-        >
-        </q-input>
+        />
       </q-item>
       <q-item>
         <q-btn>SORT</q-btn>
@@ -20,7 +19,7 @@
     </q-list>
     <q-separator />
 
-    <q-separator></q-separator>
+    <q-separator />
     <div class="fit-main">
       <q-scroll-area class="fit">
         <q-list>
@@ -55,24 +54,53 @@
                   </q-item-section>
 
                   <q-item-section>
-                    <q-item-label class="text-weight-bold">{{ asset.realName }}</q-item-label>
-                    <q-item-label caption class="text-weight-bold">
+                    <q-item-label class="text-weight-bold">
+                      {{ asset.realName }}
+                    </q-item-label>
+                    <q-item-label
+                      caption
+                      class="text-weight-bold"
+                    >
                       {{ asset.walletName }} / {{ asset.asset_name }}
                     </q-item-label>
-                    <q-item-label caption class="text-weight-bold">
-                      <q-chip outline square dense color="cyan-7" text-color="white" v-if="asset.data.statistical_rank">
-                      Statistical Rank - {{ asset.data.statistical_rank }}
+                    <q-item-label
+                      caption
+                      class="text-weight-bold"
+                    >
+                      <q-chip
+                        outline
+                        square
+                        dense
+                        color="cyan-7"
+                        text-color="white"
+                        v-if="asset.data.statistical_rank"
+                      >
+                        Statistical Rank - {{ asset.data.statistical_rank }}
                       </q-chip>
-                      <q-chip outline square dense color="light-blue-8" text-color="white" v-if="asset.data.rarity_rank">
-                      Rarity Rank - {{ asset.data.rarity_rank }}
+                      <q-chip
+                        outline
+                        square
+                        dense
+                        color="light-blue-8"
+                        text-color="white"
+                        v-if="asset.data.rarity_rank"
+                      >
+                        Rarity Rank - {{ asset.data.rarity_rank }}
                       </q-chip>
                     </q-item-label>
-                    <q-item-label caption class="text-weight-bold">
-
-                    </q-item-label>
+                    <q-item-label
+                      caption
+                      class="text-weight-bold"
+                    />
                   </q-item-section>
                   <q-item-section side>
-                    <q-chip outline square dense color="red" text-color="white">
+                    <q-chip
+                      outline
+                      square
+                      dense
+                      color="red"
+                      text-color="white"
+                    >
                       {{ asset.quantity }}x
                     </q-chip>
                   </q-item-section>
@@ -80,9 +108,11 @@
                 <q-card
                   style="border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;"
                   class="no-border no-shadow"
-                  :class="$q.dark.isActive?'bg-dark':'bg-grey-2'">
+                  :class="$q.dark.isActive?'bg-dark':'bg-grey-2'"
+                >
                   <q-card-section
-                    class="row q-p-xs">
+                    class="row q-p-xs"
+                  >
                     <div class="col-8">
                       <div class="text-h6 text-weight-bold">
                         Properties
@@ -137,8 +167,7 @@
                         label="Source Link"
                         borderless
                         readonly
-                      >
-                      </q-input>
+                      />
 
                       <q-input
                         dense

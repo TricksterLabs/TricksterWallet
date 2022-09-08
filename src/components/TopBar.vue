@@ -13,7 +13,7 @@
             square
             :outline="route.path=='/'+nav.route?true:false"
             type="a"
-            :href="`/#/${nav.route}`"
+            :to="`/${nav.route}`"
             class="flex text-capitalize text-weight-bold justify-center items-center full-width"
             style="height: 64px"
           >

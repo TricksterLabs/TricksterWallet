@@ -10,7 +10,8 @@
     >
       <q-item-label
         header
-        class="text-capitalize text-weight-bold">
+        class="text-capitalize text-weight-bold"
+      >
         Transaction
       </q-item-label>
     </q-item>
@@ -48,7 +49,8 @@
           <q-expansion-item
             v-for="(nfts, i) in store.transactions"
             :key="`transaction-${nfts[0].walletName}`"
-            expand-separator dense
+            expand-separator
+            dense
             class="expansion-border"
             group="transactions"
             v-model="selectedWallet[i]"
@@ -62,16 +64,22 @@
                 caption
                 side
               >
-                <q-chip outline dense square color="deep-orange" text-color="white">
+                <q-chip
+                  outline
+                  dense
+                  square
+                  color="deep-orange"
+                  text-color="white"
+                >
                   ADA: {{ totalAmounts[i] }}
                 </q-chip>
-
               </q-item-section>
             </template>
             <q-item
               v-for="nft in nfts"
               :key="nft.asset_name"
-              dense class="q-px-xs"
+              dense
+              class="q-px-xs"
             >
               <q-item-section avatar>
                 <q-avatar>
@@ -84,7 +92,8 @@
                     nft.asset_name
                   }}
                 </q-item-label>
-                <q-item-label class="wallet-text"
+                <q-item-label
+                  class="wallet-text"
                   caption
                 >
                   {{
@@ -93,7 +102,13 @@
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
-                <q-btn icon="close" flat dense round @click="store.removeSelect(nft.asset_name)"></q-btn>
+                <q-btn
+                  icon="close"
+                  flat
+                  dense
+                  round
+                  @click="store.removeSelect(nft.asset_name)"
+                />
               </q-item-section>
             </q-item>
           </q-expansion-item>
@@ -145,20 +160,23 @@
         />
       </q-item-section>
     </q-item>
-      <q-input
-        dense
-        v-model="receivingAddress"
-        input-class="" class="full-width q-px-xs q-mb-xs"
-        label="Receiving Address"
-        outlined
-      />
+    <q-input
+      dense
+      v-model="receivingAddress"
+      input-class=""
+      class="full-width q-px-xs q-mb-xs"
+      label="Receiving Address"
+      outlined
+    />
     <q-btn
       size="23px"
-      color="primary" outline
+      color="primary"
+      outline
       :disable="receivingAddress === ''"
-      @click="onSubmit" class="text-capitalize q-ma-xs" label="Submit"
-    >
-    </q-btn>
+      @click="onSubmit"
+      class="text-capitalize q-ma-xs"
+      label="Submit"
+    />
   </q-list>
 </template>
 

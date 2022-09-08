@@ -29,7 +29,10 @@
             />
           </q-item-section>
         </q-item>
-        <q-item class="full-width" v-if="isMingledAddress">
+        <q-item
+          class="full-width"
+          v-if="isMingledAddress"
+        >
           <q-item-section>
             <q-input
               dense
@@ -41,8 +44,15 @@
           </q-item-section>
         </q-item>
       </q-card-section>
-      <q-card-actions align="right" class="q-mr-lg q-pb-md">
-        <q-btn label="Generate" color="positive" outline></q-btn>
+      <q-card-actions
+        align="right"
+        class="q-mr-lg q-pb-md"
+      >
+        <q-btn
+          label="Generate"
+          color="positive"
+          outline
+        />
       </q-card-actions>
     </q-card>
   </q-page>

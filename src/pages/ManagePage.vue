@@ -11,7 +11,8 @@
           type="a"
           class="q-mr-md col-6 full-width"
           href="#/manage/create-wallets"
-          color="primary"></q-btn>
+          color="primary"
+        />
         <q-btn
           label="Import Wallets"
           stack
@@ -19,19 +20,22 @@
           type="a"
           class="full-width"
           href="#/manage/import-wallets"
-          color="positive"></q-btn>
+          color="positive"
+        />
         <q-btn
           label="Hardware Wallets"
           stack
           outline
           class="q-mr-md full-width"
-          color="warning"></q-btn>
+          color="warning"
+        />
         <q-btn
           label="Export Wallets"
           stack
           outline
           class="full-width"
-          color="negative"></q-btn>
+          color="negative"
+        />
       </q-card-section>
     </q-card>
   </q-page>

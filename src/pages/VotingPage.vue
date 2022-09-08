@@ -2,7 +2,7 @@
   <q-page
     class="flex flex-center text text-h2 text-weight-bolder"
   >
-    Voting Page <br/> Coming Soon..
+    Voting Page <br> Coming Soon..
   </q-page>
 </template>
 

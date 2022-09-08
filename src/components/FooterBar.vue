@@ -46,7 +46,8 @@
     <q-space />
     <span
       :style="$q.dark.isActive?{color:'white'}:{color: '#71a4e0'}"
-      class="col-2">
+      class="col-2"
+    >
 
       <q-btn
         flat

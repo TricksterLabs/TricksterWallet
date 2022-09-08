@@ -2,7 +2,7 @@
   <q-page
     class="flex flex-center text text-h2 text-weight-bolder"
   >
-    Wallet Management <br/> Page Coming Soon..
+    Wallet Management <br> Page Coming Soon..
   </q-page>
 </template>
 

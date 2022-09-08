@@ -19,10 +19,11 @@
     <q-item-section class="q-pa-sm">
       <div>
         <a
-          :href="`/#/assets`"
           style="text-decoration: none"
           @click="store.WalletNumData(props.num, props.classify)"
-          :class="$q.dark.isActive?'text-white':'text-grey-8'">
+          class="cursor-pointer"
+          :class="$q.dark.isActive?'text-white':'text-grey-8'"
+        >
           <q-item-label class="text-center text-h6 text-weight-bold">
             {{ props.name }}
           </q-item-label>
@@ -46,7 +47,7 @@
           </q-item-label>
         </a>
       </div>
-      <q-separator class="q-my-xs"></q-separator>
+      <q-separator class="q-my-xs" />
 
       <q-item-label class="text-center">
         <q-btn
@@ -137,7 +138,7 @@
                   light: '#f5f5f5',
                 },
               }"
-            ></qrcode>
+            />
           </figure>
           {{ address }}
           <q-btn
@@ -155,13 +156,14 @@
         </q-card-section>
         <q-card-actions
           align="right"
-          class="q-pa-md">
+          class="q-pa-md"
+        >
           <q-btn
             label="Close"
             color="negative"
             outline
-            @click="modelQr=false">
-          </q-btn>
+            @click="modelQr=false"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -197,7 +199,7 @@ const color = (seed) => {
     luminosity: $q.dark.isActive ? 'light' : 'dark',
     hue: 'rgb',
     alpha: 0.5,
-    seed: seed
+    seed
   })
 }
 

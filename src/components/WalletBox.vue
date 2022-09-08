@@ -91,6 +91,16 @@
       <q-separator />
     </q-list>
   </q-scroll-area>
+  <q-btn
+    outline
+    style="border-top: gray solid 0px !important;"
+    color="negative"
+    size="20px"
+    class="q-ma-xs q-pb-sm"
+    to="/manage"
+  >
+    MANAGE
+  </q-btn>
 </template>
 
 <script setup>

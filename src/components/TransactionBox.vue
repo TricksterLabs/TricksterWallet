@@ -156,9 +156,8 @@
       size="23px"
       color="primary" outline
       :disable="receivingAddress === ''"
-      @click="onSubmit" class="text-capitalize q-ma-xs q-mb-sm" label="Submit"
-    ><G></G>
-
+      @click="onSubmit" class="text-capitalize q-ma-xs" label="Submit"
+    >
     </q-btn>
   </q-list>
 </template>

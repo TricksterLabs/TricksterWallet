@@ -11,7 +11,7 @@
       class="absolute-top-left q-mt-xs q-ml-xs"
       outline
       square
-      :style="{'color': color}"
+      :style="{'color': color(props.address)}"
     >
       {{ props.num }}
     </q-badge>
@@ -171,7 +171,7 @@
 <script setup>
 import { shortenAddress } from 'src/utils'
 import randomColor from 'randomcolor/randomColor'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useQuasar, copyToClipboard } from 'quasar'
 import qrcode from '@chenfengyuan/vue-qrcode'
 import { useTransactionStore } from 'src/stores/transactions'
@@ -192,13 +192,14 @@ const $q = useQuasar()
 
 const store = useTransactionStore()
 
-const color = computed(() => {
+const color = (seed) => {
   return randomColor({
     luminosity: $q.dark.isActive ? 'light' : 'dark',
     hue: 'rgb',
-    alpha: 0.5
+    alpha: 0.5,
+    seed: seed
   })
-})
+}
 
 const modelQr = ref(false)
 

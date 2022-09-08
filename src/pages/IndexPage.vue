@@ -1,27 +1,26 @@
 <template>
   <q-page>
-    <div class="row items-center">
-      <div class="col-10 q-pl-sm">
+    <q-list class="flex no-wrap">
+      <q-item class="full-width">
         <q-input
           v-model="searchText"
-          class="full-width q-ma-sm "
-          outlined dense
+          class="full-width"
+          borderless
           label="Search.."
+          dense
         >
-          <template #append>
-            <q-icon v-if="searchText"
-              name="close"
-              @click="searchText = ''"
-              class="cursor-pointer"
-            />
-          </template>
         </q-input>
-      </div>
-      <div class="col-2 q-pl-sm">
-        <q-btn color="primary" dense icon="sort" outline class="q-ml-sm text-capitalize" label="Sort"></q-btn>
-        <q-btn class="q-ml-md text-capitalize" dense icon="filter_alt" outline color="primary" label="Filter"></q-btn>
-      </div>
-    </div>
+      </q-item>
+      <q-item>
+        <q-btn>SORT</q-btn>
+      </q-item>
+      <q-item>
+        <q-btn>FILTER</q-btn>
+      </q-item>
+    </q-list>
+    <q-separator />
+
+    <q-separator></q-separator>
     <div class="fit-main">
       <q-scroll-area class="fit">
         <q-list>

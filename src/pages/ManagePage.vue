@@ -10,7 +10,7 @@
           outline
           type="a"
           class="q-mr-md col-6 full-width"
-          href="#/manage/create-wallets"
+          to="/manage/create-wallets"
           color="primary"
         />
         <q-btn
@@ -19,7 +19,7 @@
           outline
           type="a"
           class="full-width"
-          href="#/manage/import-wallets"
+          to="/manage/import-wallets"
           color="positive"
         />
         <q-btn

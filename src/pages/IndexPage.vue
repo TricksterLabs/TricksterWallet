@@ -113,8 +113,8 @@
                   <q-card-section
                     class="row q-p-xs"
                   >
-                    <div class="col-8">
-                      <div class="text-h6 text-weight-bold">
+                    <div class="col-12 row">
+                      <div class="text-h6 col-12 text-weight-bold">
                         Properties
                       </div>
                       <q-input
@@ -124,34 +124,17 @@
                         input-class=""
                         label="Asset Name"
                         borderless
+                        class="col-6"
                         readonly
                       />
+
                       <q-input
                         dense
                         v-if="asset.policy_id"
                         v-model="asset.policy_id"
                         input-class=""
                         label="Policy Id"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
-                        dense
-                        v-if="asset.data.mediaType"
-                        :model-value="asset.data.mediaType ?? 'image/jpeg'"
-                        input-class=""
-                        label="Sources Type"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
-                        v-if="asset.data.image"
-                        dense
-                        v-model="asset.data.image"
-                        input-class=""
-                        label="Source Link"
+                        class="col-6"
                         borderless
                         readonly
                       />
@@ -162,56 +145,34 @@
                         v-model="asset.quantity"
                         input-class=""
                         label="Quantity"
+                        class="col-6"
                         borderless
                         readonly
                       />
-                    </div>
-                    <div class="col-4" style="margin-top: 34px">
-                      <q-input
-                        dense
-                        v-if="asset.data.description"
-                        v-model="asset.data.description"
-                        input-class=""
-                        label="Description"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        v-if="asset.data.name"
-                        v-model="asset.data.name"
-                        input-class=""
-                        label="Name"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        v-if="asset.data.ticker"
-                        v-model="asset.data.ticker"
-                        input-class=""
-                        label="Ticker"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        v-if="asset.data.decimals"
-                        v-model="asset.data.decimals"
-                        input-class=""
-                        label="Decimal"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        v-if="asset.data.fungible"
-                        :model-value="asset.data.fungible?'Yes':'No'"
-                        input-class=""
-                        label="Fungible"
-                        borderless
-                        readonly
-                      />
+
+                      <template v-if="asset.hasOwnProperty('data')">
+                        <template
+                          :key="data"
+                          v-for="data in Object.keys(asset.data)">
+                          <q-input
+                            v-if="data!='files'"
+                            dense
+                            :model-value="asset.data[data]"
+                            input-class=""
+                            class="col-6"
+                            borderless
+                            readonly
+                            :label-slot="true"
+                          >
+                            <template v-slot:label>
+                              <span class="text-capitalize">
+                                {{ data.split('_').join(' ') }}
+                              </span>
+                            </template>
+                          </q-input>
+                        </template>
+                      </template>
+
                     </div>
                   </q-card-section>
                 </q-card>

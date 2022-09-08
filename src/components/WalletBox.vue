@@ -70,8 +70,12 @@
   </q-list>
   <q-separator />
   <q-scroll-area class="fit">
-    <q-list separator>
+    <q-list
+      separator
+      v-if="wallets.length>0"
+    >
       <template
+
         v-for="(wallet) in wallets"
         :key="wallet.baseAddressExternal[0]"
       >

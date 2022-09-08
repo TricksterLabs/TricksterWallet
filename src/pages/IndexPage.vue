@@ -119,6 +119,7 @@
                       </div>
                       <q-input
                         dense
+                        v-if="asset.asset_name"
                         v-model="asset.asset_name"
                         input-class=""
                         label="Asset Name"
@@ -127,32 +128,17 @@
                       />
                       <q-input
                         dense
+                        v-if="asset.policy_id"
                         v-model="asset.policy_id"
                         input-class=""
                         label="Policy Id"
                         borderless
                         readonly
                       />
-                      <q-input
-                        dense
-                        model-value="fg43f43"
-                        input-class=""
-                        label="Fingerprint"
-                        borderless
-                        readonly
-                      />
 
                       <q-input
                         dense
-                        model-value="721"
-                        input-class=""
-                        label="Metadata Type"
-                        borderless
-                        readonly
-                      />
-
-                      <q-input
-                        dense
+                        v-if="asset.data.mediaType"
                         :model-value="asset.data.mediaType ?? 'image/jpeg'"
                         input-class=""
                         label="Sources Type"
@@ -161,6 +147,7 @@
                       />
 
                       <q-input
+                        v-if="asset.data.image"
                         dense
                         v-model="asset.data.image"
                         input-class=""
@@ -170,6 +157,7 @@
                       />
 
                       <q-input
+                        v-if="asset.quantity"
                         dense
                         v-model="asset.quantity"
                         input-class=""
@@ -178,55 +166,49 @@
                         readonly
                       />
                     </div>
-                    <div class="col-4">
-                      <div class="text-h6 text-weight-bold">
-                        Metadata
-                      </div>
+                    <div class="col-4" style="margin-top: 34px">
                       <q-input
                         dense
-                        model-value="Yes"
+                        v-if="asset.data.description"
+                        v-model="asset.data.description"
                         input-class=""
-                        label="Legs"
+                        label="Description"
                         borderless
                         readonly
                       />
                       <q-input
                         dense
-                        model-value="Yes"
+                        v-if="asset.data.name"
+                        v-model="asset.data.name"
                         input-class=""
-                        label="Head"
+                        label="Name"
                         borderless
                         readonly
                       />
                       <q-input
                         dense
-                        model-value="Yes"
+                        v-if="asset.data.ticker"
+                        v-model="asset.data.ticker"
                         input-class=""
-                        label="Hands"
+                        label="Ticker"
                         borderless
                         readonly
                       />
                       <q-input
                         dense
-                        model-value="Yes"
+                        v-if="asset.data.decimals"
+                        v-model="asset.data.decimals"
                         input-class=""
-                        label="Body"
+                        label="Decimal"
                         borderless
                         readonly
                       />
                       <q-input
                         dense
-                        model-value="Yes"
+                        v-if="asset.data.fungible"
+                        :model-value="asset.data.fungible?'Yes':'No'"
                         input-class=""
-                        label="Eyes"
-                        borderless
-                        readonly
-                      />
-                      <q-input
-                        dense
-                        model-value="Yes"
-                        input-class=""
-                        label="Mouth"
+                        label="Fungible"
                         borderless
                         readonly
                       />

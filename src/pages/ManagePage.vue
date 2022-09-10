@@ -35,6 +35,7 @@
           outline
           class="full-width"
           color="negative"
+          to="/manage/export-wallets"
         />
       </q-card-section>
     </q-card>

@@ -50,6 +50,7 @@
           label="Import"
           color="positive"
           outline
+          @click="importWallet"
         />
       </q-card-actions>
     </q-card>
@@ -58,8 +59,57 @@
 
 <script setup>
 import { ref } from 'vue'
+import { dbData } from '../dexie/db'
+// import { liveQuery } from 'dexie'
+import { generateWallet } from '../wallet/importWallet'
 
 const stack = ref('')
 const address = ref('')
 const isMingledAddress = ref(false)
+
+// const generateWallets = () => {
+//   for (let i = 0; i < amountOfWallet.value; i++) {
+//     genWallet()
+//   }
+// }
+
+const importWallet = async () => {
+  // console.log('address', address.value)
+  const addressArray = address.value.split('\n')
+  // console.log('addressArray', addressArray[1])
+  // console.log('stack', stack.value)
+  for (let i = 0; i < addressArray.length; i++) {
+    try {
+      const generateNewWallet = await generateWallet(addressArray[i], stack.value)
+      const addNewWallet = await dbData.wallet.put({
+        entropy: generateNewWallet.entropy,
+        baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
+        baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
+        enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },
+        enterpriseAddressInternal: { 0: generateNewWallet.enterpriseAddressInternal },
+        stakeAddress: generateNewWallet.stakeAddress,
+        name: ''
+      })
+      await addNewWallet
+      console.log(addNewWallet)
+      if (typeof addNewWallet === 'number') {
+      // await Promise.all([
+        await dbData.wallet.update(addNewWallet, {
+          name: 'Wallet ' + addNewWallet,
+          balance: 0,
+          utxo_set: []
+        })
+        await dbData.history.put({
+          id: addNewWallet,
+          last_height: 0,
+          transactions: []
+        })
+      // ])
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
 </script>

@@ -16,7 +16,8 @@ const routes = [
       { path: '/wallet_management', component: () => import('pages/WalletManagementPage.vue') },
       { path: '/manage', component: () => import('pages/ManagePage.vue') },
       { path: '/manage/create-wallets', component: () => import('pages/CreateWalletPage.vue') },
-      { path: '/manage/import-wallets', component: () => import('pages/ImportWalletPage.vue') }
+      { path: '/manage/import-wallets', component: () => import('pages/ImportWalletPage.vue') },
+      { path: '/manage/export-wallets', component: () => import('pages/ExportWalletPage.vue') }
     ]
   },
 

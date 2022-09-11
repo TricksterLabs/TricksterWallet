@@ -1,7 +1,7 @@
 <template>
   <q-list
     separator
-    class="full-height flex column no-wrap"
+    class="full-height q-pb-none q-mb-none flex column no-wrap"
   >
     <q-item
       class="flex justify-center items-center"
@@ -42,7 +42,7 @@
       </q-tabs>
     </q-item>
     <q-item class="q-mb-md q-pa-none"
-            :style="$route.path=='/assets'?{'height': 'calc(100vh - 249px)'}:{'height': 'calc(100vh - 200px)'}">
+            :style="$route.path=='/assets'?{'height': 'calc(100vh - 245px)'}:{'height': 'calc(100vh - 200px)'}">
     <q-scroll-area class="fit">
         <q-list class="q-ma-sm">
           <q-expansion-item
@@ -163,12 +163,12 @@
       dense
       v-model="receivingAddress"
       input-class=""
-      class="full-width q-px-xs q-mb-xs"
+      class="full-width q-px-xs q-mt-xs q-mb-xs"
       label="Receiving Address"
       outlined
     />
     <q-btn
-      size="23px"
+      size="21px"
       color="primary"
       outline
       :disable="receivingAddress === ''"

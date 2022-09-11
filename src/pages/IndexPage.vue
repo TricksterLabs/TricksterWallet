@@ -103,7 +103,10 @@
                       class="text-weight-bold"
                     />
                   </q-item-section>
-                  <q-item-section side v-if="$q.screen.gt.md">
+                  <q-item-section
+                    side
+                    v-if="$q.screen.gt.md"
+                  >
                     <q-chip
                       outline
                       square
@@ -163,7 +166,8 @@
                       <template v-if="asset.hasOwnProperty('data')">
                         <template
                           :key="data"
-                          v-for="data in Object.keys(asset.data)">
+                          v-for="data in Object.keys(asset.data)"
+                        >
                           <q-input
                             v-if="data!='files'"
                             dense
@@ -174,7 +178,7 @@
                             readonly
                             :label-slot="true"
                           >
-                            <template v-slot:label>
+                            <template #label>
                               <span class="text-capitalize">
                                 {{ data.split('_').join(' ') }}
                               </span>
@@ -182,7 +186,6 @@
                           </q-input>
                         </template>
                       </template>
-
                     </div>
                   </q-card-section>
                 </q-card>
@@ -213,7 +216,7 @@ const walletList = computed(() => {
   // console.log('walletRefs', walletsRefs)
   const walletnum = store.walletNum
   if (walletsRefs && walletsRefs.length !== 0) {
-    // console.log(walletsRefstore)
+    console.log('refs', walletsRefs)
     for (let i = 0; i < walletsRefs.length; i++) {
       if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
         const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
@@ -227,35 +230,67 @@ const walletList = computed(() => {
                 .includes(searchText.value.toLowerCase())
         ) || []
         filteredUTXOSet.forEach((item) => {
-          item.asset_list.forEach((assetListItem) => {
-            if (data[assetListItem.policy_id]) {
-              data[assetListItem.policy_id].push({
-                // ...item,
-                asset_list: item.asset_list.map((assetListItem) => ({
-                  ...assetListItem,
-                  data: assetListItem.data || {},
-                  realName: assetListItem.data?.name || '',
+          for (let y = 0; y < item.asset_list.length; y++) {
+            if (data[item.asset_list[y].policy_id]) {
+              console.log('item', item)
+              data[item.asset_list[y].policy_id].push({
+                asset_list: [{
+                  ...item.asset_list[y],
+                  // asset_name: item.asset_list[i].asset_name,
+                  // policy_id: item.asset_list[i].policy_id,
+                  realName: item.asset_list[y].data.name,
                   walletName: walletsRefs[i].name,
                   walletId: walletsRefs[i].id
-                }))
+                // data: item.asset_list[i].data
+                }]
               })
+
+              // console.log(item.asset_list[i])
             } else {
-              data[assetListItem.policy_id] = [{
-                // ...item,
-                asset_list: item.asset_list.map((assetListItem) => ({
-                  ...assetListItem,
-                  data: assetListItem.data || {},
-                  realName: assetListItem.data?.name || '',
+              data[item.asset_list[y].policy_id] = [{
+                asset_list: [{
+                  ...item.asset_list[y],
+                  // asset_name: item.asset_list[i].asset_name,
+                  // policy_id: item.asset_list[i].policy_id,
+                  realName: item.asset_list[y].data.name,
                   walletName: walletsRefs[i].name,
                   walletId: walletsRefs[i].id
-                }))
+                // data: item.asset_list[i].data
+                }]
               }]
             }
-          })
+          }
+          // item.asset_list.forEach((assetListItem) => {
+          //   if (data[assetListItem.policy_id]) {
+          //     console.log(item)
+          //     data[assetListItem.policy_id].push({
+          //       // ...item
+          //       asset_list: item.asset_list.map((assetListItem) => ({
+          //         ...assetListItem,
+          //         data: assetListItem.data || {},
+          //         realName: assetListItem.data?.name || '',
+          //         walletName: walletsRefs[i].name || '',
+          //         walletId: walletsRefs[i].id || ''
+          //       }))
+          //     })
+          //   } else {
+          //     data[assetListItem.policy_id] = [{
+          //       // ...item
+          //       asset_list: item.asset_list.map((assetListItem) => ({
+          //         ...assetListItem,
+          //         data: assetListItem.data || {},
+          //         realName: assetListItem.data?.name || '',
+          //         walletName: walletsRefs[i].name,
+          //         walletId: walletsRefs[i].id
+          //       }))
+          //     }]
+          //   }
+          // })
         })
       }
     }
   }
+  console.log('data', data)
   return data
 })
 

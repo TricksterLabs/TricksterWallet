@@ -42,8 +42,13 @@
             }}
           </q-item-label>
           <q-item-label class="text-body2 text-center">
-            {{ (balance / 1000000).toFixed(2) }}
-            {{ balance / 200 }}$
+            <span class="text-bold text-blue">
+
+              {{ (balance / 1000000).toFixed(2) }} ₳
+            </span>
+            <span class="text-bold text-green">
+              {{ (balance / 1000000 * 0.5).toFixed(2) }} $
+            </span>
           </q-item-label>
         </a>
       </div>

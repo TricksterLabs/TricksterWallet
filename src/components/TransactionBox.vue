@@ -1,7 +1,7 @@
 <template>
   <q-list
     separator
-    class="full-height flex column no-wrap"
+    class="full-height q-pb-none q-mb-none flex column no-wrap"
   >
     <q-item
       class="flex justify-center items-center"
@@ -31,19 +31,21 @@
           name="standard"
           label="Standard"
         />
-        <q-tab
+        <!-- <q-tab
           name="one2many"
           label="One2Many"
         />
         <q-tab
           name="many2one"
           label="Many2One"
-        />
+        /> -->
       </q-tabs>
     </q-item>
-    <q-item class="q-mb-md q-pa-none"
-            :style="$route.path=='/assets'?{'height': 'calc(100vh - 249px)'}:{'height': 'calc(100vh - 200px)'}">
-    <q-scroll-area class="fit">
+    <q-item
+      class="q-mb-md q-pa-none"
+      :style="$route.path=='/assets'?{'height': 'calc(100vh - 245px)'}:{'height': 'calc(100vh - 200px)'}"
+    >
+      <q-scroll-area class="fit">
         <q-list class="q-ma-sm">
           <q-expansion-item
             v-for="(nfts, i) in store.transactions"
@@ -128,7 +130,6 @@
           input-class=""
           label="ADA to send"
           borderless
-          type="number"
           class="number-input"
         />
       </q-item-section>
@@ -163,12 +164,12 @@
       dense
       v-model="receivingAddress"
       input-class=""
-      class="full-width q-px-xs q-mb-xs"
+      class="full-width q-px-xs q-mt-xs q-mb-xs"
       label="Receiving Address"
       outlined
     />
     <q-btn
-      size="23px"
+      size="21px"
       color="primary"
       outline
       :disable="receivingAddress === ''"
@@ -204,9 +205,39 @@ const onSubmit = async () => {
   // console.log('selectedWallet', selectedWallet.value)
   // console.log('totalAmounts', totalAmounts.value[0])
   // console.log('store.Transaction', JSON.parse(JSON.stringify(await store.transactions2)))
+  // const adaQty = []
+  // const txs = await store.transactions2
+
+  // for (let i = 0; i < totalAmounts.value.length; i++) {
+  //   adaQty.push(totalAmounts.value[i])
+  // }
+
+  // for (const property in txs) {
+  //   await singleSend(
+  //     totalAmounts.value[0],
+  //     [property, txs[property]],
+  //     receivingAddress.value
+  //   )
+  //   console.log(property, txs[property])
+  //   console.log(receivingAddress.value)
+  // }
+
+  // console.log(txs[0])
+  // txs.forEach((tx, i) => {
+  //   if (selectedWallet.value[i]) {
+  //     console.log('tx', tx)
+  //     console.log('adaAmounts', adaAmounts.value[i])
+  //     console.log('receivingAddress', receivingAddress.value)
+  //     // singleSend(tx, adaAmounts.value[i], receivingAddress.value)
+  //   }
+  // })
+  // console.log(await store.transactions2)
+  console.log(totalAmounts.value[0])
+  console.log(store.transactions2)
+  console.log(receivingAddress.value)
   await singleSend(
     totalAmounts.value[0],
-    await store.transactions2,
+    store.transactions2,
     receivingAddress.value
   )
 }

@@ -1,6 +1,6 @@
 <template>
   <q-toolbar class="q-pa-none q-pb-sm">
-    <q-btn
+    <!-- <q-btn
       v-if="$q.screen.gt.md"
       outline
       style="border-top: gray solid 0px !important;"
@@ -10,7 +10,7 @@
       @click="genWallet"
     >
       GEN WALLET
-    </q-btn>
+    </q-btn> -->
 
     <!-- <q-btn
       color="secondary"
@@ -67,9 +67,9 @@
 import { onMounted, onUnmounted, onUpdated, ref } from 'vue'
 import { useQuasar } from 'quasar'
 // import { api } from 'boot/axios'
-import { dbData } from '../dexie/db'
+// import { dbData } from '../dexie/db'
 // import { liveQuery } from 'dexie'
-import { generateWallet } from '../wallet/generateWallet'
+// import { generateWallet } from '../wallet/generateWallet'
 // import { useObservable } from '@vueuse/rxjs'
 
 // const currentPrimaryKey = 2
@@ -81,38 +81,38 @@ import { generateWallet } from '../wallet/generateWallet'
 //   })
 // )
 
-const genWallet = async () => {
-  try {
-    const generateNewWallet = await generateWallet(24)
-    const addNewWallet = await dbData.wallet.put({
-      entropy: generateNewWallet.entropy,
-      baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
-      baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
-      enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },
-      enterpriseAddressInternal: { 0: generateNewWallet.enterpriseAddressInternal },
-      stakeAddress: generateNewWallet.stakeAddress,
-      name: ''
-    })
-    await addNewWallet
-    console.log(addNewWallet)
-    if (typeof addNewWallet === 'number') {
-      // await Promise.all([
-      await dbData.wallet.update(addNewWallet, {
-        name: 'Wallet ' + addNewWallet,
-        balance: 0,
-        utxo_set: []
-      })
-      await dbData.history.put({
-        id: addNewWallet,
-        last_height: 0,
-        transactions: []
-      })
-      // ])
-    }
-  } catch (e) {
-    console.log(e)
-  }
-}
+// const genWallet = async () => {
+//   try {
+//     const generateNewWallet = await generateWallet(24)
+//     const addNewWallet = await dbData.wallet.put({
+//       entropy: generateNewWallet.entropy,
+//       baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
+//       baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
+//       enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },
+//       enterpriseAddressInternal: { 0: generateNewWallet.enterpriseAddressInternal },
+//       stakeAddress: generateNewWallet.stakeAddress,
+//       name: ''
+//     })
+//     await addNewWallet
+//     console.log(addNewWallet)
+//     if (typeof addNewWallet === 'number') {
+//       // await Promise.all([
+//       await dbData.wallet.update(addNewWallet, {
+//         name: 'Wallet ' + addNewWallet,
+//         balance: 0,
+//         utxo_set: []
+//       })
+//       await dbData.history.put({
+//         id: addNewWallet,
+//         last_height: 0,
+//         transactions: []
+//       })
+//       // ])
+//     }
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 
 // async function getWalletUtxo () {
 //   try {

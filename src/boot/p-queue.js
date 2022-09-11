@@ -44,7 +44,7 @@ const transformArray = async () => {
 async function reCheck () {
   while (true) {
     worker.port.postMessage(await transformArray())
-    await delay(10000)
+    await delay(20000)
   }
 }
 

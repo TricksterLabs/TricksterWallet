@@ -39,8 +39,8 @@
       <q-separator vertical />
       <q-item-section class="q-pt-ms">
         <q-item-label class="justify-between text-weight-bolder flex q-px-md">
-          <span>15</span>
-          <span>$20</span>
+          <span>Everything</span>
+          <!-- <span>$20</span> -->
         </q-item-label>
         <q-item-label class="text-center">
           <!-- Assets: {{ store.wallets }} -->

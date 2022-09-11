@@ -24,9 +24,9 @@ const queueWallet = new PQueue({
 // })
 
 const getTransactions = async (id, address, lastHeight, transactionsOld) => {
-  console.log('Working')
+  console.log('Working', transactionsOld)
   try {
-    const getTip = await fetch('https://eu-fr.trickster.fi/api/v0/tip', {
+    const getTip = await fetch('https://eu-de.trickster.fi/api/v0/tip', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -48,6 +48,7 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
             address
           ],
           _after_block_height: lastHeight
+          // _after_block_height: 0
         }
       )
     })
@@ -65,8 +66,31 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
       })
       const resultWalletUtxo = await walletUtxo.json()
 
+      // if (typeof resultWalletUtxo === 'object' && resultWalletUtxo.utxo_set.length > 0) {
+      // if (resultWalletUtxo.length > 0) {
+      //   for (let i = 0; i < resultWalletUtxo.length; i++) {
+      //     await dbData.wallet.update(id, {
+      //       utxo_set:
+      //     })
+      //   }
+
+      // const addHexNames = (utxoSet) => {
+      //   const newArray = []
+      //   if (utxoSet.length > 0) {
+      //     for (let i = 0; i < utxoSet.length; i++) {
+      //       for (let y = 0; y < utxoSet[i].asset_list.length; y++) {
+      //         console.log(utxoSet[i].asset_list[y].asset_name)
+      //         newArray.push({
+      //           ...utxoSet[i].asset_list[y],
+
+      //         })
+      //       }
+      //     }
+      //   }
+      // }
+      // }
       if (typeof resultWalletUtxo === 'object' && resultWalletUtxo.length > 0) {
-        // console.log(resultWalletUtxo[0].utxo_set[0].asset_list)
+        console.log('old', transactionsOld)
         if (resultWalletUtxo[0]) {
           await dbData.wallet.update(id, {
             balance: parseInt(resultWalletUtxo[0].balance),
@@ -75,26 +99,36 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
           })
           await dbData.history.update(id, {
             last_height: resultGetTip[0].block_no,
-            transactions: [...resultNewTx, ...transactionsOld || []]
+            transactions: [...resultNewTx, ...transactionsOld]
           })
-          if (resultWalletUtxo[0].utxo_set[0].asset_list[0]) {
-            for (let i = 0; i < resultWalletUtxo[0].utxo_set.length; i++) {
-              for (let y = 0; y < resultWalletUtxo[0].utxo_set[i].asset_list.length; y++) {
-                const assetData = await ky.get('https://api.opencnft.io/1/asset/' + resultWalletUtxo[0].utxo_set[i].asset_list[y].policy_id + resultWalletUtxo[0].utxo_set[i].asset_list[y].asset_name).json()
-                // console.log(assetFetch)
-                // const assetData = await assetFetch.json()
-                const transformedAsset = {
-                  ...assetData.last_metadata,
-                  statistical_rank: assetData.statistical_rank,
-                  rarity_rank: assetData.rarity_rank
-                }
 
-                if (assetData) {
-                  console.log(assetData)
-                  // console.log(resultWalletUtxo)
-                  await dbData.wallet.where('id').equals(id).modify(x => {
-                    x.utxo_set[i].asset_list[y].data = transformedAsset
-                  })
+          if (resultWalletUtxo[0].utxo_set[0]) {
+            for (let i = 0; i < resultWalletUtxo[0].utxo_set.length; i++) {
+              if (resultWalletUtxo[0].utxo_set[i].asset_list[0]) {
+                for (let y = 0; y < resultWalletUtxo[0].utxo_set[i].asset_list.length; y++) {
+                  const assetData = await ky.get('https://api.opencnft.io/1/asset/' + resultWalletUtxo[0].utxo_set[i].asset_list[y].policy_id + resultWalletUtxo[0].utxo_set[i].asset_list[y].asset_name).json()
+                  // console.log('test35', assetData)
+                  // const assetData = await assetFetch.json()
+                  const transformedAsset = {
+                    ...assetData.last_metadata,
+                    statistical_rank: assetData.statistical_rank,
+                    rarity_rank: assetData.rarity_rank
+                  }
+
+                  if (assetData) {
+                    console.log(assetData)
+                    // console.log(resultWalletUtxo)
+                    await dbData.wallet.where('id').equals(id).modify(x => {
+                    // x.utxo_set[i].asset_list[y].data = transformedAsset
+                      x.utxo_set[i].asset_list[y] = {
+                        data: transformedAsset,
+                        asset_name: x.utxo_set[i].asset_list[y].asset_name,
+                        policy_id: x.utxo_set[i].asset_list[y].policy_id,
+                        quantity: x.utxo_set[i].asset_list[y].quantity,
+                        asset_name_hex: (x.utxo_set[i].asset_list[y].asset_name).match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').toUpperCase()
+                      }
+                    })
+                  }
                 }
               }
             }
@@ -130,7 +164,8 @@ self.onconnect = (e) => {
     const walletData = e.data
     console.log(walletData)
     for (let i = 0; i < walletData.length; i++) {
-      await queueWallet.add(async () => await getTransactions(walletData[i].id, walletData[i].baseAddressExternal[0], walletData[i].last_height), walletData[i].transactions)
+      await queueWallet.add(async () => await getTransactions(walletData[i].id, walletData[i].baseAddressExternal[0], walletData[i].last_height, walletData[i].transactions)
+      )
     }
     port.postMessage(walletData)
   }

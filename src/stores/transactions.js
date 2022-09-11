@@ -40,7 +40,19 @@ export const useTransactionStore = defineStore('transactions', {
         const walletId = state.selections[i].walletId
         // const walletId = state.selections[i].walletId
         if (walletId) {
+          // if (i === 0) {
+          //   transactions[walletId].push({
+          //     adaQty: 0
+          //   // policyId: state.selections[i].policy_id,
+          //   // amount: new BigNumber(state.selections[i].quantity)
+          //   })
+          // }
           if (!transactions[walletId]) transactions[walletId] = []
+          // if (i === 0) {
+          //   transactions[walletId].push({
+          //     adaQty: new BigNumber(0)
+          //   })
+          // }
           transactions[walletId].push({
             assetName: state.selections[i].asset_name,
             policyId: state.selections[i].policy_id,

@@ -44,8 +44,8 @@
               >
                 <template #header>
                   <q-checkbox
-                    v-model="store.selections"
-                    :val="asset"
+                    :model-value="JSON.stringify(store.selections).indexOf(JSON.stringify(asset))>=0?true:false"
+                    @update:model-value="removeFromStore(asset)"
                   />
                   <q-item-section avatar>
                     <q-avatar>
@@ -374,6 +374,20 @@ const walletList2 = computed(() => {
 })
 console.log(walletList)
 
+const removeFromStore = (asset) => {
+  let SelectedIndex = null
+  store.selections.filter(function (item, index) {
+    if (JSON.stringify(asset) === JSON.stringify(item)) {
+      SelectedIndex = index
+    }
+    return item
+  })
+  if (SelectedIndex != null) {
+    store.selections.splice(SelectedIndex, 1)
+  } else {
+    store.selections.push(asset)
+  }
+}
 // watch(walletList, (val) => {
 //   console.log('walletList', JSON.parse(JSON.stringify(val)))
 // })

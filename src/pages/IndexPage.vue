@@ -49,7 +49,7 @@
                   />
                   <q-item-section avatar>
                     <q-avatar>
-                      <img :src="asset.data.image?'https://nftstorage.link/ipfs/'+asset.data.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+                      <img :src="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('image') && asset.data.image?'https://nftstorage.link/ipfs/'+asset.data.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
                     </q-avatar>
                   </q-item-section>
 
@@ -73,7 +73,7 @@
                         dense
                         color="cyan-7"
                         text-color="white"
-                        v-if="asset.data.statistical_rank"
+                        v-if="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('statistical_rank') && asset.data.statistical_rank"
                       >
                         Statistical Rank - {{ asset.data.statistical_rank }}
                       </q-chip>
@@ -83,7 +83,7 @@
                         dense
                         color="light-blue-8"
                         text-color="white"
-                        v-if="asset.data.rarity_rank"
+                        v-if="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('rarity_rank') && asset.data.rarity_rank"
                       >
                         Rarity Rank - {{ asset.data.rarity_rank }}
                       </q-chip>
@@ -169,7 +169,7 @@
                           v-for="data in Object.keys(asset.data)"
                         >
                           <q-input
-                            v-if="data!='files'"
+                            v-if="data!='files' && asset.data.hasOwnProperty(data)"
                             dense
                             :model-value="asset.data[data]"
                             input-class=""

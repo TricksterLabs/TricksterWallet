@@ -24,7 +24,7 @@
       <q-scroll-area class="fit">
         <q-list>
           <q-expansion-item
-            v-for="(nft, policyId) in walletList"
+            v-for="(nft, policyId) in walletList2"
             :key="policyId"
             :expand-separator="false"
             :label="$q.screen.gt.md?policyId:shortenPolicy(policyId)"
@@ -33,12 +33,12 @@
             :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
           >
             <template
-              v-for="item in nft"
-              :key="item.id"
+              v-for="(item, id) in nft"
+              :key="id"
             >
               <q-expansion-item
-                v-for="asset in item.asset_list"
-                :key="`asset-${asset.asset_name}`"
+                v-for="(asset, id) in item"
+                :key="`asset-${id}`"
                 class="expansion-border q-ma-sm"
                 :expand-separator="false"
               >
@@ -61,7 +61,7 @@
                       caption
                       class="text-weight-bold"
                     >
-                      {{ asset.walletName }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
+                      {{ asset.asset_name_hex }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
                     </q-item-label>
                     <q-item-label
                       caption
@@ -372,7 +372,7 @@ const walletList2 = computed(() => {
   console.log('data', data)
   return data
 })
-console.log(walletList2)
+console.log(walletList)
 
 // watch(walletList, (val) => {
 //   console.log('walletList', JSON.parse(JSON.stringify(val)))

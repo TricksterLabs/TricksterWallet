@@ -24,7 +24,7 @@
       <q-scroll-area class="fit">
         <q-list>
           <q-expansion-item
-            v-for="(nft, policyId) in walletList"
+            v-for="(nft, policyId) in walletList2"
             :key="policyId"
             :expand-separator="false"
             :label="$q.screen.gt.md?policyId:shortenPolicy(policyId)"
@@ -33,19 +33,19 @@
             :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
           >
             <template
-              v-for="item in nft"
-              :key="item.id"
+              v-for="(item, id) in nft"
+              :key="id"
             >
               <q-expansion-item
-                v-for="asset in item.asset_list"
-                :key="`asset-${asset.asset_name}`"
+                v-for="(asset, id) in item"
+                :key="`asset-${id}`"
                 class="expansion-border q-ma-sm"
                 :expand-separator="false"
               >
                 <template #header>
                   <q-checkbox
-                    v-model="store.selections"
-                    :val="asset"
+                    :model-value="JSON.stringify(store.selections).indexOf(JSON.stringify(asset))>=0?true:false"
+                    @update:model-value="removeFromStore(asset)"
                   />
                   <q-item-section avatar>
                     <q-avatar>
@@ -55,13 +55,13 @@
 
                   <q-item-section>
                     <q-item-label class="text-weight-bold">
-                      {{ asset.realName }}
+                      {{ asset.walletName }}
                     </q-item-label>
                     <q-item-label
                       caption
                       class="text-weight-bold"
                     >
-                      {{ asset.walletName }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
+                      {{ asset.asset_name_hex }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
                     </q-item-label>
                     <q-item-label
                       caption
@@ -339,17 +339,17 @@ const walletList2 = computed(() => {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity = (parseInt(data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity) + parseInt(item.asset_list[y].quantity)).toString()
                 } else {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               } else {
                 data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
                   [walletsRefs[i].id]: {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               }
@@ -357,9 +357,9 @@ const walletList2 = computed(() => {
               data[item.asset_list[y].policy_id] = {
                 [item.asset_list[y].asset_name]: {
                   [walletsRefs[i].id]: {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               }
@@ -372,8 +372,22 @@ const walletList2 = computed(() => {
   console.log('data', data)
   return data
 })
-console.log(walletList2)
+console.log(walletList)
 
+const removeFromStore = (asset) => {
+  let SelectedIndex = null
+  store.selections.filter(function (item, index) {
+    if (JSON.stringify(asset) === JSON.stringify(item)) {
+      SelectedIndex = index
+    }
+    return item
+  })
+  if (SelectedIndex != null) {
+    store.selections.splice(SelectedIndex, 1)
+  } else {
+    store.selections.push(asset)
+  }
+}
 // watch(walletList, (val) => {
 //   console.log('walletList', JSON.parse(JSON.stringify(val)))
 // })

@@ -54,6 +54,7 @@
             dense
             class="expansion-border"
             group="transactions"
+            :class="i>0?'q-mt-xs':''"
             v-model="selectedWallet[i]"
           >
             <template #header>

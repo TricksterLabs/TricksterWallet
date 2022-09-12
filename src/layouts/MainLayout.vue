@@ -64,12 +64,11 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, ref } from 'vue'
+import { ref } from 'vue'
 import TopBar from '../components/TopBar.vue'
 import TransactionBox from 'src/components/TransactionBox.vue'
 import WalletBox from 'src/components/WalletBox.vue'
 import FooterBar from 'src/components/FooterBar.vue'
-import { useTransactionStore } from 'src/stores/transactions'
 import PasswordModal from 'src/components/PasswordModal.vue'
 import { useQuasar } from 'quasar'
 
@@ -78,8 +77,6 @@ const $q = useQuasar()
 $q.dark.set(true)
 // import { date } from 'quasar';
 
-const store = useTransactionStore()
-
 const walletNum = ref('all')
 const classify = ref('assets')
 const pass = ref(true)
@@ -87,11 +84,4 @@ const pass = ref(true)
 const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)
 
-const getParams = () => {
-  store.clearSelection()
-}
-
-onMounted(getParams)
-
-onUpdated(getParams)
 </script>

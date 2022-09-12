@@ -340,12 +340,16 @@ const walletList2 = computed(() => {
                 } else {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
                     ...item.asset_list[y]
+                    // walletId: walletsRefs[i].id,
+                    // walletName: walletsRefs[i].name
                   }
                 }
               } else {
                 data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
                   [walletsRefs[i].id]: {
                     ...item.asset_list[y]
+                    // walletId: walletsRefs[i].id,
+                    // walletName: walletsRefs[i].name
                   }
                 }
               }
@@ -354,6 +358,8 @@ const walletList2 = computed(() => {
                 [item.asset_list[y].asset_name]: {
                   [walletsRefs[i].id]: {
                     ...item.asset_list[y]
+                    // walletId: walletsRefs[i].id,
+                    // walletName: walletsRefs[i].name
                   }
                 }
               }

@@ -55,7 +55,7 @@
 
                   <q-item-section>
                     <q-item-label class="text-weight-bold">
-                      {{ asset.realName }}
+                      {{ asset.walletName }}
                     </q-item-label>
                     <q-item-label
                       caption
@@ -339,17 +339,17 @@ const walletList2 = computed(() => {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity = (parseInt(data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity) + parseInt(item.asset_list[y].quantity)).toString()
                 } else {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               } else {
                 data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
                   [walletsRefs[i].id]: {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               }
@@ -357,9 +357,9 @@ const walletList2 = computed(() => {
               data[item.asset_list[y].policy_id] = {
                 [item.asset_list[y].asset_name]: {
                   [walletsRefs[i].id]: {
-                    ...item.asset_list[y]
-                    // walletId: walletsRefs[i].id,
-                    // walletName: walletsRefs[i].name
+                    ...item.asset_list[y],
+                    walletId: walletsRefs[i].id,
+                    walletName: walletsRefs[i].name
                   }
                 }
               }

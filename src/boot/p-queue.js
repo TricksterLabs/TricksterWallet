@@ -28,8 +28,8 @@ const transformArray = async () => {
   async function historyCompute () { return JSON.parse(JSON.stringify(await history.value)) }
   const walletsArray = await walletsCompute()
   const historyArray = await historyCompute()
-  console.log(0, walletsArray)
-  console.log(1, historyArray)
+  // console.log(0, walletsArray)
+  // console.log(1, historyArray)
   const dataArray = []
   for (let i = 0; i < walletsArray.length; i++) {
     dataArray[i] = merge(walletsArray[i], historyArray[i])

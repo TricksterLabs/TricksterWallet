@@ -216,7 +216,7 @@ const walletList = computed(() => {
   // console.log('walletRefs', walletsRefs)
   const walletnum = store.walletNum
   if (walletsRefs && walletsRefs.length !== 0) {
-    console.log('refs', walletsRefs)
+    // console.log('refs', walletsRefs)
     for (let i = 0; i < walletsRefs.length; i++) {
       if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
         const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
@@ -231,9 +231,27 @@ const walletList = computed(() => {
         ) || []
         filteredUTXOSet.forEach((item) => {
           for (let y = 0; y < item.asset_list.length; y++) {
+            // if (data[item.asset_list[y].policy_id][0].asset_list[0].asset_name) {
+            //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity += item.asset_list[y].quantity
+            // } else {
+            //   data[item.asset_list[y].policy_id] = [item]
+            // }
             if (data[item.asset_list[y].policy_id]) {
-              console.log('item', item)
+              // if (data[item.asset_list[y].policy_id][0].asset_list[0].asset_name) {
+              //   // data[item.asset_list[y].policy_id][0].asset_list[0].quantity += parseInt(item.asset_list[y].quantity)
+              //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity = parseInt(data[item.asset_list[y].policy_id][0].asset_list[0].quantity) + parseInt(item.asset_list[y].quantity)
+              // } else {
+              //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity = parseInt(item.asset_list[y].quantity)
+              // }
+              // console.log('item', item)
               data[item.asset_list[y].policy_id].push({
+                // asset_list: item.asset_list.map((assetListItem) => ({
+                //   ...assetListItem,
+                //   data: assetListItem.data || {},
+                //   realName: assetListItem.data?.name || '',
+                //   walletName: walletsRefs[i].name,
+                //   walletId: walletsRefs[i].id
+                // }))
                 asset_list: [{
                   ...item.asset_list[y],
                   // asset_name: item.asset_list[i].asset_name,
@@ -290,9 +308,65 @@ const walletList = computed(() => {
       }
     }
   }
+  // console.log('data', data)
+  return data
+})
+
+const walletList2 = computed(() => {
+  const data = {}
+  const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
+  // console.log('walletRefs', walletsRefs)
+  const walletnum = store.walletNum
+  if (walletsRefs && walletsRefs.length !== 0) {
+    // console.log('refs', walletsRefs)
+    for (let i = 0; i < walletsRefs.length; i++) {
+      if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
+        const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
+          (item) =>
+            searchText.value === '' ||
+            item.asset_list[0].asset_name
+              .toLowerCase()
+              .includes(searchText.value.toLowerCase()) ||
+              item.asset_list[0].policy_id
+                .toLowerCase()
+                .includes(searchText.value.toLowerCase())
+        ) || []
+        filteredUTXOSet.forEach((item) => {
+          for (let y = 0; y < item.asset_list.length; y++) {
+            if (data[item.asset_list[y].policy_id]) {
+              if (data[item.asset_list[y].policy_id][item.asset_list[y].asset_name]) {
+                if (data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id]) {
+                  data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity = (parseInt(data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity) + parseInt(item.asset_list[y].quantity)).toString()
+                } else {
+                  data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
+                    ...item.asset_list[y]
+                  }
+                }
+              } else {
+                data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
+                  [walletsRefs[i].id]: {
+                    ...item.asset_list[y]
+                  }
+                }
+              }
+            } else {
+              data[item.asset_list[y].policy_id] = {
+                [item.asset_list[y].asset_name]: {
+                  [walletsRefs[i].id]: {
+                    ...item.asset_list[y]
+                  }
+                }
+              }
+            }
+          }
+        })
+      }
+    }
+  }
   console.log('data', data)
   return data
 })
+console.log(walletList2)
 
 // watch(walletList, (val) => {
 //   console.log('walletList', JSON.parse(JSON.stringify(val)))

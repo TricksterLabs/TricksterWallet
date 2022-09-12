@@ -4,7 +4,14 @@
       bordered
       class="bg-transparent text-black"
     >
-      <TopBar :wallet-num="walletNum" />
+      <Suspense>
+        <template #default>
+          <TopBar :wallet-num="walletNum" />
+        </template>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </q-header>
 
     <q-footer
@@ -12,7 +19,14 @@
       style="height: 60px"
       class="bg-transparent text-black"
     >
-      <FooterBar />
+      <Suspense>
+        <template #default>
+          <FooterBar />
+        </template>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </q-footer>
 
     <q-drawer
@@ -42,7 +56,14 @@
       bordered
       :width="300"
     >
-      <TransactionBox />
+      <Suspense>
+        <template #default>
+          <TransactionBox/>
+        </template>
+        <template #fallback>
+          Loading...
+        </template>
+      </Suspense>
     </q-drawer>
 
     <q-page-container>

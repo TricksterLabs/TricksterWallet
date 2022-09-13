@@ -366,13 +366,15 @@ const walletList = computed(() => {
                       ...item.asset_list[y],
                       data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   } else {
                     data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
                       ...item.asset_list[y],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   }
                 }
@@ -383,7 +385,8 @@ const walletList = computed(() => {
                       ...item.asset_list[y],
                       data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   }
                 } else {
@@ -391,7 +394,8 @@ const walletList = computed(() => {
                     [walletsRefs[i].id]: {
                       ...item.asset_list[y],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   }
                 }
@@ -404,7 +408,8 @@ const walletList = computed(() => {
                       ...item.asset_list[y],
                       data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   }
                 }
@@ -414,7 +419,8 @@ const walletList = computed(() => {
                     [walletsRefs[i].id]: {
                       ...item.asset_list[y],
                       walletId: walletsRefs[i].id,
-                      walletName: walletsRefs[i].name
+                      walletName: walletsRefs[i].name,
+                      balance: walletsRefs[i].balance
                     }
                   }
                 }

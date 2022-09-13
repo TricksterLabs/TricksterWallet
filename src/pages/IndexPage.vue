@@ -49,7 +49,7 @@
                   />
                   <q-item-section avatar>
                     <q-avatar>
-                      <img :src="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('image') && asset.data.image?'https://nftstorage.link/ipfs/'+asset.data.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+                      <img :src="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('last_metadata') && asset.data.last_metadata.hasOwnProperty('image') && asset.data.last_metadata.image?'https://nftstorage.link/ipfs/'+asset.data.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
                     </q-avatar>
                   </q-item-section>
 
@@ -192,7 +192,7 @@
               </q-expansion-item>
             </template>
 
-            <template v-for="(asset) in assets">
+            <!-- <template v-for="(asset) in assets">
               <template v-if="asset.id===policyId">
                 <template
                   v-for="(asset_item, asset_id) in asset.asset_name"
@@ -290,7 +290,7 @@
                   </q-expansion-item>
                 </template>
               </template>
-            </template>
+            </template> -->
           </q-expansion-item>
         </q-list>
       </q-scroll-area>
@@ -312,21 +312,29 @@ const { wallets, assets } = storeToRefs(useWalletsStore())
 
 // console.log('test', assetsTemp)
 
-const assetsList = computed(() => {
+// const assetsList = computed(() => {
+//   const assetsRefs = JSON.parse(JSON.stringify(assets.value))
+//   const data = {}
+//   for (let i = 0; i < assetsRefs.length; i++) {
+//     for (let j = 0; j < [assetsRefs[i].asset_name].length; j++) {
+//       data[assetsRefs[i].id] =
+//          [assetsRefs[i].asset_name][j]
+//     }
+//   }
+//   return data
+// })
+
+// console.log('assetsList', (assetsList.value)['8d84d3b86b2c9510fea6f2f671872a38a2ffeca270bbc71f95c84420']['46757473616c436f757274303331'])
+
+const walletList = computed(() => {
   const assetsRefs = JSON.parse(JSON.stringify(assets.value))
-  const data = {}
+  const assetsList = {}
   for (let i = 0; i < assetsRefs.length; i++) {
     for (let j = 0; j < [assetsRefs[i].asset_name].length; j++) {
-      data[assetsRefs[i].id] =
+      assetsList[assetsRefs[i].id] =
          [assetsRefs[i].asset_name][j]
     }
   }
-  return data
-})
-
-console.log('assetsList', (assetsList.value)['8d84d3b86b2c9510fea6f2f671872a38a2ffeca270bbc71f95c84420']['46757473616c436f757274303331'])
-
-const walletList = computed(() => {
   const data = {}
   const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
   // console.log('walletRefs', walletsRefs)
@@ -353,28 +361,61 @@ const walletList = computed(() => {
                 if (data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id]) {
                   data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity = (parseInt(data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id].quantity) + parseInt(item.asset_list[y].quantity)).toString()
                 } else {
-                  data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
-                    ...item.asset_list[y],
-                    walletId: walletsRefs[i].id,
-                    walletName: walletsRefs[i].name
+                  if (assetsList && assetsList[item.asset_list[y].policy_id] && assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name]) {
+                    data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
+                      ...item.asset_list[y],
+                      data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
+                  } else {
+                    data[item.asset_list[y].policy_id][item.asset_list[y].asset_name][walletsRefs[i].id] = {
+                      ...item.asset_list[y],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
                   }
                 }
               } else {
-                data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
-                  [walletsRefs[i].id]: {
-                    ...item.asset_list[y],
-                    walletId: walletsRefs[i].id,
-                    walletName: walletsRefs[i].name
+                if (assetsList && assetsList[item.asset_list[y].policy_id] && assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name]) {
+                  data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
+                    [walletsRefs[i].id]: {
+                      ...item.asset_list[y],
+                      data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
+                  }
+                } else {
+                  data[item.asset_list[y].policy_id][item.asset_list[y].asset_name] = {
+                    [walletsRefs[i].id]: {
+                      ...item.asset_list[y],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
                   }
                 }
               }
             } else {
-              data[item.asset_list[y].policy_id] = {
-                [item.asset_list[y].asset_name]: {
-                  [walletsRefs[i].id]: {
-                    ...item.asset_list[y],
-                    walletId: walletsRefs[i].id,
-                    walletName: walletsRefs[i].name
+              if (assetsList && assetsList[item.asset_list[y].policy_id] && assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name]) {
+                data[item.asset_list[y].policy_id] = {
+                  [item.asset_list[y].asset_name]: {
+                    [walletsRefs[i].id]: {
+                      ...item.asset_list[y],
+                      data: assetsList[item.asset_list[y].policy_id][item.asset_list[y].asset_name],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
+                  }
+                }
+              } else {
+                data[item.asset_list[y].policy_id] = {
+                  [item.asset_list[y].asset_name]: {
+                    [walletsRefs[i].id]: {
+                      ...item.asset_list[y],
+                      walletId: walletsRefs[i].id,
+                      walletName: walletsRefs[i].name
+                    }
                   }
                 }
               }

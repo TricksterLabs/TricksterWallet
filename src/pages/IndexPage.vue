@@ -317,6 +317,7 @@ const walletList2 = computed(() => {
   const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
   // console.log('walletRefs', walletsRefs)
   const walletnum = store.walletNum
+
   if (walletsRefs && walletsRefs.length !== 0) {
     // console.log('refs', walletsRefs)
     for (let i = 0; i < walletsRefs.length; i++) {

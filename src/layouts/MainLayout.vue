@@ -58,7 +58,7 @@
     >
       <Suspense>
         <template #default>
-          <TransactionBox/>
+          <TransactionBox />
         </template>
         <template #fallback>
           Loading...

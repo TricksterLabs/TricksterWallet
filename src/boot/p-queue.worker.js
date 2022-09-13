@@ -1,7 +1,6 @@
 import PQueue from 'p-queue'
 // import { useWalletsStore } from 'stores/wallets'
 import { dbData } from '../dexie/db'
-import ky from 'ky'
 
 const queueWallet = new PQueue({
   concurrency: 100, // Concurrency limit.
@@ -106,8 +105,17 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
             for (let i = 0; i < resultWalletUtxo[0].utxo_set.length; i++) {
               if (resultWalletUtxo[0].utxo_set[i].asset_list[0]) {
                 for (let y = 0; y < resultWalletUtxo[0].utxo_set[i].asset_list.length; y++) {
-                  const assetData = await ky.get('https://api.opencnft.io/1/asset/' + resultWalletUtxo[0].utxo_set[i].asset_list[y].policy_id + resultWalletUtxo[0].utxo_set[i].asset_list[y].asset_name).json()
+                  // const assetDataFetch = await ky.get('https://api.opencnft.io/1/asset/' + resultWalletUtxo[0].utxo_set[i].asset_list[y].policy_id + resultWalletUtxo[0].utxo_set[i].asset_list[y].asset_name).json()
                   // console.log('test35', assetData)
+                  const assetDataFetch = await fetch('https://api.opencnft.io/1/asset/' + resultWalletUtxo[0].utxo_set[i].asset_list[y].policy_id + resultWalletUtxo[0].utxo_set[i].asset_list[y].asset_name, {
+                    method: 'GET',
+                    headers: {
+                      accept: 'application/json'
+                      // 'Content-Type': 'application/json'
+                    }
+                  })
+                  const assetData = await assetDataFetch.json()
+                  // console.log(await assetData2.json())
                   // const assetData = await assetFetch.json()
                   const transformedAsset = {
                     ...assetData.last_metadata,

@@ -34,6 +34,7 @@ const transformArray = async () => {
   for (let i = 0; i < walletsArray.length; i++) {
     dataArray[i] = merge(walletsArray[i], historyArray[i])
   }
+
   return dataArray
 }
 

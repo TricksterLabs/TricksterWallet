@@ -24,7 +24,7 @@
       <q-scroll-area class="fit">
         <q-list>
           <q-expansion-item
-            v-for="(nft, policyId) in walletList2"
+            v-for="(nft, policyId) in walletList"
             :key="policyId"
             :expand-separator="false"
             :label="$q.screen.gt.md?policyId:shortenPolicy(policyId)"
@@ -55,13 +55,13 @@
 
                   <q-item-section>
                     <q-item-label class="text-weight-bold">
-                      {{ asset.walletName }}
+                      {{ asset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').toUpperCase() }}
                     </q-item-label>
                     <q-item-label
                       caption
                       class="text-weight-bold"
                     >
-                      {{ asset.asset_name_hex }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
+                      {{ asset.walletName }} /  {{ $q.screen.gt.md?asset.asset_name:shortenPolicy(asset.asset_name) }}
                     </q-item-label>
                     <q-item-label
                       caption
@@ -208,111 +208,11 @@ import { shortenPolicy } from 'src/utils'
 const searchText = ref('')
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()
-const { wallets } = storeToRefs(useWalletsStore())
+const { wallets, assets } = storeToRefs(useWalletsStore())
+
+console.log(assets.value)
 
 const walletList = computed(() => {
-  const data = {}
-  const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
-  // console.log('walletRefs', walletsRefs)
-  const walletnum = store.walletNum
-  if (walletsRefs && walletsRefs.length !== 0) {
-    // console.log('refs', walletsRefs)
-    for (let i = 0; i < walletsRefs.length; i++) {
-      if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
-        const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
-          (item) =>
-            searchText.value === '' ||
-            item.asset_list[0].asset_name
-              .toLowerCase()
-              .includes(searchText.value.toLowerCase()) ||
-              item.asset_list[0].policy_id
-                .toLowerCase()
-                .includes(searchText.value.toLowerCase())
-        ) || []
-        filteredUTXOSet.forEach((item) => {
-          for (let y = 0; y < item.asset_list.length; y++) {
-            // if (data[item.asset_list[y].policy_id][0].asset_list[0].asset_name) {
-            //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity += item.asset_list[y].quantity
-            // } else {
-            //   data[item.asset_list[y].policy_id] = [item]
-            // }
-            if (data[item.asset_list[y].policy_id]) {
-              // if (data[item.asset_list[y].policy_id][0].asset_list[0].asset_name) {
-              //   // data[item.asset_list[y].policy_id][0].asset_list[0].quantity += parseInt(item.asset_list[y].quantity)
-              //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity = parseInt(data[item.asset_list[y].policy_id][0].asset_list[0].quantity) + parseInt(item.asset_list[y].quantity)
-              // } else {
-              //   data[item.asset_list[y].policy_id][0].asset_list[0].quantity = parseInt(item.asset_list[y].quantity)
-              // }
-              // console.log('item', item)
-              data[item.asset_list[y].policy_id].push({
-                // asset_list: item.asset_list.map((assetListItem) => ({
-                //   ...assetListItem,
-                //   data: assetListItem.data || {},
-                //   realName: assetListItem.data?.name || '',
-                //   walletName: walletsRefs[i].name,
-                //   walletId: walletsRefs[i].id
-                // }))
-                asset_list: [{
-                  ...item.asset_list[y],
-                  // asset_name: item.asset_list[i].asset_name,
-                  // policy_id: item.asset_list[i].policy_id,
-                  realName: item.asset_list[y].data.name,
-                  walletName: walletsRefs[i].name,
-                  walletId: walletsRefs[i].id
-                // data: item.asset_list[i].data
-                }]
-              })
-
-              // console.log(item.asset_list[i])
-            } else {
-              data[item.asset_list[y].policy_id] = [{
-                asset_list: [{
-                  ...item.asset_list[y],
-                  // asset_name: item.asset_list[i].asset_name,
-                  // policy_id: item.asset_list[i].policy_id,
-                  realName: item.asset_list[y].data.name,
-                  walletName: walletsRefs[i].name,
-                  walletId: walletsRefs[i].id
-                // data: item.asset_list[i].data
-                }]
-              }]
-            }
-          }
-          // item.asset_list.forEach((assetListItem) => {
-          //   if (data[assetListItem.policy_id]) {
-          //     console.log(item)
-          //     data[assetListItem.policy_id].push({
-          //       // ...item
-          //       asset_list: item.asset_list.map((assetListItem) => ({
-          //         ...assetListItem,
-          //         data: assetListItem.data || {},
-          //         realName: assetListItem.data?.name || '',
-          //         walletName: walletsRefs[i].name || '',
-          //         walletId: walletsRefs[i].id || ''
-          //       }))
-          //     })
-          //   } else {
-          //     data[assetListItem.policy_id] = [{
-          //       // ...item
-          //       asset_list: item.asset_list.map((assetListItem) => ({
-          //         ...assetListItem,
-          //         data: assetListItem.data || {},
-          //         realName: assetListItem.data?.name || '',
-          //         walletName: walletsRefs[i].name,
-          //         walletId: walletsRefs[i].id
-          //       }))
-          //     }]
-          //   }
-          // })
-        })
-      }
-    }
-  }
-  // console.log('data', data)
-  return data
-})
-
-const walletList2 = computed(() => {
   const data = {}
   const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
   // console.log('walletRefs', walletsRefs)
@@ -373,7 +273,6 @@ const walletList2 = computed(() => {
   console.log('data', data)
   return data
 })
-console.log(walletList)
 
 const removeFromStore = (asset) => {
   let SelectedIndex = null

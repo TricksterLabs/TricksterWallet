@@ -18,9 +18,10 @@ export const getFromDb = async () => {
 
 const dbData = new Dexie('trickster-data')
 
-dbData.version(2).stores({
+dbData.version(4).stores({
   wallet: '++id', // Primary key and indexed props
-  history: 'id'
+  history: 'id',
+  assets: 'id'
 })
 
 dbData.open().catch(function (e) {

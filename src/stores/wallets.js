@@ -28,6 +28,7 @@ function useObservable (observable, options) {
 export const useWalletsStore = defineStore('wallets', () => {
   const wallets = useObservable(liveQuery(async () => { return await dbData.wallet.toArray() }), new Proxy(dbData.wallet.toArray(), {}))
   const history = useObservable(liveQuery(async () => { return await dbData.history.toArray() }), new Proxy(dbData.history.toArray(), {}))
+  const assets = useObservable(liveQuery(async () => { return await dbData.assets.toArray() }), new Proxy(dbData.assets.toArray(), {}))
   const walletList = computed(() => {
     const data = {}
     const walletsRefs = JSON.parse(JSON.stringify(wallets.value))
@@ -79,5 +80,5 @@ export const useWalletsStore = defineStore('wallets', () => {
     return data
   })
 
-  return { wallets, walletList, history }
+  return { wallets, walletList, history, assets }
 })

@@ -48,8 +48,8 @@
       <q-scroll-area class="fit">
         <q-list class="q-ma-sm">
           <q-expansion-item
-            v-for="(nfts, i) in store.transactions"
-            :key="`transaction-${nfts[0].walletName}`"
+            v-for="(nfts, i) in transactionsList"
+            :key="`transaction-${nfts.walletName}`"
             expand-separator
             dense
             class="expansion-border"
@@ -59,7 +59,7 @@
           >
             <template #header>
               <q-item-section class="text-weight-bold">
-                {{ nfts[0].walletName }}
+                {{ nfts.walletName }}
               </q-item-section>
 
               <q-item-section
@@ -73,21 +73,19 @@
                   color="deep-orange"
                   text-color="white"
                 >
-                  ADA: {{ totalAmounts[i] }}
+                  ADA: {{getTotalAmountMethod(nfts.assets)}}
                 </q-chip>
               </q-item-section>
             </template>
             <q-item
-              v-for="nft in nfts"
+              v-for="nft in nfts.assets"
               :key="nft.asset_name"
               dense
               class="q-px-xs"
             >
               <q-item-section avatar>
                 <q-avatar>
-                  <img :src="nft.hasOwnProperty('data') && nft.data.hasOwnProperty('last_metadata') && nft.data.last_metadata.hasOwnProperty('image') && nft.data.last_metadata.image?'https://nftstorage.link/ipfs/'+nft.data.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
-
-                  <!-- <img :src="nft.data.image?'https://nftstorage.link/ipfs/'+nft.data.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'"> -->
+                  <img :src="nft.image">
                 </q-avatar>
               </q-item-section>
               <q-item-section>
@@ -106,6 +104,16 @@
                 </q-item-label>
               </q-item-section>
               <q-item-section side>
+                <q-input
+                  dense
+                  v-model="nft.quantity"
+                  input-class=""
+                  label="ADA"
+                  debounce="0"
+                  borderless
+                  class="col-1 float-right"
+                  style="width: 58px"
+                />
                 <q-btn
                   icon="close"
                   flat
@@ -243,5 +251,43 @@ const onSubmit = async () => {
     store.transactions2,
     receivingAddress.value
   )
+}
+
+const transactionsList = computed(() => {
+  const finalDict = {}
+  store.transactions.filter(function (item) {
+    item.filter(function (asset) {
+      if (!(asset.walletId in finalDict)) {
+        finalDict[asset.walletId] = {
+          walletName: asset.walletName,
+          quantity: asset.balance,
+          image: asset.data.last_metadata.image ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+          assets: []
+        }
+      }
+      console.log(item)
+      finalDict[asset.walletId].assets.push({
+        image: asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+        asset_name: asset.asset_name,
+        policy_id: asset.policy_id,
+        amount: asset.quantity,
+        quantity: null
+      })
+      return asset
+    })
+    return item
+  })
+  return finalDict
+})
+
+const getTotalAmountMethod = (item) => {
+  let sum = 0
+  item.filter(function (asset) {
+    if (asset.quantity) {
+      sum = sum + asset.quantity ? asset.quantity : 0
+    }
+    return asset
+  })
+  return sum
 }
 </script>

@@ -54,7 +54,7 @@
       v-model="rightDrawerOpen"
       :breakpoint="0"
       bordered
-      :width="300"
+      :width="320"
     >
       <Suspense>
         <template #default>

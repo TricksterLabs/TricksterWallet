@@ -191,6 +191,103 @@
                 </q-card>
               </q-expansion-item>
             </template>
+
+            <template v-for="(asset) in assets">
+              <template v-if="asset.id===policyId">
+                <template
+                  v-for="(asset_item, asset_id) in asset.asset_name"
+                  :key="asset_id"
+                >
+                  <q-expansion-item
+                    class="expansion-border q-ma-sm"
+                    :expand-separator="false"
+                  >
+                    <template #header>
+                      <q-checkbox
+                        :model-value="JSON.stringify(store.selections).indexOf(JSON.stringify(asset_item))>=0?true:false"
+                        @update:model-value="removeFromStore(asset_item)"
+                      />
+                      <q-item-section avatar>
+                        <q-avatar>
+                          <img
+                            :src="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('image') && asset_item.last_metadata.image?'https://nftstorage.link/ipfs/'+asset_item.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+                        </q-avatar>
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label class="text-weight-bold"
+                                      v-if="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('name')">
+                          {{ asset_item.last_metadata.name }}
+                        </q-item-label>
+                        <q-item-label
+                          caption
+                          class="text-weight-bold"
+                        >
+                          <q-chip
+                            outline
+                            square
+                            dense
+                            color="cyan-7"
+                            text-color="white"
+                            v-if="asset_item.hasOwnProperty('statistical_rank') && asset_item.statistical_rank"
+                          >
+                            Statistical Rank - {{ asset_item.statistical_rank }}
+                          </q-chip>
+                          <q-chip
+                            outline
+                            square
+                            dense
+                            color="light-blue-8"
+                            text-color="white"
+                            v-if="asset_item.hasOwnProperty('rarity_rank') && asset_item.rarity_rank"
+                          >
+                            Rarity Rank - {{ asset_item.rarity_rank }}
+                          </q-chip>
+                        </q-item-label>
+                      </q-item-section>
+                    </template>
+                    <q-card
+                      style="border-bottom-right-radius: 8px;border-bottom-left-radius: 8px;"
+                      class="no-border no-shadow"
+                      :class="$q.dark.isActive?'bg-dark':'bg-grey-2'"
+                    >
+                      <q-card-section
+                        class="row q-p-xs"
+                      >
+                        <div class="col-12 row">
+                          <div class="text-h6 col-12 text-weight-bold">
+                            Properties
+                          </div>
+                          <template v-if="asset_item.hasOwnProperty('last_metadata')">
+                            <template
+                              :key="data"
+                              v-for="data in Object.keys(asset_item.last_metadata)"
+                            >
+                              <q-input
+                                v-if="data!='files' && asset_item.last_metadata.hasOwnProperty(data)"
+                                dense
+                                :model-value="asset_item.last_metadata[data]"
+                                input-class=""
+                                :class="$q.screen.gt.md?'col-6':'col-12'"
+                                borderless
+                                readonly
+                                :label-slot="true"
+                              >
+                                <template #label>
+                              <span class="text-capitalize">
+                                {{ data.split('_').join(' ') }}
+                              </span>
+                                </template>
+                              </q-input>
+                            </template>
+                          </template>
+                        </div>
+                      </q-card-section>
+                    </q-card>
+                  </q-expansion-item>
+                </template>
+              </template>
+            </template>
           </q-expansion-item>
         </q-list>
       </q-scroll-area>
@@ -209,8 +306,6 @@ const searchText = ref('')
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()
 const { wallets, assets } = storeToRefs(useWalletsStore())
-
-console.log(assets.value)
 
 const walletList = computed(() => {
   const data = {}

@@ -210,13 +210,16 @@
                       <q-item-section avatar>
                         <q-avatar>
                           <img
-                            :src="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('image') && asset_item.last_metadata.image?'https://nftstorage.link/ipfs/'+asset_item.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+                            :src="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('image') && asset_item.last_metadata.image?'https://nftstorage.link/ipfs/'+asset_item.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'"
+                          >
                         </q-avatar>
                       </q-item-section>
 
                       <q-item-section>
-                        <q-item-label class="text-weight-bold"
-                                      v-if="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('name')">
+                        <q-item-label
+                          class="text-weight-bold"
+                          v-if="asset_item.hasOwnProperty('last_metadata') && asset_item.last_metadata.hasOwnProperty('name')"
+                        >
                           {{ asset_item.last_metadata.name }}
                         </q-item-label>
                         <q-item-label
@@ -274,9 +277,9 @@
                                 :label-slot="true"
                               >
                                 <template #label>
-                              <span class="text-capitalize">
-                                {{ data.split('_').join(' ') }}
-                              </span>
+                                  <span class="text-capitalize">
+                                    {{ data.split('_').join(' ') }}
+                                  </span>
                                 </template>
                               </q-input>
                             </template>
@@ -306,6 +309,22 @@ const searchText = ref('')
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()
 const { wallets, assets } = storeToRefs(useWalletsStore())
+
+// console.log('test', assetsTemp)
+
+const assetsList = computed(() => {
+  const assetsRefs = JSON.parse(JSON.stringify(assets.value))
+  const data = {}
+  for (let i = 0; i < assetsRefs.length; i++) {
+    for (let j = 0; j < [assetsRefs[i].asset_name].length; j++) {
+      data[assetsRefs[i].id] =
+         [assetsRefs[i].asset_name][j]
+    }
+  }
+  return data
+})
+
+console.log('assetsList', (assetsList.value)['8d84d3b86b2c9510fea6f2f671872a38a2ffeca270bbc71f95c84420']['46757473616c436f757274303331'])
 
 const walletList = computed(() => {
   const data = {}

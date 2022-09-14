@@ -73,7 +73,7 @@
                   color="deep-orange"
                   text-color="white"
                 >
-                  ADA: {{getTotalAmountMethod(nfts.assets)}}
+                  ADA: {{ nfts.quantity }}
                 </q-chip>
               </q-item-section>
             </template>
@@ -106,13 +106,14 @@
               <q-item-section side>
                 <q-input
                   dense
-                  v-model="nft.quantity"
+                  v-model="nft.amount"
                   input-class=""
-                  label="ADA"
+                  label="QTY"
                   debounce="0"
                   borderless
                   class="col-1 float-right"
                   style="width: 58px"
+                  :rules="[ val => val <= nft.actual_amount || 'Max Value exceeded']"
                 />
                 <q-btn
                   icon="close"
@@ -142,6 +143,8 @@
           label="ADA to send"
           borderless
           class="number-input"
+          type="number"
+          :rules="[ val => val <= maxAda[selectedNum-1] || 'Max Value exceeded']"
         />
       </q-item-section>
       <q-item-section
@@ -168,6 +171,7 @@
           label="Total"
           borderless
           readonly
+          max
         />
       </q-item-section>
     </q-item>
@@ -204,13 +208,6 @@ const selectedWallet = ref(Array(store.transactions.length).fill(false))
 const selectedNum = computed(() => {
   return selectedWallet.value.indexOf(true)
 })
-const adaAmounts = ref(Array(store.transactions.length).fill(0))
-const feeAmount = computed(() => 0)
-const totalAmounts = computed(() => {
-  return adaAmounts.value.map(
-    (x, i) => (Number(adaAmounts.value[i]) || 0)
-  )
-})
 const onSubmit = async () => {
   // console.log('receiveingAddress', receivingAddress.value)
   // console.log('selectedWallet', selectedWallet.value)
@@ -243,9 +240,9 @@ const onSubmit = async () => {
   //   }
   // })
   // console.log(await store.transactions2)
-  console.log(totalAmounts.value[0])
-  console.log(store.transactions2)
-  console.log(receivingAddress.value)
+  // console.log(totalAmounts.value[0])
+  // console.log(store.transactions2)
+  // console.log(receivingAddress.value)
   await singleSend(
     totalAmounts.value[0],
     store.transactions2,
@@ -255,22 +252,24 @@ const onSubmit = async () => {
 
 const transactionsList = computed(() => {
   const finalDict = {}
-  store.transactions.filter(function (item) {
+  store.transactions.filter(function (item, index) {
     item.filter(function (asset) {
       if (!(asset.walletId in finalDict)) {
         finalDict[asset.walletId] = {
           walletName: asset.walletName,
-          quantity: asset.balance,
+          actual_quantity: asset.balance,
+          quantity: adaAmounts.value[index + 1],
           image: asset.data.last_metadata.image ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
           assets: []
         }
       }
-      console.log(item)
+      // console.log(item)
       finalDict[asset.walletId].assets.push({
         image: asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
         asset_name: asset.asset_name,
         policy_id: asset.policy_id,
-        amount: asset.quantity,
+        actual_amount: asset.quantity,
+        amount: 0,
         quantity: null
       })
       return asset
@@ -280,14 +279,28 @@ const transactionsList = computed(() => {
   return finalDict
 })
 
-const getTotalAmountMethod = (item) => {
-  let sum = 0
-  item.filter(function (asset) {
-    if (asset.quantity) {
-      sum = sum + asset.quantity ? asset.quantity : 0
-    }
-    return asset
+// const getTotalAmountMethod = (item) => {
+//   let sum = 0
+//   item.filter(function (asset) {
+//     if (asset.quantity) {
+//       sum = sum + asset.quantity ? asset.quantity : 0
+//     }
+//     return asset
+//   })
+//   return sum
+// }
+
+const adaAmounts = ref(Array(Object.keys(transactionsList).length).fill(0))
+const feeAmount = computed(() => 0)
+const totalAmounts = computed(() => {
+  return adaAmounts.value.map(
+    (x, i) => (Number(adaAmounts.value[i]) || 0)
+  )
+})
+
+const maxAda = computed(() => {
+  return Object.keys(transactionsList.value).map(function (item) {
+    return transactionsList.value[item].actual_quantity / 1000
   })
-  return sum
-}
+})
 </script>

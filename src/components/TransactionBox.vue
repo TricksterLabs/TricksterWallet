@@ -276,7 +276,7 @@ const transactionsList = computed(() => {
     })
     return item
   })
-  return finalDict
+  return ref(finalDict).value
 })
 
 // const getTotalAmountMethod = (item) => {

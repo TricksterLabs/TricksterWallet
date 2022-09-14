@@ -41,10 +41,25 @@
 
 <script setup>
 import { ref } from 'vue'
-import { dbData } from '../dexie/db'
+import { dbData, getFromDb } from '../dexie/db'
 // import { liveQuery } from 'dexie'
 import { exportWallet } from '../wallet/exportWallet'
 
+import CryptoJS from 'crypto-js'
+
+const salt = 'my-secret-key@123'
+const pwd = ref(null)
+
+getFromDb().then((value) => {
+  pwd.value = value ? value.pwd : null
+})
+
+const decryptString = (str, salt) => {
+  return JSON.parse(CryptoJS.AES.decrypt(
+    str,
+    salt
+  ).toString(CryptoJS.enc.Utf8))
+}
 const amountOfWallet = ref('')
 // const stack = ref('')
 // const isMingledAddress = ref(false)
@@ -59,7 +74,8 @@ const showAll = async () => {
   const wallets = await dbData.wallet.toArray()
   const walletsMnemonics = []
   for (let i = 0; i < wallets.length; i++) {
-    walletsMnemonics.push(wallets[i].id, await exportWallet(wallets[i].entropy))
+    const entropyD = decryptString(wallets[i].entropy, decryptString(pwd.value, salt))
+    walletsMnemonics.push(wallets[i].id, await exportWallet(entropyD))
   }
   amountOfWallet.value = walletsMnemonics
   // console.log(wallets)

@@ -15,7 +15,7 @@ export async function generateWallet (genWords, stake) {
   // }
   // const genWords = await generateMnemonic(wordlist, strength)
   // console.log(genWords)
-  console.log('stake2', typhonjs.utils.decodeBech32(stake).value.substring(2))
+  // console.log('stake2', typhonjs.utils.decodeBech32(stake).value.substring(2))
   const entropy = Buffer.from((await mnemonicToEntropy(genWords, wordlist)).buffer).toString('hex')
   console.log(entropy)
 

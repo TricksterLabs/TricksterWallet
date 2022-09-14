@@ -59,7 +59,23 @@
 
 <script setup>
 import { ref } from 'vue'
-import { dbData } from '../dexie/db'
+import { dbData, getFromDb } from '../dexie/db'
+import CryptoJS from 'crypto-js'
+
+const salt = 'my-secret-key@123'
+const pwd = ref(null)
+
+getFromDb().then((value) => {
+  pwd.value = value ? value.pwd : null
+})
+
+const decryptString = (str) => {
+  return JSON.parse(CryptoJS.AES.decrypt(
+    str,
+    salt
+  ).toString(CryptoJS.enc.Utf8))
+}
+
 // import { liveQuery } from 'dexie'
 import { generateWallet } from '../wallet/importWallet'
 
@@ -81,8 +97,14 @@ const importWallet = async () => {
   for (let i = 0; i < addressArray.length; i++) {
     try {
       const generateNewWallet = await generateWallet(addressArray[i], stack.value)
+
+      const entropyData = CryptoJS.AES.encrypt(
+        JSON.stringify(generateNewWallet.entropy),
+        decryptString(pwd.value)
+      ).toString()
+
       const addNewWallet = await dbData.wallet.put({
-        entropy: generateNewWallet.entropy,
+        entropy: entropyData,
         baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
         baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
         enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },

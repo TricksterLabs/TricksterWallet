@@ -37,8 +37,8 @@
               :key="id"
             >
               <q-expansion-item
-                v-for="(asset, id) in item"
-                :key="`asset-${id}`"
+                v-for="(asset, id2) in item"
+                :key="`asset-${id2}`"
                 class="expansion-border q-ma-sm"
                 :expand-separator="false"
               >
@@ -341,9 +341,11 @@ const walletList = computed(() => {
   const walletnum = store.walletNum
 
   if (walletsRefs && walletsRefs.length !== 0) {
-    // console.log('refs', walletsRefs)
     for (let i = 0; i < walletsRefs.length; i++) {
-      if (walletnum === 'all' || (walletnum && walletsRefs[i].id === walletsRefs[Number(walletnum) - 1].id)) {
+      if (walletnum === 'all' || (walletnum && walletsRefs[i].id === Number(walletnum))) {
+        // console.log('refs', walletsRefs[i].id)
+        // console.log('refs', walletsRefs[Number(walletnum) - 1])
+        // console.log('refs', walletsRefs[i].id)
         const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
           (item) =>
             searchText.value === '' ||

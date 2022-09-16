@@ -5,9 +5,12 @@
       persistent
     >
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">
-            Your password
+        <q-card-section class="text-center">
+          <q-avatar size="103px" class="shadow-10">
+            <img src="profile.svg">
+          </q-avatar>
+          <div class="text-h6 q-mt-sm">
+            Login
           </div>
         </q-card-section>
 
@@ -17,6 +20,8 @@
             type="password"
             v-model="password"
             autofocus
+            outlined
+            label="Password"
             @keyup.enter="checkPassword"
           />
         </q-card-section>
@@ -26,14 +31,17 @@
           class="text-primary"
         >
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Set Password"
             v-if="!pwd"
             @click="secondDialog = true"
           />
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Sign In"
+            :disable="!password"
             @click="checkPassword"
           />
         </q-card-actions>
@@ -46,9 +54,12 @@
       transition-hide="scale"
     >
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">
-            New password
+        <q-card-section class="text-center">
+          <q-avatar size="103px" class="shadow-10">
+            <img src="profile.svg">
+          </q-avatar>
+          <div class="text-h6 q-mt-sm">
+            Sign Up
           </div>
         </q-card-section>
 
@@ -59,6 +70,7 @@
             label="New Password"
             v-model="newPwd"
             autofocus
+            outlined
             @keyup.enter="setPassword"
           />
         </q-card-section>
@@ -69,6 +81,7 @@
             v-model="confirmPassword"
             label="Confirm Password"
             autofocus
+            outlined
             @keyup.enter="checkPassword"
           />
         </q-card-section>
@@ -78,12 +91,14 @@
           class="text-primary"
         >
           <q-btn
-            flat
             label="Cancel"
+            class="text-capitalize"
             v-close-popup
+            outline
           />
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Set Password"
             @click="setPassword"
           />
@@ -159,6 +174,10 @@ const setPassword = async () => {
     // Add the new friend!
     const id = await db.password.add({
       pwd: ciphertext
+    })
+    $q.notify({
+      type: 'positive',
+      message: 'Signed Up Successfully'
     })
     console.log('id', id, ciphertext)
     pwd.value = ciphertext

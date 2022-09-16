@@ -100,7 +100,7 @@ $q.dark.set(true)
 
 const walletNum = ref('all')
 const classify = ref('assets')
-const pass = ref(false)
+const pass = ref(true)
 
 const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)

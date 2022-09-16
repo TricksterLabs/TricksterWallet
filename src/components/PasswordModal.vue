@@ -111,25 +111,51 @@ const newPwd = ref('')
 
 const db = dbSettings
 
-const salt = 'my-secret-key@123'
+const salt = CryptoJS.lib.WordArray.random(128 / 8)
 
-const encryptString = (str) => {
-  return CryptoJS.AES.encrypt(
-    JSON.stringify(str),
-    salt
-  ).toString()
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
 }
-const decryptString = (str) => {
-  return JSON.parse(CryptoJS.AES.decrypt(
-    str,
-    salt
-  ).toString(CryptoJS.enc.Utf8))
+
+const generatePasswordHash = (key, salt) => {
+  return (salt.toString() + key.toString())
 }
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
+// const salt = 'my-secret-key@123'
+
+// const encryptString = (str) => {
+//   return CryptoJS.AES.encrypt(
+//     JSON.stringify(str),
+//     salt
+//   ).toString()
+// }
+// const decryptString = (str) => {
+//   return JSON.parse(CryptoJS.AES.decrypt(
+//     str,
+//     salt
+//   ).toString(CryptoJS.enc.Utf8))
+// }
 
 const setPassword = async () => {
   try {
     if (newPwd.value === '') return
-    const ciphertext = encryptString(newPwd.value)
+    const key = generateKey(newPwd.value, salt)
+    const ciphertext = generatePasswordHash(key, salt)
     // Add the new friend!
     const id = await db.password.add({
       pwd: ciphertext
@@ -143,8 +169,7 @@ const setPassword = async () => {
 const checkPassword = () => {
   // clearTable();
   if (password.value === '') return
-  const bytes = decryptString(pwd.value)
-  if (bytes === password.value) {
+  if (checkPasswordD(password.value, pwd.value)) {
     console.log('passed')
     emit('passed')
     $q.notify({
@@ -163,4 +188,5 @@ getFromDb().then((value) => {
   console.log('currentPassword', value)
   pwd.value = value ? value.pwd : null
 })
+
 </script>

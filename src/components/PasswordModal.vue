@@ -5,9 +5,12 @@
       persistent
     >
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">
-            Your password
+        <q-card-section class="text-center">
+          <q-avatar size="103px" class="shadow-10">
+            <img src="profile.svg">
+          </q-avatar>
+          <div class="text-h6 q-mt-sm">
+            Login
           </div>
         </q-card-section>
 
@@ -17,6 +20,8 @@
             type="password"
             v-model="password"
             autofocus
+            outlined
+            label="Password"
             @keyup.enter="checkPassword"
           />
         </q-card-section>
@@ -26,14 +31,17 @@
           class="text-primary"
         >
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Set Password"
             v-if="!pwd"
             @click="secondDialog = true"
           />
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Sign In"
+            :disable="!password"
             @click="checkPassword"
           />
         </q-card-actions>
@@ -46,9 +54,12 @@
       transition-hide="scale"
     >
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">
-            New password
+        <q-card-section class="text-center">
+          <q-avatar size="103px" class="shadow-10">
+            <img src="profile.svg">
+          </q-avatar>
+          <div class="text-h6 q-mt-sm">
+            Sign Up
           </div>
         </q-card-section>
 
@@ -59,6 +70,7 @@
             label="New Password"
             v-model="newPwd"
             autofocus
+            outlined
             @keyup.enter="setPassword"
           />
         </q-card-section>
@@ -69,6 +81,7 @@
             v-model="confirmPassword"
             label="Confirm Password"
             autofocus
+            outlined
             @keyup.enter="checkPassword"
           />
         </q-card-section>
@@ -78,12 +91,14 @@
           class="text-primary"
         >
           <q-btn
-            flat
             label="Cancel"
+            class="text-capitalize"
             v-close-popup
+            outline
           />
           <q-btn
-            flat
+            outline
+            class="text-capitalize"
             label="Set Password"
             @click="setPassword"
           />
@@ -111,28 +126,58 @@ const newPwd = ref('')
 
 const db = dbSettings
 
-const salt = 'my-secret-key@123'
+const salt = CryptoJS.lib.WordArray.random(128 / 8)
 
-const encryptString = (str) => {
-  return CryptoJS.AES.encrypt(
-    JSON.stringify(str),
-    salt
-  ).toString()
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
 }
-const decryptString = (str) => {
-  return JSON.parse(CryptoJS.AES.decrypt(
-    str,
-    salt
-  ).toString(CryptoJS.enc.Utf8))
+
+const generatePasswordHash = (key, salt) => {
+  return (salt.toString() + key.toString())
 }
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
+// const salt = 'my-secret-key@123'
+
+// const encryptString = (str) => {
+//   return CryptoJS.AES.encrypt(
+//     JSON.stringify(str),
+//     salt
+//   ).toString()
+// }
+// const decryptString = (str) => {
+//   return JSON.parse(CryptoJS.AES.decrypt(
+//     str,
+//     salt
+//   ).toString(CryptoJS.enc.Utf8))
+// }
 
 const setPassword = async () => {
   try {
     if (newPwd.value === '') return
-    const ciphertext = encryptString(newPwd.value)
+    const key = generateKey(newPwd.value, salt)
+    const ciphertext = generatePasswordHash(key, salt)
     // Add the new friend!
     const id = await db.password.add({
       pwd: ciphertext
+    })
+    $q.notify({
+      type: 'positive',
+      message: 'Signed Up Successfully'
     })
     console.log('id', id, ciphertext)
     pwd.value = ciphertext
@@ -143,8 +188,7 @@ const setPassword = async () => {
 const checkPassword = () => {
   // clearTable();
   if (password.value === '') return
-  const bytes = decryptString(pwd.value)
-  if (bytes === password.value) {
+  if (checkPasswordD(password.value, pwd.value)) {
     console.log('passed')
     emit('passed')
     $q.notify({
@@ -163,4 +207,5 @@ getFromDb().then((value) => {
   console.log('currentPassword', value)
   pwd.value = value ? value.pwd : null
 })
+
 </script>

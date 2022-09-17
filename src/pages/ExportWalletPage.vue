@@ -12,11 +12,19 @@
         align="center"
         class="q-mr-lg q-pb-md"
       >
+        <q-input
+          v-model="password"
+          outlined
+          dense
+          type="password"
+          label="Password" class="q-mr-md"
+        />
         <q-btn
           label="Generate"
           color="positive"
           outline
           @click="showAll"
+          :disable="!password"
         />
       </q-card-actions>
       <q-card-section class="col-12 items-center">
@@ -45,10 +53,33 @@ import { dbData, getFromDb } from '../dexie/db'
 // import { liveQuery } from 'dexie'
 import { exportWallet } from '../wallet/exportWallet'
 
+import { useQuasar } from 'quasar'
+
+const $q = useQuasar()
 import CryptoJS from 'crypto-js'
 
-const salt = 'my-secret-key@123'
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
+}
+
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
 const pwd = ref(null)
+const password = ref(null)
 
 getFromDb().then((value) => {
   pwd.value = value ? value.pwd : null
@@ -74,8 +105,19 @@ const showAll = async () => {
   const wallets = await dbData.wallet.toArray()
   const walletsMnemonics = []
   for (let i = 0; i < wallets.length; i++) {
-    const entropyD = decryptString(wallets[i].entropy, decryptString(pwd.value, salt))
-    walletsMnemonics.push(wallets[i].id, await exportWallet(entropyD))
+    if (checkPasswordD(password.value, pwd.value)) {
+      $q.notify({
+        type: 'positive',
+        message: 'Success'
+      })
+      const entropyD = decryptString(wallets[i].entropy, password.value)
+      walletsMnemonics.push(wallets[i].id, await exportWallet(entropyD))
+    } else {
+      $q.notify({
+        type: 'negative',
+        message: 'Failure'
+      })
+    }
   }
   amountOfWallet.value = walletsMnemonics
   // console.log(wallets)

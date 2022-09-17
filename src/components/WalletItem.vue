@@ -61,6 +61,7 @@
           round
           icon="delete"
           class="q-mt-xs q-ml-xs"
+          @click="deleteModel=true"
         >
           <q-tooltip>
             Delete Wallet
@@ -172,6 +173,42 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog
+      v-model="deleteModel"
+      persistent
+    >
+      <q-card style="min-width: 300px">
+        <q-card-section class="text-center">
+          <div class="text-weight-bold text-h6">Are you sure you want to delete this Wallet ?</div>
+        </q-card-section>
+        <q-card-section>
+          <q-item class="full-width">
+            <q-input
+              v-model="password"
+              outlined
+              class="full-width"
+              type="password"
+              label="Password"
+            />
+          </q-item>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            label="Cancel"
+            class="text-capitalize"
+            v-close-popup
+            outline
+          />
+          <q-btn
+            outline
+            class="text-capitalize q-mr-lg"
+            label="Yes"
+            @click="deleteWallet"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-item>
 </template>
 
@@ -182,6 +219,9 @@ import { ref } from 'vue'
 import { useQuasar, copyToClipboard } from 'quasar'
 import qrcode from '@chenfengyuan/vue-qrcode'
 import { useTransactionStore } from 'src/stores/transactions'
+import { getFromDb } from 'src/dexie/db'
+import CryptoJS from 'crypto-js'
+import { dbData } from '../dexie/db'
 
 // eslint-disable-next-line vue/valid-define-props
 const props = defineProps({
@@ -196,6 +236,7 @@ const props = defineProps({
   balance: Number
 })
 const $q = useQuasar()
+const pwd = ref(null)
 
 const store = useTransactionStore()
 
@@ -209,6 +250,8 @@ const color = (seed) => {
 }
 
 const modelQr = ref(false)
+const deleteModel = ref(false)
+const password = ref('')
 
 const copyAddressContent = () => {
   copyToClipboard(props.address)
@@ -223,6 +266,42 @@ const copyAddressContent = () => {
       // fail
     })
 }
+
+getFromDb().then((value) => {
+  pwd.value = value ? value.pwd : null
+})
+
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
+}
+
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
+const deleteWallet = async () => {
+  if (checkPasswordD(password.value, pwd.value)) {
+    await dbData.wallet.delete(props.num)
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Failure to Delete Wallet'
+    })
+  }
+}
+
 const copyStackAddressContent = () => {
   copyToClipboard(props.stackAddress)
     .then(() => {

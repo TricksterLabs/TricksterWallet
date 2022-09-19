@@ -181,7 +181,7 @@
     >
       <q-card style="min-width: 300px">
         <q-card-section class="text-center">
-          <div class="text-weight-bold text-h6">Are you sure you want to delete this Wallet ?</div>
+          <div class="text-weight-bold text-h6">Update Wallet Name</div>
         </q-card-section>
         <q-card-section>
           <q-item class="full-width">

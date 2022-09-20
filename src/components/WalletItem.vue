@@ -52,7 +52,7 @@
           </q-item-label>
         </a>
       </div>
-      <q-separator class="q-my-xs" />
+      <q-separator class="q-my-xs"/>
 
       <q-item-label class="text-center">
         <q-btn
@@ -72,6 +72,7 @@
           flat
           round
           icon="edit"
+          @click="editModel=true"
           class="q-mt-xs q-ml-xs"
           @click="renameModel=true"
         >
@@ -176,6 +177,41 @@
     </q-dialog>
 
     <q-dialog
+      v-model="editModel"
+      persistent
+    >
+      <q-card style="min-width: 300px">
+        <q-card-section class="text-center">
+          <div class="text-weight-bold text-h6">Update Wallet Name</div>
+        </q-card-section>
+        <q-card-section>
+          <q-item class="full-width">
+            <q-input
+              v-model="nameData"
+              outlined
+              class="full-width"
+              label="Wallet Name"
+            />
+          </q-item>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            label="Cancel"
+            class="text-capitalize"
+            v-close-popup
+            outline
+          />
+          <q-btn
+            outline
+            class="text-capitalize q-mr-lg"
+            label="Yes"
+            @click="updateWallet"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
       v-model="deleteModel"
       persistent
     >
@@ -213,6 +249,7 @@
       </q-card>
     </q-dialog>
 
+<<<<<<< HEAD
     <q-dialog
       v-model="renameModel"
       persistent
@@ -259,6 +296,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+=======
+>>>>>>> 2f765aa1846b1e05027adfb1280a59b4530d2a6e
   </q-item>
 </template>
 
@@ -301,9 +340,15 @@ const color = (seed) => {
 
 const modelQr = ref(false)
 const deleteModel = ref(false)
+<<<<<<< HEAD
 const renameModel = ref(false)
 const password = ref('')
 const toName = ref('')
+=======
+const editModel = ref(false)
+const password = ref('')
+const nameData = ref(props.name)
+>>>>>>> 2f765aa1846b1e05027adfb1280a59b4530d2a6e
 
 const copyAddressContent = () => {
   copyToClipboard(props.address)
@@ -382,13 +427,24 @@ const copyStackAddressContent = () => {
       // fail
     })
 }
+
+const updateWallet = async () => {
+  try {
+    await dbData.wallet.where('id').equals(parseInt(props.num)).modify(x => {
+      x.name = nameData
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 </script>
 
 <style>
 .bg-dark-card{
-  background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);
+  background-image: linear-gradient(60deg, #29323c 0%, #485563 100%)
 }
 .bg-lite-card{
-background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
+background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%)
 }
 </style>

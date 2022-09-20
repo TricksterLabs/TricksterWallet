@@ -18,6 +18,16 @@
               label="Amount of Wallet to Generate"
               outlined
             />
+            <q-item class="full-width">
+              <q-input
+                v-model="password"
+                outlined
+                class="full-width"
+                type="password"
+                label="Password"
+                autogrow
+              />
+            </q-item>
           </q-item-section>
         </q-item>
         <q-item class="full-width">
@@ -53,6 +63,7 @@
           color="positive"
           outline
           @click="generateWallets"
+          :disable="!password"
         />
       </q-card-actions>
     </q-card>
@@ -61,13 +72,52 @@
 
 <script setup>
 import { ref } from 'vue'
-import { dbData } from '../dexie/db'
+import { dbData, getFromDb } from '../dexie/db'
 // import { liveQuery } from 'dexie'
+import { useQuasar } from 'quasar'
+
 import { generateWallet } from '../wallet/generateWallet'
+import CryptoJS from 'crypto-js'
+
+const $q = useQuasar()
 
 const amountOfWallet = ref(1)
 const stack = ref('')
 const isMingledAddress = ref(false)
+
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
+}
+
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
+// const decryptString = (str, salt) => {
+//   return JSON.parse(CryptoJS.AES.decrypt(
+//     str,
+//     salt
+//   ).toString(CryptoJS.enc.Utf8))
+// }
+
+const pwd = ref(null)
+const password = ref(null)
+
+getFromDb().then((value) => {
+  pwd.value = value ? value.pwd : null
+})
 
 const generateWallets = () => {
   for (let i = 0; i < amountOfWallet.value; i++) {
@@ -76,36 +126,53 @@ const generateWallets = () => {
 }
 
 const genWallet = async () => {
-  console.log(stack.value)
-  try {
-    const generateNewWallet = await generateWallet(24, stack.value)
-    const addNewWallet = await dbData.wallet.put({
-      entropy: generateNewWallet.entropy,
-      baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
-      baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
-      enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },
-      enterpriseAddressInternal: { 0: generateNewWallet.enterpriseAddressInternal },
-      stakeAddress: generateNewWallet.stakeAddress,
-      name: ''
+  if (checkPasswordD(password.value, pwd.value)) {
+    $q.notify({
+      type: 'positive',
+      message: 'Success'
     })
-    await addNewWallet
-    console.log(addNewWallet)
-    if (typeof addNewWallet === 'number') {
-      // await Promise.all([
-      await dbData.wallet.update(addNewWallet, {
-        name: 'Wallet ' + addNewWallet,
-        balance: 0,
-        utxo_set: []
-      })
-      await dbData.history.put({
-        id: addNewWallet,
-        last_height: 0,
-        transactions: []
-      })
-      // ])
+    console.log(stack.value)
+    for (let i = 0; i < amountOfWallet.value; i++) {
+      try {
+        const generateNewWallet = await generateWallet(24, stack.value)
+        const entropyData = CryptoJS.AES.encrypt(
+          JSON.stringify(generateNewWallet.entropy),
+          password.value
+        ).toString()
+        const addNewWallet = await dbData.wallet.put({
+          entropy: entropyData,
+          baseAddressExternal: { 0: generateNewWallet.baseAddressExternal },
+          baseAddressInternal: { 0: generateNewWallet.baseAddressInternal },
+          enterpriseAddressExternal: { 0: generateNewWallet.enterpriseAddressExternal },
+          enterpriseAddressInternal: { 0: generateNewWallet.enterpriseAddressInternal },
+          stakeAddress: generateNewWallet.stakeAddress,
+          name: ''
+        })
+        await addNewWallet
+        console.log(addNewWallet)
+        if (typeof addNewWallet === 'number') {
+        // await Promise.all([
+          await dbData.wallet.update(addNewWallet, {
+            name: 'Wallet ' + addNewWallet,
+            balance: 0,
+            utxo_set: []
+          })
+          await dbData.history.put({
+            id: addNewWallet,
+            last_height: 0,
+            transactions: []
+          })
+        // ])
+        }
+      } catch (e) {
+        console.log(e)
+      }
     }
-  } catch (e) {
-    console.log(e)
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Failure'
+    })
   }
 }
 

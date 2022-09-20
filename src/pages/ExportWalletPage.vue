@@ -17,7 +17,8 @@
           outlined
           dense
           type="password"
-          label="Password" class="q-mr-md"
+          label="Password"
+          class="q-mr-md"
         />
         <q-btn
           label="Generate"
@@ -54,9 +55,9 @@ import { dbData, getFromDb } from '../dexie/db'
 import { exportWallet } from '../wallet/exportWallet'
 
 import { useQuasar } from 'quasar'
+import CryptoJS from 'crypto-js'
 
 const $q = useQuasar()
-import CryptoJS from 'crypto-js'
 
 const generateKey = (secret, salt) => {
   return CryptoJS.PBKDF2(

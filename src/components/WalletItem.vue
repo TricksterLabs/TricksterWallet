@@ -73,6 +73,7 @@
           round
           icon="edit"
           class="q-mt-xs q-ml-xs"
+          @click="renameModel=true"
         >
           <q-tooltip>
             Rename Wallet
@@ -180,7 +181,9 @@
     >
       <q-card style="min-width: 300px">
         <q-card-section class="text-center">
-          <div class="text-weight-bold text-h6">Are you sure you want to delete this Wallet ?</div>
+          <div class="text-weight-bold text-h6">
+            Are you sure you want to delete this Wallet ?
+          </div>
         </q-card-section>
         <q-card-section>
           <q-item class="full-width">
@@ -205,6 +208,53 @@
             class="text-capitalize q-mr-lg"
             label="Yes"
             @click="deleteWallet"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
+    <q-dialog
+      v-model="renameModel"
+      persistent
+    >
+      <q-card style="min-width: 300px">
+        <q-card-section class="text-center">
+          <div class="text-weight-bold text-h6">
+            Are you sure you want to rename this Wallet ?
+          </div>
+        </q-card-section>
+        <q-card-section>
+          <q-item class="full-width">
+            <q-input
+              v-model="toName"
+              outlined
+              class="full-width"
+              type="text"
+              label="New Wallet Name"
+            />
+          </q-item>
+          <q-item class="full-width">
+            <q-input
+              v-model="password"
+              outlined
+              class="full-width"
+              type="password"
+              label="Password"
+            />
+          </q-item>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            label="Cancel"
+            class="text-capitalize"
+            v-close-popup
+            outline
+          />
+          <q-btn
+            outline
+            class="text-capitalize q-mr-lg"
+            label="Yes"
+            @click="renameWallet(toName)"
           />
         </q-card-actions>
       </q-card>
@@ -251,7 +301,9 @@ const color = (seed) => {
 
 const modelQr = ref(false)
 const deleteModel = ref(false)
+const renameModel = ref(false)
 const password = ref('')
+const toName = ref('')
 
 const copyAddressContent = () => {
   copyToClipboard(props.address)
@@ -294,10 +346,25 @@ const checkPasswordD = (password, hashedPassword) => {
 const deleteWallet = async () => {
   if (checkPasswordD(password.value, pwd.value)) {
     await dbData.wallet.delete(props.num)
+    await dbData.history.delete(props.num)
   } else {
     $q.notify({
       type: 'negative',
       message: 'Failure to Delete Wallet'
+    })
+  }
+}
+
+const renameWallet = async (name) => {
+  // console.log(name)
+  if (checkPasswordD(password.value, pwd.value)) {
+    await dbData.wallet.update(props.num, {
+      name: name.toString()
+    })
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Failure to Rename Wallet'
     })
   }
 }

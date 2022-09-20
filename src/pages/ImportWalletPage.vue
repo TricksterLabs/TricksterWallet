@@ -61,6 +61,7 @@
           color="positive"
           outline
           @click="importWallet"
+          :disable="!password"
         />
       </q-card-actions>
     </q-card>
@@ -72,6 +73,7 @@ import { ref } from 'vue'
 import { dbData, getFromDb } from '../dexie/db'
 import CryptoJS from 'crypto-js'
 import { useQuasar } from 'quasar'
+import { generateWallet } from '../wallet/importWallet'
 
 const $q = useQuasar()
 
@@ -83,7 +85,6 @@ getFromDb().then((value) => {
 })
 
 // import { liveQuery } from 'dexie'
-import { generateWallet } from '../wallet/importWallet'
 
 const stack = ref('')
 const address = ref('')

@@ -319,7 +319,7 @@ const transactionsList = computed(() => {
           assets: []
         }
       }
-      store.mapping_dict[asset.walletId].quantity = adaAmounts.value[index + 1]
+      store.mapping_dict[asset.walletId].quantity = adaAmounts.value
       const assessMatch = store.mapping_dict[asset.walletId].assets.filter((x) => x.asset_name === asset.asset_name)
       if (assessMatch.length === 0) {
         // console.log(item)

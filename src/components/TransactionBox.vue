@@ -138,7 +138,7 @@
       >
         <q-input
           dense
-          v-model.number="adaAmounts[selectedNum]"
+          v-model.number="adaAmounts"
           input-class=""
           label="ADA to send"
           borderless
@@ -183,6 +183,14 @@
       label="Receiving Address"
       outlined
     />
+    <q-input
+      v-model="password"
+      outlined
+      class="full-width q-px-xs q-mt-xs q-mb-xs"
+      type="password"
+      label="Password"
+      dense
+    />
     <q-btn
       size="21px"
       color="primary"
@@ -200,6 +208,9 @@ import { shortenAddress } from 'src/utils'
 import { useTransactionStore } from 'src/stores/transactions'
 import { computed, ref } from 'vue'
 import { singleSend } from '../wallet/singleSend'
+import { getFromDb } from 'src/dexie/db'
+import CryptoJS from 'crypto-js'
+import { useQuasar } from 'quasar'
 
 const store = useTransactionStore()
 const tab = ref('standard')
@@ -208,7 +219,41 @@ const selectedWallet = ref(Array(store.transactions.length).fill(false))
 const selectedNum = computed(() => {
   return selectedWallet.value.indexOf(true)
 })
+const $q = useQuasar()
+const pwd = ref(null)
+const password = ref(null)
+
+getFromDb().then((value) => {
+  pwd.value = value ? value.pwd : null
+})
+
+const generateKey = (secret, salt) => {
+  return CryptoJS.PBKDF2(
+    secret,
+    salt,
+    {
+      keySize: 512 / 32, // size in Words
+      iterations: 1000,
+      hasher: CryptoJS.algo.SHA512
+    }
+  )
+}
+
+const checkPasswordD = (password, hashedPassword) => {
+  const saltString = hashedPassword.slice(0, 32)
+  const saltWordArray = CryptoJS.enc.Hex.parse(saltString)
+  const keyString = hashedPassword.slice(32)
+  const newKeyString = generateKey(password, saltWordArray).toString()
+  return (keyString === newKeyString)
+}
+
 const onSubmit = async () => {
+  if (checkPasswordD(password.value, pwd.value)) {
+    $q.notify({
+      type: 'positive',
+      message: 'Success'
+    })
+  }
   // console.log('receiveingAddress', receivingAddress.value)
   // console.log('selectedWallet', selectedWallet.value)
   // console.log('totalAmounts', totalAmounts.value[0])
@@ -249,6 +294,7 @@ const onSubmit = async () => {
     receivingAddress.value
   )
 }
+const adaAmounts = ref(0)
 
 const transactionsList = computed(() => {
   const finalDict = {}
@@ -258,7 +304,7 @@ const transactionsList = computed(() => {
         finalDict[asset.walletId] = {
           walletName: asset.walletName,
           actual_quantity: asset.balance,
-          quantity: adaAmounts.value[index + 1],
+          quantity: adaAmounts.value,
           image: asset.data.last_metadata.image ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
           assets: []
         }
@@ -278,7 +324,6 @@ const transactionsList = computed(() => {
   })
   return ref(finalDict).value
 })
-
 // const getTotalAmountMethod = (item) => {
 //   let sum = 0
 //   item.filter(function (asset) {
@@ -289,18 +334,15 @@ const transactionsList = computed(() => {
 //   })
 //   return sum
 // }
-
-const adaAmounts = ref(Array(Object.keys(transactionsList).length).fill(0))
+// const adaAmountss = ref(Array(Object.keys(transactionsList).length).fill(0))
 const feeAmount = computed(() => 0)
 const totalAmounts = computed(() => {
-  return adaAmounts.value.map(
-    (x, i) => (Number(adaAmounts.value[i]) || 0)
-  )
+  return adaAmounts.value
 })
-
-const maxAda = computed(() => {
-  return Object.keys(transactionsList.value).map(function (item) {
-    return transactionsList.value[item].actual_quantity / 1000
-  })
-})
+//
+// const maxAda = computed(() => {
+//   return Object.keys(transactionsList.value).map(function (item) {
+//     return transactionsList.value[item].actual_quantity / 1000
+//   })
+// })
 </script>

@@ -115,6 +115,18 @@
             Scan
           </q-tooltip>
         </q-btn>
+        <q-btn
+          size="sm"
+          flat
+          round
+          icon="send"
+          class="q-mt-xs q-ml-xs"
+          @click="store.setWalletData({'name':name, 'actual_quantity':balance, 'id': num})"
+        >
+          <q-tooltip>
+            Send ADA
+          </q-tooltip>
+        </q-btn>
       </q-item-label>
       <!--      <q-item-label-->
       <!--        caption-->

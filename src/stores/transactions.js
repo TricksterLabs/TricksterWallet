@@ -18,7 +18,8 @@ export const useTransactionStore = defineStore('transactions', {
   state: () => ({
     selections: [],
     walletNum: ref('all'),
-    classify: ref('assets')
+    classify: ref('assets'),
+    mapping_dict: ref({})
   }),
   getters: {
     transactions: (state) => {
@@ -33,6 +34,9 @@ export const useTransactionStore = defineStore('transactions', {
         // if ()
       }
       return Object.keys(transactions).map((x) => transactions[x])
+    },
+    mapping: (state) => {
+      return state.mapping_dict
     },
     transactions2: (state) => {
       const transactions = {}
@@ -68,11 +72,13 @@ export const useTransactionStore = defineStore('transactions', {
   },
   actions: {
     // eslint-disable-next-line camelcase
-    removeSelect (asset_name) {
+    removeSelect (assetName, id) {
       this.selections = this.selections.filter(
         // eslint-disable-next-line camelcase
-        (x) => x.asset_name !== asset_name
+        (x) => x.asset_name !== assetName
       )
+
+      this.mapping_dict[id].assets = this.mapping_dict[id].assets.filter((x) => x.asset_name !== assetName)
     },
     clearSelection () {
       this.selections = []
@@ -80,6 +86,19 @@ export const useTransactionStore = defineStore('transactions', {
     WalletNumData (number, classify) {
       this.walletNum = number.toString()
       this.classify = classify.toString()
+    },
+    setMapping (data) {
+      this.mapping_dict = data
+    },
+    setWalletData (data) {
+      if (!(data.id in this.mapping_dict)) {
+        this.mapping_dict[data.id] = {
+          walletName: data.name,
+          actual_quantity: data.balance,
+          quantity: 0,
+          assets: []
+        }
+      }
     }
   }
 })

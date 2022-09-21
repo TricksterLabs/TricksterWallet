@@ -25,7 +25,6 @@
                 class="full-width"
                 type="password"
                 label="Password"
-                autogrow
               />
             </q-item>
           </q-item-section>
@@ -62,7 +61,7 @@
           label="Generate"
           color="positive"
           outline
-          @click="generateWallets"
+          @click="genWallet"
           :disable="!password"
         />
       </q-card-actions>
@@ -119,11 +118,11 @@ getFromDb().then((value) => {
   pwd.value = value ? value.pwd : null
 })
 
-const generateWallets = () => {
-  for (let i = 0; i < amountOfWallet.value; i++) {
-    genWallet()
-  }
-}
+// const generateWallets = () => {
+//   for (let i = 0; i < amountOfWallet.value; i++) {
+//     genWallet()
+//   }
+// }
 
 const genWallet = async () => {
   if (checkPasswordD(password.value, pwd.value)) {

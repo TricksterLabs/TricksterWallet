@@ -52,7 +52,7 @@
           </q-item-label>
         </a>
       </div>
-      <q-separator class="q-my-xs"/>
+      <q-separator class="q-my-xs" />
 
       <q-item-label class="text-center">
         <q-btn
@@ -74,7 +74,6 @@
           icon="edit"
           @click="editModel=true"
           class="q-mt-xs q-ml-xs"
-          @click="renameModel=true"
         >
           <q-tooltip>
             Rename Wallet
@@ -182,7 +181,9 @@
     >
       <q-card style="min-width: 300px">
         <q-card-section class="text-center">
-          <div class="text-weight-bold text-h6">Update Wallet Name</div>
+          <div class="text-weight-bold text-h6">
+            Update Wallet Name
+          </div>
         </q-card-section>
         <q-card-section>
           <q-item class="full-width">
@@ -205,7 +206,8 @@
             outline
             class="text-capitalize q-mr-lg"
             label="Yes"
-            @click="updateWallet"
+            v-close-popup
+            @click="renameWallet(nameData)"
           />
         </q-card-actions>
       </q-card>
@@ -249,12 +251,11 @@
       </q-card>
     </q-dialog>
 
-<<<<<<< HEAD
-    <q-dialog
+    <!-- <q-dialog
       v-model="renameModel"
       persistent
-    >
-      <q-card style="min-width: 300px">
+    > -->
+    <!-- <q-card style="min-width: 300px">
         <q-card-section class="text-center">
           <div class="text-weight-bold text-h6">
             Are you sure you want to rename this Wallet ?
@@ -294,10 +295,8 @@
             @click="renameWallet(toName)"
           />
         </q-card-actions>
-      </q-card>
-    </q-dialog>
-=======
->>>>>>> 2f765aa1846b1e05027adfb1280a59b4530d2a6e
+      </q-card> -->
+    <!-- </q-dialog> -->
   </q-item>
 </template>
 
@@ -340,15 +339,9 @@ const color = (seed) => {
 
 const modelQr = ref(false)
 const deleteModel = ref(false)
-<<<<<<< HEAD
-const renameModel = ref(false)
-const password = ref('')
-const toName = ref('')
-=======
 const editModel = ref(false)
 const password = ref('')
 const nameData = ref(props.name)
->>>>>>> 2f765aa1846b1e05027adfb1280a59b4530d2a6e
 
 const copyAddressContent = () => {
   copyToClipboard(props.address)
@@ -401,10 +394,14 @@ const deleteWallet = async () => {
 }
 
 const renameWallet = async (name) => {
-  // console.log(name)
-  if (checkPasswordD(password.value, pwd.value)) {
+  console.log(name)
+  if (name) {
     await dbData.wallet.update(props.num, {
       name: name.toString()
+    })
+    $q.notify({
+      type: 'positive',
+      message: 'Success'
     })
   } else {
     $q.notify({
@@ -428,15 +425,15 @@ const copyStackAddressContent = () => {
     })
 }
 
-const updateWallet = async () => {
-  try {
-    await dbData.wallet.where('id').equals(parseInt(props.num)).modify(x => {
-      x.name = nameData
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
+// const updateWallet = async () => {
+//   try {
+//     await dbData.wallet.where('id').equals(parseInt(props.num)).modify(x => {
+//       x.name = nameData
+//     })
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 
 </script>
 

@@ -120,7 +120,7 @@
                   flat
                   dense
                   round
-                  @click="store.removeSelect(nft.asset_name)"
+                  @click="store.removeSelect(nft.asset_name, i)"
                 />
               </q-item-section>
             </q-item>
@@ -251,31 +251,37 @@ const onSubmit = async () => {
 }
 
 const transactionsList = computed(() => {
-  const finalDict = {}
+  const finalDict = store.mapping
   store.transactions.filter(function (item, index) {
     item.filter(function (asset) {
-      if (!(asset.walletId in finalDict)) {
-        finalDict[asset.walletId] = {
+      if (!(asset.walletId in store.mapping_dict)) {
+        store.mapping_dict[asset.walletId] = {
           walletName: asset.walletName,
           actual_quantity: asset.balance,
           quantity: adaAmounts.value[index + 1],
-          image: asset.data.last_metadata.image ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+          image: ('data' in asset && 'last_metadata' in asset.data && asset.data.last_metadata.image) ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
           assets: []
         }
       }
-      // console.log(item)
-      finalDict[asset.walletId].assets.push({
-        image: asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
-        asset_name: asset.asset_name,
-        policy_id: asset.policy_id,
-        actual_amount: asset.quantity,
-        amount: 0,
-        quantity: null
-      })
+      store.mapping_dict[asset.walletId].quantity = adaAmounts.value[index + 1]
+      const assessMatch = store.mapping_dict[asset.walletId].assets.filter((x) => x.asset_name === asset.asset_name)
+      if (assessMatch.length === 0) {
+        // console.log(item)
+        store.mapping_dict[asset.walletId].assets.push({
+          image: 'data' in asset && 'last_metadata' in asset.data && asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+          asset_name: asset.asset_name,
+          policy_id: asset.policy_id,
+          actual_amount: asset.quantity,
+          amount: asset.quantity,
+          quantity: null
+        })
+      }
       return asset
     })
     return item
   })
+
+  store.setMapping(finalDict)
   return ref(finalDict).value
 })
 

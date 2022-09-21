@@ -33,7 +33,7 @@
       v-model="leftDrawerOpen"
       :breakpoint="0"
       bordered
-      :width="220"
+      :width="225"
       class="flex no-wrap column"
     >
       <Suspense>
@@ -100,7 +100,7 @@ $q.dark.set(true)
 
 const walletNum = ref('all')
 const classify = ref('assets')
-const pass = ref(false)
+const pass = ref(true)
 
 const leftDrawerOpen = ref(true)
 const rightDrawerOpen = ref(true)

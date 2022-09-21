@@ -63,7 +63,6 @@
               </q-item-section>
 
               <q-item-section
-                caption
                 side
               >
                 <q-chip
@@ -77,53 +76,64 @@
                 </q-chip>
               </q-item-section>
             </template>
-            <q-item
-              v-for="nft in nfts.assets"
-              :key="nft.asset_name"
-              dense
-              class="q-px-xs"
-            >
-              <q-item-section avatar>
-                <q-avatar>
-                  <img :src="nft.image">
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="ellipsis">
-                  {{
-                    shortenAddress(nft.asset_name)
-                  }}
-                </q-item-label>
-                <q-item-label
-                  class="wallet-text ellipsis"
-                  caption
-                >
-                  {{
-                    nft.policy_id
-                  }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-input
-                  dense
-                  v-model="nft.amount"
-                  input-class=""
-                  label="QTY"
-                  debounce="0"
-                  borderless
-                  class="col-1 float-right"
-                  style="width: 58px"
-                  :rules="[ val => val <= nft.actual_amount || 'Max Value exceeded']"
+            <div class="row">
+              <div class="col-12">
+                <q-btn class="float-right text-capitalize q-mr-md"
+                       icon="close"
+                       flat
+                       label="Remove"
+                       dense
+                       @click="store.removeTransactionData(i)"
                 />
-                <q-btn
-                  icon="close"
-                  flat
-                  dense
-                  round
-                  @click="store.removeSelect(nft.asset_name)"
-                />
-              </q-item-section>
-            </q-item>
+              </div>
+              <q-item
+                v-for="nft in nfts.assets"
+                :key="nft.asset_name"
+                dense
+                class="q-px-xs"
+              >
+                <q-item-section avatar>
+                  <q-avatar>
+                    <img :src="nft.image">
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="ellipsis">
+                    {{
+                      shortenAddress(nft.asset_name)
+                    }}
+                  </q-item-label>
+                  <q-item-label
+                    class="wallet-text ellipsis"
+                    caption
+                  >
+                    {{
+                      nft.policy_id
+                    }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-input
+                    dense
+                    v-model="nft.amount"
+                    input-class=""
+                    label="QTY"
+                    debounce="0"
+                    borderless
+                    class="col-1 float-right"
+                    style="width: 58px"
+                    :rules="[ val => val <= nft.actual_amount || 'Max Value exceeded']"
+                  />
+                  <q-btn
+                    icon="close"
+                    flat
+                    dense
+                    round
+                    @click="store.removeSelect(nft.asset_name, i)"
+                  />
+                </q-item-section>
+              </q-item>
+            </div>
           </q-expansion-item>
         </q-list>
       </q-scroll-area>
@@ -297,31 +307,37 @@ const onSubmit = async () => {
 const adaAmounts = ref(0)
 
 const transactionsList = computed(() => {
-  const finalDict = {}
+  const finalDict = store.mapping
   store.transactions.filter(function (item, index) {
     item.filter(function (asset) {
-      if (!(asset.walletId in finalDict)) {
-        finalDict[asset.walletId] = {
+      if (!(asset.walletId in store.mapping_dict)) {
+        store.mapping_dict[asset.walletId] = {
           walletName: asset.walletName,
           actual_quantity: asset.balance,
           quantity: adaAmounts.value,
-          image: asset.data.last_metadata.image ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+          image: ('data' in asset && 'last_metadata' in asset.data && asset.data.last_metadata.image) ? asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
           assets: []
         }
       }
-      // console.log(item)
-      finalDict[asset.walletId].assets.push({
-        image: asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
-        asset_name: asset.asset_name,
-        policy_id: asset.policy_id,
-        actual_amount: asset.quantity,
-        amount: 0,
-        quantity: null
-      })
+      store.mapping_dict[asset.walletId].quantity = adaAmounts.value[index + 1]
+      const assessMatch = store.mapping_dict[asset.walletId].assets.filter((x) => x.asset_name === asset.asset_name)
+      if (assessMatch.length === 0) {
+        // console.log(item)
+        store.mapping_dict[asset.walletId].assets.push({
+          image: 'data' in asset && 'last_metadata' in asset.data && asset.data.last_metadata.image ? 'https://nftstorage.link/ipfs/' + asset.data.last_metadata.image.split('//')[1] : 'https://cdn.quasar.dev/img/avatar5.jpg',
+          asset_name: asset.asset_name,
+          policy_id: asset.policy_id,
+          actual_amount: asset.quantity,
+          amount: asset.quantity,
+          quantity: null
+        })
+      }
       return asset
     })
     return item
   })
+
+  store.setMapping(finalDict)
   return ref(finalDict).value
 })
 // const getTotalAmountMethod = (item) => {

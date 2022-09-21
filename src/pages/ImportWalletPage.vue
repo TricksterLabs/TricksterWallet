@@ -48,7 +48,6 @@
             class="full-width"
             type="password"
             label="Password"
-            autogrow
           />
         </q-item>
       </q-card-section>

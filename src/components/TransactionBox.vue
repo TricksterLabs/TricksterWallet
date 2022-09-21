@@ -154,7 +154,6 @@
           borderless
           class="number-input"
           type="number"
-          :rules="[ val => val <= maxAda[selectedNum-1] || 'Max Value exceeded']"
         />
       </q-item-section>
       <q-item-section
@@ -319,7 +318,7 @@ const transactionsList = computed(() => {
           assets: []
         }
       }
-      store.mapping_dict[asset.walletId].quantity = adaAmounts.value
+
       const assessMatch = store.mapping_dict[asset.walletId].assets.filter((x) => x.asset_name === asset.asset_name)
       if (assessMatch.length === 0) {
         // console.log(item)
@@ -337,6 +336,10 @@ const transactionsList = computed(() => {
     return item
   })
 
+  Object.keys(store.mapping_dict).filter(function (item) {
+    store.mapping_dict[item].quantity = adaAmounts.value
+    return item
+  })
   store.setMapping(finalDict)
   return ref(finalDict).value
 })

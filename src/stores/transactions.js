@@ -99,6 +99,14 @@ export const useTransactionStore = defineStore('transactions', {
           assets: []
         }
       }
+    },
+    removeTransactionData (id) {
+      const assetNames = this.mapping_dict[id].assets.map(x => x.asset_name)
+      this.selections = this.selections.filter(
+        // eslint-disable-next-line camelcase
+        (x) => !assetNames.includes(x.asset_name)
+      )
+      delete this.mapping_dict[id]
     }
   }
 })

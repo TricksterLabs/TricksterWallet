@@ -63,7 +63,6 @@
               </q-item-section>
 
               <q-item-section
-                caption
                 side
               >
                 <q-chip
@@ -77,53 +76,64 @@
                 </q-chip>
               </q-item-section>
             </template>
-            <q-item
-              v-for="nft in nfts.assets"
-              :key="nft.asset_name"
-              dense
-              class="q-px-xs"
-            >
-              <q-item-section avatar>
-                <q-avatar>
-                  <img :src="nft.image">
-                </q-avatar>
-              </q-item-section>
-              <q-item-section>
-                <q-item-label class="ellipsis">
-                  {{
-                    shortenAddress(nft.asset_name)
-                  }}
-                </q-item-label>
-                <q-item-label
-                  class="wallet-text ellipsis"
-                  caption
-                >
-                  {{
-                    nft.policy_id
-                  }}
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <q-input
-                  dense
-                  v-model="nft.amount"
-                  input-class=""
-                  label="QTY"
-                  debounce="0"
-                  borderless
-                  class="col-1 float-right"
-                  style="width: 58px"
-                  :rules="[ val => val <= nft.actual_amount || 'Max Value exceeded']"
+            <div class="row">
+              <div class="col-12">
+                <q-btn class="float-right text-capitalize q-mr-md"
+                       icon="close"
+                       flat
+                       label="Remove"
+                       dense
+                       @click="store.removeTransactionData(i)"
                 />
-                <q-btn
-                  icon="close"
-                  flat
-                  dense
-                  round
-                  @click="store.removeSelect(nft.asset_name, i)"
-                />
-              </q-item-section>
-            </q-item>
+              </div>
+              <q-item
+                v-for="nft in nfts.assets"
+                :key="nft.asset_name"
+                dense
+                class="q-px-xs"
+              >
+                <q-item-section avatar>
+                  <q-avatar>
+                    <img :src="nft.image">
+                  </q-avatar>
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label class="ellipsis">
+                    {{
+                      shortenAddress(nft.asset_name)
+                    }}
+                  </q-item-label>
+                  <q-item-label
+                    class="wallet-text ellipsis"
+                    caption
+                  >
+                    {{
+                      nft.policy_id
+                    }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-input
+                    dense
+                    v-model="nft.amount"
+                    input-class=""
+                    label="QTY"
+                    debounce="0"
+                    borderless
+                    class="col-1 float-right"
+                    style="width: 58px"
+                    :rules="[ val => val <= nft.actual_amount || 'Max Value exceeded']"
+                  />
+                  <q-btn
+                    icon="close"
+                    flat
+                    dense
+                    round
+                    @click="store.removeSelect(nft.asset_name, i)"
+                  />
+                </q-item-section>
+              </q-item>
+            </div>
           </q-expansion-item>
         </q-list>
       </q-scroll-area>

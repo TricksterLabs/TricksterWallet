@@ -12,8 +12,19 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
   // if (inputs.length === 0) {
   //   return
   // }
+
+  console.log('sendAmount', sendAmount)
+  console.log('getInputs', getInputs)
+  console.log('tokens', tokens)
+  console.log('sendAddress', sendAddress)
+  console.log('receiveAddress', receiveAddress)
+  console.log('TTL', TTL)
+  console.log('paymentSKey', paymentSKey)
+
   const outputs = getOutputs(sendAmount, receiveAddress, tokens)
-  console.log(getInputs)
+  console.log('outputs', outputs)
+  // console.log(getInputs)
+  // console.log(getInputs)
 
   const assets = (tokens) => {
     const assetData = []
@@ -43,19 +54,11 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
     return inputsData
   }
 
+  console.log('inputs', inputs())
+
   const inputsData = inputs()
 
-  console.log('inputsData', inputsData)
-  console.log('outputs', outputs)
-  // const finalTTL = await getTTL(TTL)
-
   const tx = new typhonjs.Transaction({ protocolParams })
-  // tx.paymentTransaction({
-  //   inputs: inputsData,
-  //   outputs,
-  //   changeAddress: typhonjs.utils.getAddressFromBech32(sendAddress),
-  //   ttl: TTL
-  // })
 
   outputs.forEach((output) => {
     tx.addOutput(output)
@@ -63,21 +66,12 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
 
   tx.setTTL(TTL)
 
-  // if (auxiliaryData) {
-  //   transaction.setAuxiliaryData(auxiliaryData)
-  // }
-
+  console.log('getFee', tx.getFee())
   const sendAddressMod = typhonjs.utils.getAddressFromBech32(sendAddress)
   tx.prepareTransaction({ inputs: inputsData, changeAddress: sendAddressMod })
-  console.log('txxxx', tx)
-
-  console.log(tx)
 
   const txHashBuffer = tx.getTransactionHash()
   const requiredSignatures = tx.getRequiredWitnesses()
-
-  // console.log(txHashBuffer)
-
   // eslint-disable-next-line no-unused-vars
   for (const [, bipPath] of requiredSignatures) {
     const privateKey = paymentSKey
@@ -88,13 +82,9 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
     tx.addWitness(witness)
   }
 
-  // console.log(tx.inputs.amount)
-  // console.log(tx.outputs)
   const txBuilt = tx.buildTransaction()
-  console.log(txBuilt)
-  const txHash = txBuilt.hash
+  // const txHash = txBuilt.hash
   const txBuffer = Buffer.from(txBuilt.payload, 'hex')
-  console.log(txHash)
 
   return txBuffer
 }

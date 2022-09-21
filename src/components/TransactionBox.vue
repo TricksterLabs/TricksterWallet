@@ -78,12 +78,13 @@
             </template>
             <div class="row">
               <div class="col-12">
-                <q-btn class="float-right text-capitalize q-mr-md"
-                       icon="close"
-                       flat
-                       label="Remove"
-                       dense
-                       @click="store.removeTransactionData(i)"
+                <q-btn
+                  class="float-right text-capitalize q-mr-md"
+                  icon="close"
+                  flat
+                  label="Remove"
+                  dense
+                  @click="store.removeTransactionData(i)"
                 />
               </div>
               <q-item
@@ -140,7 +141,7 @@
     </q-item>
     <q-item
       class="q-pa-none"
-      v-if="selectedWallet.includes(true)"
+      v-if="selectedWallet"
     >
       <q-item-section
         class="col-6 bordered q-pa-md flex column no-wrap"
@@ -220,6 +221,7 @@ import { singleSend } from '../wallet/singleSend'
 import { getFromDb } from 'src/dexie/db'
 import CryptoJS from 'crypto-js'
 import { useQuasar } from 'quasar'
+// import * as typhonjs from '@stricahq/typhonjs'
 
 const store = useTransactionStore()
 const tab = ref('standard')
@@ -258,9 +260,26 @@ const checkPasswordD = (password, hashedPassword) => {
 
 const onSubmit = async () => {
   if (checkPasswordD(password.value, pwd.value)) {
+    // console.log(JSON.parse(JSON.stringify(store.mapping_dict)))
+    const fullTransaction = JSON.parse(JSON.stringify(store.mapping_dict))
+    for (const property in fullTransaction) {
+      // console.log(`${property}: ${fullTransaction[property].actual_quantity}`)
+      await singleSend(
+        password.value,
+        parseInt(property),
+        parseFloat(fullTransaction[property].quantity),
+        fullTransaction[property].assets,
+        receivingAddress.value
+      )
+    }
     $q.notify({
       type: 'positive',
       message: 'Success'
+    })
+  } else {
+    $q.notify({
+      type: 'negative',
+      message: 'Wrong Password'
     })
   }
   // console.log('receiveingAddress', receivingAddress.value)
@@ -297,11 +316,12 @@ const onSubmit = async () => {
   // console.log(totalAmounts.value[0])
   // console.log(store.transactions2)
   // console.log(receivingAddress.value)
-  await singleSend(
-    totalAmounts.value[0],
-    store.transactions2,
-    receivingAddress.value
-  )
+
+  // await singleSend(
+  //   totalAmounts.value[0],
+  //   store.transactions2,
+  //   receivingAddress.value
+  // )
 }
 const adaAmounts = ref(0)
 
@@ -310,6 +330,7 @@ const transactionsList = computed(() => {
   store.transactions.filter(function (item, index) {
     item.filter(function (asset) {
       if (!(asset.walletId in store.mapping_dict)) {
+        console.log(asset)
         store.mapping_dict[asset.walletId] = {
           walletName: asset.walletName,
           actual_quantity: asset.balance,

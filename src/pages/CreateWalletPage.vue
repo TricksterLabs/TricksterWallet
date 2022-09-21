@@ -47,7 +47,7 @@
               dense
               v-model.number="stack"
               input-class=""
-              label="Stack"
+              label="Stake Address"
               outlined
             />
           </q-item-section>

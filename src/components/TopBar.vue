@@ -36,21 +36,18 @@ const navs = [
     label: 'ASSETS',
     route: 'assets'
   }, {
+    label: 'HISTORY',
+    route: 'history'
+
+  }, {
     label: 'MARKET',
     route: 'market'
   }, {
-    label: 'TRANSACTION',
-    route: 'transaction'
-  }, {
     label: 'STAKING',
-    route: 'stacking'
+    route: 'staking'
   },
   {
     label: 'VOTING',
     route: 'voting'
-  },
-  {
-    label: 'Wallet Management',
-    route: 'wallet_management'
   }]
 </script>

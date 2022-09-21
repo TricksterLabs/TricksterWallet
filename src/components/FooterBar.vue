@@ -58,7 +58,7 @@
         class="q-mr-sm"
         :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
       />
-      Version: 2.0.0 BETA
+      Version: 0.0.1 ALPHA
     </span>
   </q-toolbar>
 </template>

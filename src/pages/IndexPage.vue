@@ -169,7 +169,7 @@
                           v-for="data in Object.keys(asset.data)"
                         >
                           <q-input
-                            v-if="data!='files' && asset.data.hasOwnProperty(data)"
+                            v-if="(data!='traits' && data!='last_metadata') && asset.data.hasOwnProperty(data)"
                             dense
                             :model-value="asset.data[data]"
                             input-class=""
@@ -186,6 +186,10 @@
                           </q-input>
                         </template>
                       </template>
+
+                      <div class="col-12">
+                        <q-btn label="Show Info" class="float-right text-capitalize" outline @click="setData(asset)"></q-btn>
+                      </div>
                     </div>
                   </q-card-section>
                 </q-card>
@@ -295,6 +299,189 @@
         </q-list>
       </q-scroll-area>
     </div>
+
+    <q-dialog
+      v-model="detailView"
+      persistent
+    >
+      <q-card style="min-width: 1250px">
+        <q-card-section class="col-12 q-pa-sm">
+          <q-item>
+            <q-item-section avatar>
+              <q-avatar>
+                <img
+                  :src="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('image') && selectedAsset.data.last_metadata.image?'https://nftstorage.link/ipfs/'+selectedAsset.data.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+              </q-avatar>
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label class="text-weight-bold">
+                {{
+                  selectedAsset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').toUpperCase()
+                }}
+              </q-item-label>
+              <q-item-label
+                caption
+                class="text-weight-bold"
+              >
+                {{ selectedAsset.walletName }} / {{
+                  $q.screen.gt.md ? selectedAsset.asset_name : shortenPolicy(selectedAsset.asset_name)
+                }}
+              </q-item-label>
+              <q-item-label
+                caption
+                class="text-weight-bold"
+              >
+                <q-chip
+                  outline
+                  square
+                  dense
+                  color="cyan-7"
+                  text-color="white"
+                  v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('statistical_rank') && selectedAsset.data.statistical_rank"
+                >
+                  Statistical Rank - {{ selectedAsset.data.statistical_rank }}
+                </q-chip>
+                <q-chip
+                  outline
+                  square
+                  dense
+                  color="light-blue-8"
+                  text-color="white"
+                  v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('rarity_rank') && selectedAsset.data.rarity_rank"
+                >
+                  Rarity Rank - {{ selectedAsset.data.rarity_rank }}
+                </q-chip>
+                <q-chip
+                  v-if="!$q.screen.gt.md"
+                  outline
+                  square
+                  dense
+                  color="red"
+                  text-color="white"
+                >
+                  {{ selectedAsset.quantity }}x
+                </q-chip>
+              </q-item-label>
+              <q-item-label
+                caption
+                class="text-weight-bold"
+              />
+            </q-item-section>
+            <q-item-section
+              side
+              v-if="$q.screen.gt.md"
+            >
+              <q-btn icon="close" @click="removeData" flat round dense></q-btn>
+              <q-chip
+                outline
+                square
+                dense
+                color="red"
+                text-color="white"
+              >
+                {{ selectedAsset.quantity }}x
+              </q-chip>
+            </q-item-section>
+          </q-item>
+        </q-card-section>
+        <q-separator></q-separator>
+        <q-card-section class="text-center row q-pa-sm">
+          <q-expansion-item
+            :expand-separator="false"
+            label="Last Metadata"
+            default-opened
+            group="meta"
+            class="expansion-border col-12 full-width q-ma-sm"
+            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
+          >
+            <div class="row q-pa-sm">
+              <template
+                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')">
+                <template
+                  :key="data"
+                  v-for="data in Object.keys(selectedAsset.data.last_metadata)"
+                >
+                  <q-input
+                    v-if="data!='attributes' && selectedAsset.data.last_metadata.hasOwnProperty(data)"
+                    dense
+                    :model-value="selectedAsset.data.last_metadata[data]"
+                    input-class=""
+                    :class="$q.screen.gt.md?'col-6':'col-12'"
+                    borderless
+                    readonly
+                    :label-slot="true"
+                  >
+                    <template #label>
+                    <span class="text-capitalize">
+                      {{ data.split('_').join(' ') }}
+                    </span>
+                    </template>
+                  </q-input>
+                </template>
+              </template>
+              <template
+                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')">
+                <template
+                  :key="attributes_data"
+                  v-for="attributes_data in Object.keys(selectedAsset.data.last_metadata.attributes)"
+                >
+                  <q-input
+                    dense
+                    :model-value="attributes_data === 'attributes'?selectedAsset.data.last_metadata.attributes[attributes_data].join(','):selectedAsset.data.last_metadata.attributes[attributes_data]"
+                    input-class=""
+                    :class="$q.screen.gt.md?'col-6':'col-12'"
+                    borderless
+                    readonly
+                    :label-slot="true"
+                  >
+                    <template #label>
+                    <span class="text-capitalize">
+                      {{ attributes_data.split('_').join(' ') }}
+                    </span>
+                    </template>
+                  </q-input>
+                </template>
+              </template>
+            </div>
+          </q-expansion-item>
+          <q-expansion-item
+            :expand-separator="false"
+            label="Traits"
+            group="meta"
+            class="expansion-border col-12 full-width q-ma-sm"
+            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
+          >
+            <div class="row q-pa-sm">
+              <template
+                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('traits')">
+                <template
+                  :key="data"
+                  v-for="data in Object.keys(selectedAsset.data.traits)"
+                >
+                  <q-input
+                    v-if="selectedAsset.data.traits.hasOwnProperty(data)"
+                    dense
+                    :model-value="selectedAsset.data.traits[data]"
+                    input-class=""
+                    :class="$q.screen.gt.md?'col-6':'col-12'"
+                    borderless
+                    readonly
+                    :label-slot="true"
+                  >
+                    <template #label>
+                    <span class="text-capitalize">
+                      {{ data.split('_').join(' ') }}
+                    </span>
+                    </template>
+                  </q-input>
+                </template>
+              </template>
+            </div>
+          </q-expansion-item>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -306,6 +493,9 @@ import { useWalletsStore } from 'stores/wallets'
 import { shortenPolicy } from 'src/utils'
 
 const searchText = ref('')
+const selectedAsset = ref({})
+const detailView = ref(false)
+
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()
 const { wallets, assets } = storeToRefs(useWalletsStore())
@@ -325,6 +515,16 @@ const { wallets, assets } = storeToRefs(useWalletsStore())
 // })
 
 // console.log('assetsList', (assetsList.value)['8d84d3b86b2c9510fea6f2f671872a38a2ffeca270bbc71f95c84420']['46757473616c436f757274303331'])
+
+const setData = (data) => {
+  selectedAsset.value = data
+  detailView.value = true
+}
+
+const removeData = () => {
+  selectedAsset.value = {}
+  detailView.value = false
+}
 
 const walletList = computed(() => {
   const assetsRefs = JSON.parse(JSON.stringify(assets.value))
@@ -356,6 +556,8 @@ const walletList = computed(() => {
                 .toLowerCase()
                 .includes(searchText.value.toLowerCase())
         ) || []
+
+        console.log(filteredUTXOSet)
         filteredUTXOSet.forEach((item) => {
           for (let y = 0; y < item.asset_list.length; y++) {
             if (data[item.asset_list[y].policy_id]) {
@@ -433,12 +635,13 @@ const walletList = computed(() => {
       }
     }
   }
-  console.log('data', data)
+  // console.log('data', data)
   return data
 })
 
 const removeFromStore = (asset, id) => {
   let SelectedIndex = null
+  // console.log(store.selections)
   store.selections.filter(function (item, index) {
     if (JSON.stringify(asset) === JSON.stringify(item)) {
       SelectedIndex = index
@@ -447,6 +650,7 @@ const removeFromStore = (asset, id) => {
   })
   if (SelectedIndex != null) {
     store.selections.splice(SelectedIndex, 1)
+    // console.log(asset.asset_name)
     store.removeSelect(asset.asset_name, id)
   } else {
     store.selections.push(asset)

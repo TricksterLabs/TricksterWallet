@@ -6,7 +6,10 @@
     >
       <q-card style="min-width: 350px">
         <q-card-section class="text-center">
-          <q-avatar size="103px" class="shadow-10">
+          <q-avatar
+            size="103px"
+            class="shadow-10"
+          >
             <img src="profile.svg">
           </q-avatar>
           <div class="text-h6 q-mt-sm">
@@ -55,7 +58,10 @@
     >
       <q-card style="min-width: 350px">
         <q-card-section class="text-center">
-          <q-avatar size="103px" class="shadow-10">
+          <q-avatar
+            size="103px"
+            class="shadow-10"
+          >
             <img src="profile.svg">
           </q-avatar>
           <div class="text-h6 q-mt-sm">
@@ -82,7 +88,7 @@
             label="Confirm Password"
             autofocus
             outlined
-            @keyup.enter="checkPassword"
+            @keyup.enter="setPassword"
           />
         </q-card-section>
 
@@ -167,22 +173,29 @@ const checkPasswordD = (password, hashedPassword) => {
 // }
 
 const setPassword = async () => {
-  try {
-    if (newPwd.value === '') return
-    const key = generateKey(newPwd.value, salt)
-    const ciphertext = generatePasswordHash(key, salt)
-    // Add the new friend!
-    const id = await db.password.add({
-      pwd: ciphertext
-    })
+  if (newPwd.value === confirmPassword.value) {
+    try {
+      if (newPwd.value === '') return
+      const key = generateKey(newPwd.value, salt)
+      const ciphertext = generatePasswordHash(key, salt)
+      // Add the new friend!
+      const id = await db.password.add({
+        pwd: ciphertext
+      })
+      $q.notify({
+        type: 'positive',
+        message: 'Signed Up Successfully'
+      })
+      console.log('id', id, ciphertext)
+      pwd.value = ciphertext
+      secondDialog.value = false
+    } catch (error) {}
+  } else {
     $q.notify({
-      type: 'positive',
-      message: 'Signed Up Successfully'
+      type: 'negative',
+      message: 'Password Mismatch'
     })
-    console.log('id', id, ciphertext)
-    pwd.value = ciphertext
-    secondDialog.value = false
-  } catch (error) {}
+  }
 }
 
 const checkPassword = () => {

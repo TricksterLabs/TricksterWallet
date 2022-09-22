@@ -23,15 +23,15 @@
         <q-item-section dense>
           <q-input
             dense
-            :model-value="lastTime"
+            :model-value="currentTime"
             input-class=""
-            label="Last Refresh"
+            label="Current Time"
             borderless
             readonly
           />
         </q-item-section>
       </q-item>
-      <q-item v-if="$q.screen.gt.md">
+      <!-- <q-item v-if="$q.screen.gt.md">
         <q-item-section dense>
           <q-input
             dense
@@ -42,7 +42,7 @@
             readonly
           />
         </q-item-section>
-      </q-item>
+      </q-item> -->
     </q-list>
     <q-space />
     <span
@@ -58,7 +58,7 @@
         class="q-mr-sm"
         :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
       />
-      Version: 0.0.1 ALPHA
+      Version: 0.0.4 Alpha
     </span>
   </q-toolbar>
 </template>

@@ -187,7 +187,8 @@
                         </template>
                       </template>
                       <template
-                        v-if="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('traits')">
+                        v-if="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('traits')"
+                      >
                         <template
                           :key="data"
                           v-for="data in Object.keys(asset.data.traits)"
@@ -212,7 +213,12 @@
                       </template>
 
                       <div class="col-12">
-                        <q-btn label="Show Info" class="float-right text-capitalize" outline @click="setData(asset)"></q-btn>
+                        <q-btn
+                          label="Show Info"
+                          class="float-right text-capitalize"
+                          outline
+                          @click="setData(asset)"
+                        />
                       </div>
                     </div>
                   </q-card-section>
@@ -334,7 +340,8 @@
             <q-item-section avatar>
               <q-avatar>
                 <img
-                  :src="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('image') && selectedAsset.data.last_metadata.image?'https://nftstorage.link/ipfs/'+selectedAsset.data.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'">
+                  :src="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('image') && selectedAsset.data.last_metadata.image?'https://nftstorage.link/ipfs/'+selectedAsset.data.last_metadata.image.split('//')[1]:'https://cdn.quasar.dev/img/avatar5.jpg'"
+                >
               </q-avatar>
             </q-item-section>
 
@@ -396,7 +403,13 @@
               side
               v-if="$q.screen.gt.md"
             >
-              <q-btn icon="close" @click="removeData" flat round dense></q-btn>
+              <q-btn
+                icon="close"
+                @click="removeData"
+                flat
+                round
+                dense
+              />
               <q-chip
                 outline
                 square
@@ -409,100 +422,102 @@
             </q-item-section>
           </q-item>
         </q-card-section>
-        <q-separator></q-separator>
+        <q-separator />
         <q-card-section class="text-center row q-pa-sm">
-<!--          <q-expansion-item-->
-<!--            :expand-separator="false"-->
-<!--            label="Last Metadata"-->
-<!--            default-opened-->
-<!--            group="meta"-->
-<!--            class="expansion-border col-12 full-width q-ma-sm"-->
-<!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
-<!--          >-->
-            <div class="row q-pa-sm">
+          <!--          <q-expansion-item-->
+          <!--            :expand-separator="false"-->
+          <!--            label="Last Metadata"-->
+          <!--            default-opened-->
+          <!--            group="meta"-->
+          <!--            class="expansion-border col-12 full-width q-ma-sm"-->
+          <!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
+          <!--          >-->
+          <div class="row q-pa-sm">
+            <template
+              v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')"
+            >
               <template
-                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')">
-                <template
-                  :key="data"
-                  v-for="data in Object.keys(selectedAsset.data.last_metadata)"
+                :key="data"
+                v-for="data in Object.keys(selectedAsset.data.last_metadata)"
+              >
+                <q-input
+                  v-if="data!='attributes' && selectedAsset.data.last_metadata.hasOwnProperty(data)"
+                  dense
+                  :model-value="selectedAsset.data.last_metadata[data]"
+                  input-class=""
+                  :class="$q.screen.gt.md?'col-6':'col-12'"
+                  borderless
+                  readonly
+                  :label-slot="true"
                 >
-                  <q-input
-                    v-if="data!='attributes' && selectedAsset.data.last_metadata.hasOwnProperty(data)"
-                    dense
-                    :model-value="selectedAsset.data.last_metadata[data]"
-                    input-class=""
-                    :class="$q.screen.gt.md?'col-6':'col-12'"
-                    borderless
-                    readonly
-                    :label-slot="true"
-                  >
-                    <template #label>
+                  <template #label>
                     <span class="text-capitalize">
                       {{ data.split('_').join(' ') }}
                     </span>
-                    </template>
-                  </q-input>
-                </template>
+                  </template>
+                </q-input>
               </template>
+            </template>
+            <template
+              v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')"
+            >
               <template
-                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')">
-                <template
-                  :key="attributes_data"
-                  v-for="attributes_data in Object.keys(selectedAsset.data.last_metadata.attributes)"
+                :key="attributes_data"
+                v-for="attributes_data in Object.keys(selectedAsset.data.last_metadata.attributes)"
+              >
+                <q-input
+                  dense
+                  :model-value="attributes_data === 'attributes'?selectedAsset.data.last_metadata.attributes[attributes_data].join(','):selectedAsset.data.last_metadata.attributes[attributes_data]"
+                  input-class=""
+                  :class="$q.screen.gt.md?'col-6':'col-12'"
+                  borderless
+                  readonly
+                  :label-slot="true"
                 >
-                  <q-input
-                    dense
-                    :model-value="attributes_data === 'attributes'?selectedAsset.data.last_metadata.attributes[attributes_data].join(','):selectedAsset.data.last_metadata.attributes[attributes_data]"
-                    input-class=""
-                    :class="$q.screen.gt.md?'col-6':'col-12'"
-                    borderless
-                    readonly
-                    :label-slot="true"
-                  >
-                    <template #label>
+                  <template #label>
                     <span class="text-capitalize">
                       {{ attributes_data.split('_').join(' ') }}
                     </span>
-                    </template>
-                  </q-input>
-                </template>
+                  </template>
+                </q-input>
               </template>
-            </div>
-<!--          </q-expansion-item>-->
-<!--          <q-expansion-item-->
-<!--            :expand-separator="false"-->
-<!--            label="Traits"-->
-<!--            group="meta"-->
-<!--            class="expansion-border col-12 full-width q-ma-sm"-->
-<!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
-<!--          >-->
-<!--            <div class="row q-pa-sm">-->
-<!--              <template-->
-<!--                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('traits')">-->
-<!--                <template-->
-<!--                  :key="data"-->
-<!--                  v-for="data in Object.keys(selectedAsset.data.traits)"-->
-<!--                >-->
-<!--                  <q-input-->
-<!--                    v-if="selectedAsset.data.traits.hasOwnProperty(data)"-->
-<!--                    dense-->
-<!--                    :model-value="selectedAsset.data.traits[data]"-->
-<!--                    input-class=""-->
-<!--                    :class="$q.screen.gt.md?'col-6':'col-12'"-->
-<!--                    borderless-->
-<!--                    readonly-->
-<!--                    :label-slot="true"-->
-<!--                  >-->
-<!--                    <template #label>-->
-<!--                    <span class="text-capitalize">-->
-<!--                      {{ data.split('_').join(' ') }}-->
-<!--                    </span>-->
-<!--                    </template>-->
-<!--                  </q-input>-->
-<!--                </template>-->
-<!--              </template>-->
-<!--            </div>-->
-<!--          </q-expansion-item>-->
+            </template>
+          </div>
+          <!--          </q-expansion-item>-->
+          <!--          <q-expansion-item-->
+          <!--            :expand-separator="false"-->
+          <!--            label="Traits"-->
+          <!--            group="meta"-->
+          <!--            class="expansion-border col-12 full-width q-ma-sm"-->
+          <!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
+          <!--          >-->
+          <!--            <div class="row q-pa-sm">-->
+          <!--              <template-->
+          <!--                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('traits')">-->
+          <!--                <template-->
+          <!--                  :key="data"-->
+          <!--                  v-for="data in Object.keys(selectedAsset.data.traits)"-->
+          <!--                >-->
+          <!--                  <q-input-->
+          <!--                    v-if="selectedAsset.data.traits.hasOwnProperty(data)"-->
+          <!--                    dense-->
+          <!--                    :model-value="selectedAsset.data.traits[data]"-->
+          <!--                    input-class=""-->
+          <!--                    :class="$q.screen.gt.md?'col-6':'col-12'"-->
+          <!--                    borderless-->
+          <!--                    readonly-->
+          <!--                    :label-slot="true"-->
+          <!--                  >-->
+          <!--                    <template #label>-->
+          <!--                    <span class="text-capitalize">-->
+          <!--                      {{ data.split('_').join(' ') }}-->
+          <!--                    </span>-->
+          <!--                    </template>-->
+          <!--                  </q-input>-->
+          <!--                </template>-->
+          <!--              </template>-->
+          <!--            </div>-->
+          <!--          </q-expansion-item>-->
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -570,18 +585,13 @@ const walletList = computed(() => {
         // console.log('refs', walletsRefs[i].id)
         // console.log('refs', walletsRefs[Number(walletnum) - 1])
         // console.log('refs', walletsRefs[i].id)
-        const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
-          (item) =>
-            searchText.value === '' ||
-            item.asset_list[0].asset_name
-              .toLowerCase()
-              .includes(searchText.value.toLowerCase()) ||
-              item.asset_list[0].policy_id
-                .toLowerCase()
-                .includes(searchText.value.toLowerCase())
-        ) || []
-
-        console.log(filteredUTXOSet)
+        const filteredUTXOSet = walletsRefs[i].utxo_set?.map(function (item) {
+          item.asset_list = item.asset_list.filter(function (asset) {
+            return searchText.value === '' || (asset.policy_id.toLowerCase().indexOf(searchText.value.toLowerCase()) >= 0) ||
+                   (asset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').indexOf(searchText.value.toLowerCase()) >= 0)
+          })
+          return item
+        })
         filteredUTXOSet.forEach((item) => {
           for (let y = 0; y < item.asset_list.length; y++) {
             if (data[item.asset_list[y].policy_id]) {

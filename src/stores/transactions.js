@@ -73,10 +73,10 @@ export const useTransactionStore = defineStore('transactions', {
   actions: {
     // eslint-disable-next-line camelcase
     removeSelect (assetName, id) {
-      this.selections = this.selections.filter(
-        // eslint-disable-next-line camelcase
-        (x) => x.asset_name !== assetName
-      )
+      // this.selections = this.selections.filter(
+      //   // eslint-disable-next-line camelcase
+      //   (x) => x.asset_name !== assetName
+      // )
 
       this.mapping_dict[id].assets = this.mapping_dict[id].assets.filter((x) => x.asset_name !== assetName)
     },

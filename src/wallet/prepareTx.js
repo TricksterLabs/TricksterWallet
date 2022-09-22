@@ -68,6 +68,7 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
 
   console.log('getFee', tx.getFee())
   const sendAddressMod = typhonjs.utils.getAddressFromBech32(sendAddress)
+  console.log('yoyo', tx.calculateMinUtxoAmount().toNumber())
   tx.prepareTransaction({ inputs: inputsData, changeAddress: sendAddressMod })
 
   const txHashBuffer = tx.getTransactionHash()
@@ -81,10 +82,15 @@ export async function prepareTx (sendAmount, getInputs, tokens, sendAddress, rec
     }
     tx.addWitness(witness)
   }
-
+  const fee = tx.fee
+  // console.log('omega', fee.toNumber())
+  // console.log('HUAIA', tx.getInputs()[1].tokens)
+  const minUtxo = typhonjs.utils.calculateMinUtxoAmount(tx.getInputs(), protocolParams.lovelacePerUtxoWord)
+  // console.log('MEGA', tx.getOutputs())
   const txBuilt = tx.buildTransaction()
+  // console.log('yoyo', tx.calculateMinUtxoAmount().toNumber())
   // const txHash = txBuilt.hash
   const txBuffer = Buffer.from(txBuilt.payload, 'hex')
 
-  return txBuffer
+  return { txBuffer, minUtxo, fee }
 }

@@ -221,6 +221,7 @@ import { singleSend } from '../wallet/singleSend'
 import { getFromDb } from 'src/dexie/db'
 import CryptoJS from 'crypto-js'
 import { useQuasar } from 'quasar'
+import { sendTx } from '../wallet/sendTx.js'
 // import * as typhonjs from '@stricahq/typhonjs'
 
 const store = useTransactionStore()
@@ -264,13 +265,17 @@ const onSubmit = async () => {
     const fullTransaction = JSON.parse(JSON.stringify(store.mapping_dict))
     for (const property in fullTransaction) {
       // console.log(`${property}: ${fullTransaction[property].actual_quantity}`)
-      await singleSend(
+      const tx = await singleSend(
         password.value,
         parseInt(property),
         parseFloat(fullTransaction[property].quantity),
         fullTransaction[property].assets,
         receivingAddress.value
       )
+      console.log('minUtxo', tx.minUtxo.toNumber())
+      if (tx) {
+        await sendTx(tx.txBuffer)
+      }
     }
     $q.notify({
       type: 'positive',

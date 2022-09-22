@@ -1,7 +1,7 @@
 import { prepareWallet } from './prepareWallet.js'
 import { getTTL } from './getTTL.js'
 import { prepareTx } from './prepareTx.js'
-import { sendTx } from './sendTx.js'
+// import { sendTx } from './sendTx.js'
 // import BigNumber from 'bignumber.js'
 import { dbData } from 'src/dexie/db'
 import CryptoJS from 'crypto-js'
@@ -56,6 +56,6 @@ export async function singleSend (password, walletId, sendAmount, tokens, receiv
   // console.log('receiveAddress', receiveAddress)
   // console.log('walletParse', walletParse)
   const tx = await prepareTx(sendAmount, getInputs, getOutputs, sendAddress, receiveAddress, newTTL, walletParse)
-  console.log(tx)
-  await sendTx(tx)
+  // console.log(tx)
+  return tx
 }

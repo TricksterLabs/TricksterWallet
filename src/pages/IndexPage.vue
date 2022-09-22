@@ -186,6 +186,30 @@
                           </q-input>
                         </template>
                       </template>
+                      <template
+                        v-if="asset.hasOwnProperty('data') && asset.data.hasOwnProperty('traits')">
+                        <template
+                          :key="data"
+                          v-for="data in Object.keys(asset.data.traits)"
+                        >
+                          <q-input
+                            v-if="asset.data.traits.hasOwnProperty(data)"
+                            dense
+                            :model-value="asset.data.traits[data]"
+                            input-class=""
+                            :class="$q.screen.gt.md?'col-6':'col-12'"
+                            borderless
+                            readonly
+                            :label-slot="true"
+                          >
+                            <template #label>
+                              <span class="text-capitalize">
+                                {{ data.split('_').join(' ') }}
+                              </span>
+                            </template>
+                          </q-input>
+                        </template>
+                      </template>
 
                       <div class="col-12">
                         <q-btn label="Show Info" class="float-right text-capitalize" outline @click="setData(asset)"></q-btn>
@@ -387,14 +411,14 @@
         </q-card-section>
         <q-separator></q-separator>
         <q-card-section class="text-center row q-pa-sm">
-          <q-expansion-item
-            :expand-separator="false"
-            label="Last Metadata"
-            default-opened
-            group="meta"
-            class="expansion-border col-12 full-width q-ma-sm"
-            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
-          >
+<!--          <q-expansion-item-->
+<!--            :expand-separator="false"-->
+<!--            label="Last Metadata"-->
+<!--            default-opened-->
+<!--            group="meta"-->
+<!--            class="expansion-border col-12 full-width q-ma-sm"-->
+<!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
+<!--          >-->
             <div class="row q-pa-sm">
               <template
                 v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')">
@@ -444,41 +468,41 @@
                 </template>
               </template>
             </div>
-          </q-expansion-item>
-          <q-expansion-item
-            :expand-separator="false"
-            label="Traits"
-            group="meta"
-            class="expansion-border col-12 full-width q-ma-sm"
-            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
-          >
-            <div class="row q-pa-sm">
-              <template
-                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('traits')">
-                <template
-                  :key="data"
-                  v-for="data in Object.keys(selectedAsset.data.traits)"
-                >
-                  <q-input
-                    v-if="selectedAsset.data.traits.hasOwnProperty(data)"
-                    dense
-                    :model-value="selectedAsset.data.traits[data]"
-                    input-class=""
-                    :class="$q.screen.gt.md?'col-6':'col-12'"
-                    borderless
-                    readonly
-                    :label-slot="true"
-                  >
-                    <template #label>
-                    <span class="text-capitalize">
-                      {{ data.split('_').join(' ') }}
-                    </span>
-                    </template>
-                  </q-input>
-                </template>
-              </template>
-            </div>
-          </q-expansion-item>
+<!--          </q-expansion-item>-->
+<!--          <q-expansion-item-->
+<!--            :expand-separator="false"-->
+<!--            label="Traits"-->
+<!--            group="meta"-->
+<!--            class="expansion-border col-12 full-width q-ma-sm"-->
+<!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
+<!--          >-->
+<!--            <div class="row q-pa-sm">-->
+<!--              <template-->
+<!--                v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('traits')">-->
+<!--                <template-->
+<!--                  :key="data"-->
+<!--                  v-for="data in Object.keys(selectedAsset.data.traits)"-->
+<!--                >-->
+<!--                  <q-input-->
+<!--                    v-if="selectedAsset.data.traits.hasOwnProperty(data)"-->
+<!--                    dense-->
+<!--                    :model-value="selectedAsset.data.traits[data]"-->
+<!--                    input-class=""-->
+<!--                    :class="$q.screen.gt.md?'col-6':'col-12'"-->
+<!--                    borderless-->
+<!--                    readonly-->
+<!--                    :label-slot="true"-->
+<!--                  >-->
+<!--                    <template #label>-->
+<!--                    <span class="text-capitalize">-->
+<!--                      {{ data.split('_').join(' ') }}-->
+<!--                    </span>-->
+<!--                    </template>-->
+<!--                  </q-input>-->
+<!--                </template>-->
+<!--              </template>-->
+<!--            </div>-->
+<!--          </q-expansion-item>-->
         </q-card-section>
       </q-card>
     </q-dialog>

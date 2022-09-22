@@ -570,18 +570,21 @@ const walletList = computed(() => {
         // console.log('refs', walletsRefs[i].id)
         // console.log('refs', walletsRefs[Number(walletnum) - 1])
         // console.log('refs', walletsRefs[i].id)
-        const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
-          (item) =>
-            searchText.value === '' ||
-            item.asset_list[0].asset_name
-              .toLowerCase()
-              .includes(searchText.value.toLowerCase()) ||
-              item.asset_list[0].policy_id
-                .toLowerCase()
-                .includes(searchText.value.toLowerCase())
-        ) || []
+        // const filteredUTXOSet = walletsRefs[i].utxo_set?.filter(
+        //   (item) =>
+        //     searchText.value === '' ||
+        //       item.asset_list[0].policy_id
+        //         .toLowerCase()
+        //         .indexOf(searchText.value.toLowerCase()) >= 0
+        // ) || []
 
-        console.log(filteredUTXOSet)
+        const filteredUTXOSet = walletsRefs[i].utxo_set?.map(function (item) {
+          item.asset_list = item.asset_list.filter(function (asset) {
+            return searchText.value === '' || (asset.policy_id.toLowerCase().indexOf(searchText.value.toLowerCase()) >= 0) ||
+                   (asset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').indexOf(searchText.value.toLowerCase()) >= 0)
+          })
+          return item
+        })
         filteredUTXOSet.forEach((item) => {
           for (let y = 0; y < item.asset_list.length; y++) {
             if (data[item.asset_list[y].policy_id]) {

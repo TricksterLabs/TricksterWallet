@@ -588,7 +588,7 @@ const walletList = computed(() => {
         const filteredUTXOSet = walletsRefs[i].utxo_set?.map(function (item) {
           item.asset_list = item.asset_list.filter(function (asset) {
             return searchText.value === '' || (asset.policy_id.toLowerCase().indexOf(searchText.value.toLowerCase()) >= 0) ||
-                   (asset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').indexOf(searchText.value.toLowerCase()) >= 0)
+                   (asset.asset_name.match(/.{1,2}/g).reduce((acc, char) => acc + String.fromCharCode(parseInt(char, 16)), '').toLowerCase().indexOf(searchText.value.toLowerCase()) >= 0)
           })
           return item
         })

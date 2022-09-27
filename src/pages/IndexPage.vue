@@ -423,7 +423,7 @@
           </q-item>
         </q-card-section>
         <q-separator />
-        <q-card-section class="text-center row q-pa-sm">
+        <q-card-section class="row q-pa-sm">
           <!--          <q-expansion-item-->
           <!--            :expand-separator="false"-->
           <!--            label="Last Metadata"-->
@@ -432,9 +432,20 @@
           <!--            class="expansion-border col-12 full-width q-ma-sm"-->
           <!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
           <!--          >-->
-          <div class="row q-pa-sm">
+            <div class="col-12">
+              <q-toggle v-model="jsonView" label="Json View" class="float-right"/>
+            </div>
+            <div class="col-12" v-if="jsonView">
+              <json-viewer
+                :value="selectedAsset.data.last_metadata"
+                :expand-depth=5
+                copyable
+                :class="$q.dark.isActive?'bg-dark':'bg-grey-2'"
+                theme="dark"
+                sort></json-viewer>
+            </div>
             <template
-              v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')"
+              v-if="!jsonView && selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')"
             >
               <template
                 :key="data"
@@ -459,7 +470,7 @@
               </template>
             </template>
             <template
-              v-if="selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')"
+              v-if="!jsonView &&  selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')"
             >
               <template
                 :key="attributes_data"
@@ -482,7 +493,6 @@
                 </q-input>
               </template>
             </template>
-          </div>
           <!--          </q-expansion-item>-->
           <!--          <q-expansion-item-->
           <!--            :expand-separator="false"-->
@@ -530,10 +540,12 @@ import { storeToRefs } from 'pinia'
 import { useTransactionStore } from 'stores/transactions'
 import { useWalletsStore } from 'stores/wallets'
 import { shortenPolicy } from 'src/utils'
+import JsonViewer from 'vue-json-viewer'
 
 const searchText = ref('')
 const selectedAsset = ref({})
 const detailView = ref(false)
+const jsonView = ref(false)
 
 const store = useTransactionStore()
 // const walletStore = useWalletsStore()

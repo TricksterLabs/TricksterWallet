@@ -32,6 +32,59 @@
             class="expansion-border q-ma-sm"
             :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"
           >
+            <div class="q-px-md">
+              <q-chip
+                outline
+                square
+                dense
+                color="cyan-7"
+                text-color="white"
+                v-if="projectMapping[policyId]['asset_holders']"
+              >
+                Asset Holder - {{ projectMapping[policyId]['asset_holders'] }}
+              </q-chip>
+
+              <q-chip
+                outline
+                square
+                dense
+                color="primary"
+                text-color="white"
+                v-if="projectMapping[policyId]['asset_minted']"
+              >
+                Asset Minted - {{ projectMapping[policyId]['asset_minted'] }}
+              </q-chip>
+              <q-chip
+                outline
+                square
+                dense
+                color="positive"
+                text-color="white"
+                v-if="projectMapping[policyId]['floor_price']"
+              >
+                Floor Price - {{ parseInt(projectMapping[policyId]['floor_price'] / 1000000) }}
+              </q-chip>
+              <q-chip
+                outline
+                square
+                dense
+                color="orange"
+                text-color="white"
+                v-if="projectMapping[policyId]['total_volume']"
+              >
+                Total Volume - {{ parseInt(projectMapping[policyId]['total_volume'] / 1000000) }}
+              </q-chip>
+              <q-chip
+                outline
+                square
+                dense
+                color="light-blue-10"
+                text-color="white"
+                v-if="projectMapping[policyId]['name']"
+              >
+                Name - {{ projectMapping[policyId]['name'] }}
+              </q-chip>
+            </div>
             <template
               v-for="(item, id) in nft"
               :key="id"
@@ -577,14 +630,23 @@ const removeData = () => {
   detailView.value = false
 }
 
+const projectMapping = computed(() => {
+  const assetsRefs = JSON.parse(JSON.stringify(assets.value))
+  const tempMapping = {}
+  for (let i = 0; i < assetsRefs.length; i++) {
+    tempMapping[assetsRefs[i].id] = assetsRefs[i].project
+  }
+  return tempMapping
+})
+
 const walletList = computed(() => {
   const assetsRefs = JSON.parse(JSON.stringify(assets.value))
   const assetsList = {}
   for (let i = 0; i < assetsRefs.length; i++) {
     for (let j = 0; j < [assetsRefs[i].asset_name].length; j++) {
-      assetsList[assetsRefs[i].id] =
-         [assetsRefs[i].asset_name][j]
+      assetsList[assetsRefs[i].id] = [assetsRefs[i].asset_name][j]
     }
+    // console.log(assetsRefs[i]['id'])
   }
   const data = {}
   const walletsRefs = JSON.parse(JSON.stringify(wallets.value))

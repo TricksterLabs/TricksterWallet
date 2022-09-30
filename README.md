@@ -35,7 +35,7 @@
   <h3 align="center">Trickster Wallet</h3>
 
   <p align="center">
-    Cardano Multi-Wallet Manager
+    Cardano Multi-Wallet Manager (Light and Full-Node options available)
     <br />
     <a href="https://github.com/TricksterLabs/TricksterWallet"><strong>Explore the docs »</strong></a>
     <br />
@@ -201,7 +201,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/TricksterLabs) - support@trickster.fi
+TricksterLabs - [@TricksterLabs](https://twitter.com/TricksterLabs) - support@trickster.fi
 
 Project Link: [https://github.com/TricksterLabs/TricksterWallet](https://github.com/TricksterLabs/TricksterWallet)
 

@@ -41,7 +41,7 @@
                 text-color="white"
                 v-if="projectMapping[policyId]['asset_holders']"
               >
-                Asset Holder - {{ projectMapping[policyId]['asset_holders'] }}
+                Holders - {{ projectMapping[policyId]['asset_holders'] }}
               </q-chip>
 
               <q-chip
@@ -52,7 +52,7 @@
                 text-color="white"
                 v-if="projectMapping[policyId]['asset_minted']"
               >
-                Asset Minted - {{ projectMapping[policyId]['asset_minted'] }}
+                Minted - {{ projectMapping[policyId]['asset_minted'] }}
               </q-chip>
               <q-chip
                 outline

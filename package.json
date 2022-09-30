@@ -10,6 +10,21 @@
     "lint": "eslint --ext .js,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TricksterLabs/TricksterWallet.git"
+  },
+  "keywords": [
+    "trickster",
+    "nft",
+    "wallet",
+    "cardano wallet",
+    "cardano"
+  ],
+  "bugs": {
+    "url": "https://github.com/TricksterLabs/TricksterWallet/issues"
+  },
+  "homepage": "https://github.com/TricksterLabs/TricksterWallet#readme",
   "dependencies": {
     "@chenfengyuan/vue-qrcode": "^2.0.0",
     "@quasar/extras": "^1.0.0",

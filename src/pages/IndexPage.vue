@@ -485,67 +485,75 @@
           <!--            class="expansion-border col-12 full-width q-ma-sm"-->
           <!--            :header-class="$q.screen.gt.md?'expansion-border-header text-center':'expansion-border-header'"-->
           <!--          >-->
-            <div class="col-12">
-              <q-toggle v-model="jsonView" label="Json View" class="float-right"/>
-            </div>
-            <div class="col-12" v-if="jsonView">
-              <json-viewer
-                :value="selectedAsset.data.last_metadata"
-                :expand-depth=5
-                copyable
-                :class="$q.dark.isActive?'bg-dark':'bg-grey-2'"
-                theme="dark"
-                sort></json-viewer>
-            </div>
+          <div class="col-12">
+            <q-toggle
+              v-model="jsonView"
+              label="Json View"
+              class="float-right"
+            />
+          </div>
+          <div
+            class="col-12"
+            v-if="jsonView"
+          >
+            <json-viewer
+              :value="selectedAsset.data.last_metadata"
+              :expand-depth="5"
+              copyable
+              :class="$q.dark.isActive?'bg-dark':'bg-grey-2'"
+              theme="dark"
+              sort
+            />
+          </div>
+          <template
+            v-if="!jsonView && selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')"
+          >
             <template
-              v-if="!jsonView && selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata')"
+              :key="data"
+              v-for="data in Object.keys(selectedAsset.data.last_metadata)"
             >
-              <template
-                :key="data"
-                v-for="data in Object.keys(selectedAsset.data.last_metadata)"
+              <q-input
+                v-if="data!='attributes' && selectedAsset.data.last_metadata.hasOwnProperty(data)"
+                dense
+                :model-value="selectedAsset.data.last_metadata[data]"
+                input-class=""
+                :class="$q.screen.gt.md?'col-6':'col-12'"
+                borderless
+                readonly
+                :label-slot="true"
               >
-                <q-input
-                  v-if="data!='attributes' && selectedAsset.data.last_metadata.hasOwnProperty(data)"
-                  dense
-                  :model-value="selectedAsset.data.last_metadata[data]"
-                  input-class=""
-                  :class="$q.screen.gt.md?'col-6':'col-12'"
-                  borderless
-                  readonly
-                  :label-slot="true"
-                >
-                  <template #label>
-                    <span class="text-capitalize">
-                      {{ data.split('_').join(' ') }}
-                    </span>
-                  </template>
-                </q-input>
-              </template>
+                <template #label>
+                  <span class="text-capitalize">
+                    {{ data.split('_').join(' ') }}
+                  </span>
+                </template>
+              </q-input>
             </template>
+          </template>
+          <template
+            v-if="!jsonView && selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')"
+          >
             <template
-              v-if="!jsonView &&  selectedAsset.hasOwnProperty('data') && selectedAsset.data.hasOwnProperty('last_metadata') && selectedAsset.data.last_metadata.hasOwnProperty('attributes')"
+              :key="attributes_data"
+              v-for="attributes_data in Object.keys(selectedAsset.data.last_metadata.attributes)"
             >
-              <template
-                :key="attributes_data"
-                v-for="attributes_data in Object.keys(selectedAsset.data.last_metadata.attributes)"
+              <q-input
+                dense
+                :model-value="attributes_data === 'attributes'?selectedAsset.data.last_metadata.attributes[attributes_data].join(','):selectedAsset.data.last_metadata.attributes[attributes_data]"
+                input-class=""
+                :class="$q.screen.gt.md?'col-6':'col-12'"
+                borderless
+                readonly
+                :label-slot="true"
               >
-                <q-input
-                  dense
-                  :model-value="attributes_data === 'attributes'?selectedAsset.data.last_metadata.attributes[attributes_data].join(','):selectedAsset.data.last_metadata.attributes[attributes_data]"
-                  input-class=""
-                  :class="$q.screen.gt.md?'col-6':'col-12'"
-                  borderless
-                  readonly
-                  :label-slot="true"
-                >
-                  <template #label>
-                    <span class="text-capitalize">
-                      {{ attributes_data.split('_').join(' ') }}
-                    </span>
-                  </template>
-                </q-input>
-              </template>
+                <template #label>
+                  <span class="text-capitalize">
+                    {{ attributes_data.split('_').join(' ') }}
+                  </span>
+                </template>
+              </q-input>
             </template>
+          </template>
           <!--          </q-expansion-item>-->
           <!--          <q-expansion-item-->
           <!--            :expand-separator="false"-->

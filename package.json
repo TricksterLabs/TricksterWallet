@@ -1,8 +1,9 @@
 {
-  "name": "trickster-wallet-js",
-  "version": "0.0.5-alpha",
+  "name": "trickster-wallet",
+  "version": "0.0.6-alpha",
+  "productName": "TricksterWallet",
   "description": "Trickster Cardano Multi-Wallet Manager",
-  "productName": "Trickster Wallet",
+  "license": "MIT",
   "author": "Aervue <aervue.dev@gmail.com>",
   "private": true,
   "scripts": {

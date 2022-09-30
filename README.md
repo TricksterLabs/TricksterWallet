@@ -79,6 +79,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+[![Product Name Screen Shot][product-screenshot]](https://github.com/TricksterLabs/TricksterWallet)
+
 Presenting you a Cardano Multi-Wallet Manager (Please note this is an alpha release, there will be breaking changes and many features are missing)
 
 * The purpose of this software is to be an all encompassing solution to the world of Cardano

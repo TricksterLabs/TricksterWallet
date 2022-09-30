@@ -71,7 +71,6 @@
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -80,18 +79,18 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+Presenting you a Cardano Multi-Wallet Manager (Please note this is an alpha release, there will be breaking changes and many features are missing)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+* The purpose of this software is to be an all encompassing solution to the world of Cardano
+* Multi-Wallet asset viewer
+* Send complex transactions from multiple wallets at the same time (with franken address support)
+* Data analytics for each asset
+* List/purchase/offer on market assets directly from your wallet
+* Exchange tokens directly from your wallet
+* Asset trading directly from your wallet
+* Cardano mailing system & propose a new standard (via transaction metadata)
+* ... more
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
-
-Use the `BLANK_README.md` to get started.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -100,6 +99,9 @@ Use the `BLANK_README.md` to get started.
 ### Built With
 
 * [![Vue][Vue.js]][Vue-url]
+* Quasar Framework
+* Koios API (for everyday tasks)
+* OpenCNFT API (for market analytics)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -108,20 +110,7 @@ Use the `BLANK_README.md` to get started.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
 ### Installation (for developers)
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
 1. Clone the repo
    ```sh
@@ -151,9 +140,20 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+1. Extract the archive to a folder of choice
+2. Open TricksterWallet.exe (or the extension required by your operating system)
+3. On first open you will be prompted to "Set Password". This will be required for any sensitive operations you will do.
+4. Type in your new password to get access to the app.
+5. Click manage and either create or import wallets
+6. Wallets should be populated on the left part of the screen, various options are presented when hovering over their respective buttons
+7. The middle screen contains all of your assets and analytics about them to be able to manage them with ease.
+8. To send a transaction with only ADA, initiate a transaction on the corresponding icon in front of your wallet.
+9. To send assets, simply select them.
+10. Currently, minimum value and fees are not shown to the user (this is an alpha release). Estimate that you need atleast 0.15-0.2 ADA per transaction as a fee and about 1.2 ADA for the first asset with an extra of 0.2 ADA for each additional asset you add (these are minimum utxo values)
+11. Make sure to keep a backup of your keys somewhere safe, you can export newly created wallets in Manage > Export Wallets
+   ```sh
+   git clone https://github.com/TricksterLabs/TricksterWallet.git
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -163,12 +163,7 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 ## Roadmap
 
 - [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
+- [ ] Add Roadmap
 
 See the [open issues](https://github.com/TricksterLabs/TricksterWallet/issues) for a full list of proposed features (and known issues).
 

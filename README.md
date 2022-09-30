@@ -37,7 +37,13 @@
   <p align="center">
     Cardano Multi-Wallet Manager
     <br />
-
+    <a href="https://github.com/TricksterLabs/TricksterWallet"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    ·
+    <a href="https://github.com/TricksterLabs/TricksterWallet/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/TricksterLabs/TricksterWallet/issues">Request Feature</a>
   </p>
 </div>
 

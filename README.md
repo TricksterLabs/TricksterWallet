@@ -153,9 +153,6 @@ Presenting you a Cardano Multi-Wallet Manager (Please note this is an alpha rele
 9. To send assets, simply select them.
 10. Currently, minimum value and fees are not shown to the user (this is an alpha release). Estimate that you need atleast 0.15-0.2 ADA per transaction as a fee and about 1.2 ADA for the first asset with an extra of 0.2 ADA for each additional asset you add (these are minimum utxo values)
 11. Make sure to keep a backup of your keys somewhere safe, you can export newly created wallets in Manage > Export Wallets
-   ```sh
-   git clone https://github.com/TricksterLabs/TricksterWallet.git
-   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

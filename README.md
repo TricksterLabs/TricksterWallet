@@ -32,7 +32,7 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Trickster Wallet</h3>
+  <h3 align="center">Trickster Wallet (0.0.6-alpha)</h3>
 
   <p align="center">
     Cardano Multi-Wallet Manager (Light and Full-Node options available)

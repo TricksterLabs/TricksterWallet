@@ -32,19 +32,12 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Trickster Wallet</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Cardano Multi-Wallet Manager
     <br />
-    <a href="https://github.com/TricksterLabs/TricksterWallet"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/TricksterLabs/TricksterWallet">View Demo</a>
-    ·
-    <a href="https://github.com/TricksterLabs/TricksterWallet/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/TricksterLabs/TricksterWallet/issues">Request Feature</a>
+
   </p>
 </div>
 

@@ -41,7 +41,9 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
     const newTx = await fetch('https://eu-fr.trickster.fi/api/v0/address_txs', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+
         // 'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(
@@ -60,11 +62,26 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
     if (resultNewTx[0]) {
       // console.log('blockHeight', resultNewTx[0].block_height)
 
-      const walletUtxo = await fetch('https://eu-fr.trickster.fi/api/v0/address_info?_address=' + address, {
-        method: 'GET',
+      // const walletUtxo = await fetch('https://eu-fr.trickster.fi/api/v0/address_info?_address=' + address, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   }
+      // })
+      const walletUtxo = await fetch('https://eu-fr.trickster.fi/api/v0/address_info', {
+        method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        // 'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(
+          {
+            _addresses: [
+              address
+            ]
+          }
+        )
       })
       const resultWalletUtxo = await walletUtxo.json()
 

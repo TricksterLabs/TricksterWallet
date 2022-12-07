@@ -28,7 +28,7 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
 
   // console.log('Working', transactionsOld)
   try {
-    const getTip = await fetch('https://eu-de.trickster.fi/api/v0/tip', {
+    const getTip = await fetch('https://api.koios.rest/api/v0/tip', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -38,7 +38,7 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
     const resultGetTip = await getTip.json()
     // console.log(id, resultGetTip[0].block_no)
     // console.log(lastHeight)
-    const newTx = await fetch('https://eu-fr.trickster.fi/api/v0/address_txs', {
+    const newTx = await fetch('https://api.koios.rest/api/v0/address_txs', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,7 +68,7 @@ const getTransactions = async (id, address, lastHeight, transactionsOld) => {
       //     'Content-Type': 'application/json'
       //   }
       // })
-      const walletUtxo = await fetch('https://eu-fr.trickster.fi/api/v0/address_info', {
+      const walletUtxo = await fetch('https://api.koios.rest/api/v0/address_info', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 export async function getTTL () {
   try {
-    const getTip = await fetch('https://eu-fr.trickster.fi/api/v0/tip', {
+    const getTip = await fetch('https://api.koios.rest/api/v0/tip', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'

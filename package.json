@@ -1,6 +1,6 @@
 {
   "name": "trickster-wallet",
-  "version": "0.0.7-alpha",
+  "version": "0.0.9-alpha",
   "productName": "TricksterWallet",
   "description": "Trickster Cardano Multi-Wallet Manager",
   "license": "MIT",

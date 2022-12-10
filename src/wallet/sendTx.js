@@ -7,7 +7,7 @@
 export async function sendTx (tx) {
   try {
     // const newTx = await axios.post('https://eu-fr.trickster.fi/api/v0/submittx', tx, { headers })
-    const newTx = await fetch('https://eu-fr.trickster.fi/api/v0/submittx', {
+    const newTx = await fetch('https://api.koios.rest/api/v0/submittx', {
     // const newTx = await fetch('/api', {
       method: 'POST',
       headers: {
